@@ -1,21 +1,25 @@
 Welcome to PyChess!
 
-This is a python app purely created from scratch using just Python(cpython version 3.8) and Pygame.
+This is a python app purely created from scratch using just Python(cpython version 3.7.3) and Pygame.
 
 To run the game, download Pygame library and run the- main.py file.
 You will see the chess board appear. Go ahead and enjoy the chess match with your friend.
 
 Under just 500 lines of code, this is very light and efficient..
 
-If you take a look at the source code, 2 Things will strike you
-a) Object Oriented Programming style has not been used. Instead, a Functional Programming approach has been taken
+If you take a look at the source code, you can observe that
+Object Oriented Programming style has not been used. Instead, a Functional Programming approach has been taken. The code might be compicated, but it works
+
 To explain in short- how the logic works in the chess game,
 - Pygame provides th tools for GUI and mouse handling
 - There are 2 lists that hold the position of each piece
 - The functions are written, each with a specific use to handle data and play chess
 The functions work together in such a manner that they seamlesly integrate to provide a decent chess experience and using less disk space, processor and memory.
 
-Docs: All functions as defined in- myutils.py(version 1.3) file:-
+Docs: 
+The main.py file handles the GUI and user actions:-
+myutils.py defines the functions that run the game
+All functions as defined in- myutils.py(version 1.3) file are:-
 - getchoice() -- This function gets user input when pawn promotion can be done
 - drawboard() -- This function draws the first layer on screen(i.e the chess board)
 - getpiece() -- This returns the name of a piece if its position and colour 90is given
