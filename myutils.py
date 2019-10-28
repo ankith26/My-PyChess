@@ -54,9 +54,9 @@ def move(colour, fro, to, var = True):
     val = -1
     if colour == "w":
         for i in range(len(bBoard)):
-                if bBoard[i] != None and bBoard[i][:2] == to:
-                    bBoard[i] = None
-                    val = i
+            if bBoard[i] != None and bBoard[i][:2] == to:
+                bBoard[i] = None
+                val = i
         for i in range(len(wBoard)):
             if wBoard[i] != None and wBoard[i][:2] == fro:
                 if i == 15:
@@ -74,9 +74,9 @@ def move(colour, fro, to, var = True):
         else: return True
     elif colour == "b":
         for i in range(len(wBoard)):
-                if wBoard[i] != None and wBoard[i][:2] == to:
-                    wBoard[i] = None
-                    val = i
+            if wBoard[i] != None and wBoard[i][:2] == to:
+                wBoard[i] = None
+                val = i
         for i in range(len(bBoard)):
             if bBoard[i] != None and bBoard[i][:2] == fro:
                 if i == 15:
