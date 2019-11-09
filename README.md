@@ -10,7 +10,7 @@ You will see the chess board appear. Go ahead and enjoy the chess match with you
 
 Under just 400 lines of code, this is very light and efficient..
 
-If you take a look at the source code, You can observe that Object Oriented Programming style has not been used. Instead, a Functional Programming approach has been taken. This means that the code is slightly complicated, but will work well.
+If you take a look at the source code, You can observe that Object Oriented Programming style has not been used. This means that the code is slightly complicated, but will work well.
 
 To explain in short- how the logic works in the chess game,
 - Pygame provides the tools for GUI and mouse motion handling
