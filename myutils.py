@@ -13,7 +13,7 @@ wKingMoved = bKingMoved = False  # Some variables for castling
 wRook1Moved = bRook1Moved = False
 wRook2Moved = bRook2Moved = False
 
-def copy(sboard)
+def copy(sboard):
     board = []
     for i in sboard:
         if i is None:
