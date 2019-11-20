@@ -12,7 +12,6 @@ bBoard = [[1, 2], [2, 2], [3, 2], [4, 2], [5, 2], [6, 2], [7, 2], [8, 2],# pawns
 wKingMoved = bKingMoved = False  # Some variables for castling
 wRook1Moved = bRook1Moved = False
 wRook2Moved = bRook2Moved = False
-
 def copy(sboard):
     board = []
     for i in sboard:
@@ -21,7 +20,6 @@ def copy(sboard):
         else:
             board.append(list(i))
     return board
-
 def getChoice():
     return "queen"
 
