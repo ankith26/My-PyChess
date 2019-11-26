@@ -9,7 +9,7 @@ HEADING = pygame.image.load('images/heading.png')
 SINGLEPLAYER = pygame.image.load('images/singleplayer.png')#220*80
 MULTIPLAYER = pygame.image.load('images/multiplayer.png')#220*80
 ONLINE = pygame.image.load('images/online.png')#220*80
-#VERSION = pygame.image.load('images/version.png')
+VERSION = pygame.image.load('images/version.png')
 SOON1 = pygame.image.load('images/soon.png')#100*100
 SOON2 = pygame.image.load('images/soon2.png')#100*100
 ABOUT = pygame.image.load('images/about.png')#100*40
@@ -18,6 +18,7 @@ DOCS = pygame.image.load('images/docs.png')#100*40
 def showMain():
     pygame.draw.rect(win,(0,0,0),(0,0,460,460))
     win.blit(HEADING,(100,20))
+    win.blit(VERSION,(340,100))
     win.blit(DOCS,(0,460))
     win.blit(ABOUT,(400,460))
     win.blit(SINGLEPLAYER,(110,140))

@@ -15,7 +15,7 @@ To explain in short- how the logic works in the chess game,
 - The functions are written, each with a specific use to handle data and play chess
 The functions work together in such a manner that they seamlesly integrate to provide a decent chess experience and using less disk space, processor and memory.
 
-Docs: All functions as defined in- myutils.py(version 1.3) file:-
+Docs: All functions as defined in- myutils.py file:-
 - getChoice() -- This function gets user input when pawn promotion can be done
 - drawBoard() -- This function draws the first layer on screen(i.e the chess board)
 - getPiece() -- This returns the name of a piece if its position and colour 90is given

@@ -1,87 +1,5 @@
 import pygame
 from myutils import *
-def drawBoard(win):
-    colour = (0, 255, 255)
-    pygame.draw.rect(win, colour, (0, 0, 500, 50))
-    pygame.draw.rect(win, colour, (0, 0, 50, 500))
-    pygame.draw.rect(win, colour, (450, 0, 50, 500))
-    pygame.draw.rect(win, colour, (0, 450, 500, 50))
-    for y in range(8):
-        for x in range(8):
-            if (x + y) % 2 == 0:
-                colour = (255, 255, 255)
-            else:
-                colour = (181, 101, 29)
-            pygame.draw.rect(
-                win, colour, (50 + (x * 50), 50 + (y * 50), 50, 50))
-
-WPAWN = pygame.image.load("images/whitePawn.png")
-WROOK = pygame.image.load("images/whiteRook.png")
-WKNIGHT = pygame.image.load("images/whiteKnight.png")
-WBISHOP = pygame.image.load("images/whiteBishop.png")
-WQUEEN = pygame.image.load("images/whiteQueen.png")
-WKING = pygame.image.load("images/whiteKing.png")
-BPAWN = pygame.image.load("images/blackPawn.png")
-BROOK = pygame.image.load("images/blackRook.png")
-BKNIGHT = pygame.image.load("images/blackKnight.png")
-BBISHOP = pygame.image.load("images/blackBishop.png")
-BQUEEN = pygame.image.load("images/blackQueen.png")
-BKING = pygame.image.load("images/blackKing.png")
-
-CHECKMATE = pygame.image.load("images/checkmate.png")
-STALEMATE = pygame.image.load("images/stalemate.png")
-def drawPieces(win):
-    count = 0
-    for x in wBoard:
-        if x is not None:
-            if count in range(8):
-                win.blit(WPAWN, (x[0] * 50, x[1] * 50))
-            elif count in range(8, 10):
-                win.blit(WROOK, (x[0] * 50, x[1] * 50))
-            elif count in range(10, 12):
-                win.blit(WKNIGHT, (x[0] * 50, x[1] * 50))
-            elif count in range(12, 14):
-                win.blit(WBISHOP, (x[0] * 50, x[1] * 50))
-            elif count == 14:
-                win.blit(WQUEEN, (x[0] * 50, x[1] * 50))
-            elif count == 15:
-                win.blit(WKING, (x[0] * 50, x[1] * 50))
-            else:
-                if x[2] == 'knight':
-                    win.blit(WKNIGHT, (x[0] * 50, x[1] * 50))
-                if x[2] == 'bishop':
-                    win.blit(WBISHOP, (x[0] * 50, x[1] * 50))
-                if x[2] == 'rook':
-                    win.blit(WROOK, (x[0] * 50, x[1] * 50))
-                if x[2] == 'queen':
-                    win.blit(WQUEEN, (x[0] * 50, x[1] * 50))
-        count += 1
-    count = 0
-    for x in bBoard:
-        if x is not None:
-            if count in range(8):
-                win.blit(BPAWN, (x[0] * 50, x[1] * 50))
-            elif count in range(8, 10):
-                win.blit(BROOK, (x[0] * 50, x[1] * 50))
-            elif count in range(10, 12):
-                win.blit(BKNIGHT, (x[0] * 50, x[1] * 50))
-            elif count in range(12, 14):
-                win.blit(BBISHOP, (x[0] * 50, x[1] * 50))
-            elif count == 14:
-                win.blit(BQUEEN, (x[0] * 50, x[1] * 50))
-            elif count == 15:
-                win.blit(BKING, (x[0] * 50, x[1] * 50))
-            else:
-                if x[2] == 'knight':
-                    win.blit(BKNIGHT, (x[0] * 50, x[1] * 50))
-                if x[2] == 'bishop':
-                    win.blit(BBISHOP, (x[0] * 50, x[1] * 50))
-                if x[2] == 'rook':
-                    win.blit(BROOK, (x[0] * 50, x[1] * 50))
-                if x[2] == 'queen':
-                    win.blit(BQUEEN, (x[0] * 50, x[1] * 50))
-        count += 1
-
 def main(win):
     clock = pygame.time.Clock()
     wmove = True
@@ -89,6 +7,7 @@ def main(win):
     sel = [0, 0]
     prevsel = [0, 0]
     end = [False]
+    CHECK = pygame.image.load("images/check.png")
     
     while True:
         clock.tick(24)
@@ -106,6 +25,13 @@ def main(win):
                     sel = [0, 0]
         if not end[0]:
             drawBoard(win)
+            if wmove:
+                if isChecked("w") and not isCheckmate("w"):
+                    win.blit(CHECK, (180,0))
+            else:
+                if isChecked("b") and not isCheckmate("b"):
+                    win.blit(CHECK, (180,0))
+                    
             if wmove and sel != [0, 0]:
                 if isChecked("w") and isCheckmate("w"):
                     end = [True, "w"]
@@ -123,8 +49,17 @@ def main(win):
                         if isOccupied(sel[0], sel[1]) != "w":
                             ptype = getPiece("w", prevsel)
                             if sel in availableMoves("w", ptype, prevsel):
+                                if ptype == "pawn" and sel[1] == 1:
+                                    drawPieces(win)
+                                    win.blit(CHOOSE, (0,0))
+                                    win.blit(WQUEEN, (230, 0))
+                                    win.blit(WBISHOP, (280, 0))
+                                    win.blit(WROOK, (330, 0))
+                                    win.blit(WKNIGHT, (380, 0))
+                                    pygame.display.update()
                                 if move("w", prevsel, sel):
                                     wmove = False
+                                    animate(win, "w", ptype, prevsel, sel)
                                 else:
                                     wmove = True
                                 doRoutine()
@@ -145,8 +80,17 @@ def main(win):
                         if isOccupied(sel[0], sel[1]) != "b":
                             ptype = getPiece("b", prevsel)
                             if sel in availableMoves("b", ptype, prevsel):
+                                if ptype == "pawn" and sel[1] == 8:
+                                    drawPieces(win)
+                                    win.blit(CHOOSE, (0,0))
+                                    win.blit(BQUEEN, (230, 0))
+                                    win.blit(BBISHOP, (280, 0))
+                                    win.blit(BROOK, (330, 0))
+                                    win.blit(BKNIGHT, (380, 0))
+                                    pygame.display.update()
                                 if move("b", prevsel, sel):
                                     wmove = True
+                                    animate(win, "b", ptype, prevsel, sel)
                                 else:
                                     wmove = False
                                 doRoutine()
