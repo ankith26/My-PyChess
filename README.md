@@ -3,13 +3,14 @@ A Multiplayer Chess app written in Python using Pygame Library
 
 ## Welcome to PyChess!
 
-This is a python app purely created from scratch using just Python(cpython version 3.7.3) and Pygame.
+This is a python app purely created from scratch using just Python(version 3.7.3) and Pygame.
 
 To run the game, download Pygame library and run the- main.py file.
-You will see the chess board appear. Go ahead and enjoy the chess match with your friend.
-
-Under just 400 lines of code, this is very light and efficient..
-
+Choose from the menus options.
+If you choose multiplayer, you will see the chess board appear. Go ahead and enjoy the chess match with your friend.
+Singleplayer is a random move generator for beginners.
+Harder levels of difficulty coming soon.
+You can save/load games
 If you take a look at the source code, You can observe that Object Oriented Programming style has not been used. This means that the code is slightly complicated, but will work well.
 
 To explain in short- how the logic works in the chess game,
