@@ -140,7 +140,7 @@ def allMoves(side, wboard, bboard, flag=True):
         for i in wboard:
             cnt += 1
             if i != None:
-                for j in availableMoves(side, wboard, bboard, i):
+                for j in availableMoves(side, wboard, bboard, i, flag):
                     if isOccupied(wboard, bboard, j[0], j[1], "w") != "w":
                         if wboard[cnt] != None:
                             yield [list(wboard[cnt][:2]), j]
@@ -149,7 +149,7 @@ def allMoves(side, wboard, bboard, flag=True):
         for i in bboard:
             cnt += 1
             if i != None:
-                for j in availableMoves(side, wboard, bboard, i):
+                for j in availableMoves(side, wboard, bboard, i, flag):
                     if isOccupied(wboard, bboard, j[0], j[1], "b") != "b":
                         if bboard[cnt] != None:
                             yield [list(bboard[cnt][:2]), j]
@@ -159,7 +159,6 @@ def isChecked(side, wboard, bboard, pos=None):
         if pos == None:
             pos = wboard[15]              
         for i in allMoves("b", wboard, bboard, False):
-            #if isOccupied(wboard, bboard, i[1][0], i[1][1], "b") != "w":
             if i[1] == pos[:2]:
                 return True
         return False
@@ -167,7 +166,6 @@ def isChecked(side, wboard, bboard, pos=None):
         if pos == None:
             pos = bboard[15]              
         for i in allMoves("w", wboard, bboard, False):
-            #if isOccupied(wboard, bboard, i[1][0], i[1][1], "w") != "b":
             if i[1] == pos[:2]:
                 return True
         return False
