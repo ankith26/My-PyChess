@@ -18,5 +18,9 @@ The True loop of the menu just checks which button has been pressed to call the 
 
 Finally, if the mouse is hovered over the text it changes colour
 
+## singleplayer.py and multiplayer.py
+
+These files run the chess game. They are quite similar
+
 
 
