@@ -134,13 +134,13 @@ def isOccupied(wboard, bboard, x, y, flag="w"):
                 return "b"
     return "empty"
 
-def allMoves(side, wboard, bboard, flag=True):
+def allMoves(side, wboard, bboard):
     if side == "w":
         cnt = -1
         for i in wboard:
             cnt += 1
             if i != None:
-                for j in availableMoves(side, wboard, bboard, i, flag):
+                for j in availableMoves(side, wboard, bboard, i):
                     if isOccupied(wboard, bboard, j[0], j[1], "w") != "w":
                         if wboard[cnt] != None:
                             yield [list(wboard[cnt][:2]), j]
@@ -149,7 +149,7 @@ def allMoves(side, wboard, bboard, flag=True):
         for i in bboard:
             cnt += 1
             if i != None:
-                for j in availableMoves(side, wboard, bboard, i, flag):
+                for j in availableMoves(side, wboard, bboard, i):
                     if isOccupied(wboard, bboard, j[0], j[1], "b") != "b":
                         if bboard[cnt] != None:
                             yield [list(bboard[cnt][:2]), j]
@@ -158,14 +158,14 @@ def isChecked(side, wboard, bboard, pos=None):
     if side == "w":        
         if pos == None:
             pos = wboard[15]              
-        for i in allMoves("b", wboard, bboard, False):
+        for i in allMoves("b", wboard, bboard):
             if i[1] == pos[:2]:
                 return True
         return False
     else:
         if pos == None:
             pos = bboard[15]              
-        for i in allMoves("w", wboard, bboard, False):
+        for i in allMoves("w", wboard, bboard):
             if i[1] == pos[:2]:
                 return True
         return False
@@ -213,7 +213,7 @@ def castleMoves(side, wboard, bboard, c):
                    not isChecked('b', wboard, bboard, [7, 1]):
                     yield [7, 1]
 
-def availableMoves(side, wboard, bboard, ptype, flag=True, castle=None):
+def availableMoves(side, wboard, bboard, ptype, castle=None):
     x, y = ptype[0], ptype[1]
     piece = ptype[2]
     if isOccupied(wboard, bboard, x, y, side) != side:
@@ -222,27 +222,23 @@ def availableMoves(side, wboard, bboard, ptype, flag=True, castle=None):
         if side == 'w':
             if y == 7 and isOccupied(wboard, bboard, x, 5) == \
                isOccupied(wboard, bboard, x, 6) == "empty":
-                if flag:
-                    yield [x, 5]
+                yield [x, 5]
             if isOccupied(wboard, bboard, x + 1, y - 1, side) == "b":
                 yield [x + 1, y - 1]
             if isOccupied(wboard, bboard, x - 1, y - 1, side) == "b":
                 yield [x - 1, y - 1]
             if isOccupied(wboard, bboard, x, y - 1) == "empty":
-                if flag:
-                    yield [x, y - 1]
+                yield [x, y - 1]
         else:
             if y == 2 and isOccupied(wboard, bboard, x, 4) ==\
                isOccupied(wboard, bboard, x, 3) == "empty":
-                if flag:
-                    yield [x, 4]
+                yield [x, 4]
             if isOccupied(wboard, bboard, x + 1, y + 1, side) == "w":
                 yield [x + 1, y + 1]
             if isOccupied(wboard, bboard, x - 1, y + 1, side) == "w":
                 yield [x - 1, y + 1]
             if isOccupied(wboard, bboard, x, y + 1) == "empty":
-                if flag:
-                    yield [x, y + 1]
+                yield [x, y + 1]
     elif piece == 'knight':
         for i in [[x + 1, y + 2], [x + 1, y - 2], [x - 1, y + 2], [x - 1, y - 2]
                 ,[x + 2, y + 1], [x + 2, y - 1], [x - 2, y + 1], [x - 2, y - 1]]:
