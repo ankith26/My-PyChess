@@ -184,34 +184,35 @@ def isCheckmate(side, wboard, bboard):
         return True
     
 def castleMoves(side, wboard, bboard, c):
-    if side == 'w':
-        if not c[0] and not c[2]:
-            if isOccupied(wboard, bboard, 2, 8) == \
-               isOccupied(wboard, bboard, 3, 8) == \
-               isOccupied(wboard, bboard, 4, 8) == "empty":
-                if not isChecked('w', wboard, bboard, [3, 8]) and \
-                   not isChecked('w', wboard, bboard, [4, 8]):
-                    yield [3, 8]
-        if not c[0] and not c[3]:
-            if isOccupied(wboard, bboard, 6, 8) == \
-               isOccupied(wboard, bboard, 7, 8) == "empty":
-                if not isChecked('w', wboard, bboard, [6, 8]) and \
-                   not isChecked('w', wboard, bboard, [7, 8]):
-                    yield [7, 8]
-    else:
-        if not c[1] and not c[4]:
-            if isOccupied(wboard, bboard, 2, 1) == \
-               isOccupied(wboard, bboard, 3, 1) == \
-               isOccupied(wboard, bboard, 4, 1) == "empty":
-                if not isChecked('b', wboard, bboard, [3, 1]) and \
-                   not isChecked('b', wboard, bboard, [4, 1]):
-                    yield [3, 1]
-        if not c[1] and not c[5]:
-            if isOccupied(wboard, bboard, 6, 1) == \
-               isOccupied(wboard, bboard, 7, 1) == "empty":
-                if not isChecked('b', wboard, bboard, [6, 1]) and \
-                   not isChecked('b', wboard, bboard, [7, 1]):
-                    yield [7, 1]
+    if not isChecked(side, wboard, bboard):
+        if side == 'w':
+            if not c[0] and not c[2]:
+                if isOccupied(wboard, bboard, [2, 8]) == \
+                   isOccupied(wboard, bboard, [3, 8]) == \
+                   isOccupied(wboard, bboard, [4, 8]) == "empty":
+                    if not isChecked('w', wboard, bboard, [3, 8]) and \
+                       not isChecked('w', wboard, bboard, [4, 8]):
+                        yield [3, 8]
+            if not c[0] and not c[3]:
+                if isOccupied(wboard, bboard, [6, 8]) == \
+                   isOccupied(wboard, bboard, [7, 8]) == "empty":
+                    if not isChecked('w', wboard, bboard, [6, 8]) and \
+                       not isChecked('w', wboard, bboard, [7, 8]):
+                        yield [7, 8]
+        else:
+            if not c[1] and not c[4]:
+                if isOccupied(wboard, bboard, [2, 1]) == \
+                   isOccupied(wboard, bboard, [3, 1]) == \
+                   isOccupied(wboard, bboard, [4, 1]) == "empty":
+                    if not isChecked('b', wboard, bboard, [3, 1]) and \
+                       not isChecked('b', wboard, bboard, [4, 1]):
+                        yield [3, 1]
+            if not c[1] and not c[5]:
+                if isOccupied(wboard, bboard, [6, 1]) == \
+                   isOccupied(wboard, bboard, [7, 1]) == "empty":
+                    if not isChecked('b', wboard, bboard, [6, 1]) and \
+                       not isChecked('b', wboard, bboard, [7, 1]):
+                        yield [7, 1]
 
 def availableMoves(side, wboard, bboard, ptype, castle=None):
     x, y = ptype[0], ptype[1]
