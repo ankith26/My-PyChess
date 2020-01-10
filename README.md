@@ -12,10 +12,10 @@ A Multiplayer/SinglePlayer Chess app written in Python using Pygame Library.
 
 This is a python app purely created from scratch using just Python(version 3.7.3) and Pygame.
 
-This game does not support Python 2 and some of the older versions of Python 3
-(python 3.5 till python 3.7.3 supported and tested)
-(may even work on python 3.3 and 3.4)
-It even needs a roughly recent version of pygame to work
+This game does not support Python 2 and some of the older versions of Python 3.
+(Python 3.5 till Python 3.7.3 supported and tested)
+(may even work on Python 3.3 and 3.4)
+It even needs a roughly recent version of pygame to work.
 
 To run the game, download the file and run the main.py file.
 Choose from the menus options.
@@ -58,16 +58,17 @@ Feel free to download the code, use it and please notify me if you come across b
 ## What's next
 
 - I am working on the next upgrade to the game.
-- The upgrade will add a new prefernce Menu where you can customise some game features.
+- The upgrade will optimise the game even further, fixing a bug.
+- The upgrade will add a new preference Menu where you can customise some game features(it will be incomplete)
 - The upgrade adds background animations on the home menu.
 - Hopefully, I will add documentation about the Game.
 - Please notify me quickly if you come across bugs, issues.
 - Put down your thoughts about the game in the Issues section along with all bugs/glitches.
 
-## Future Goals with The Game
+## Long term Future Goals with the Game
 
 - Online Gameplay (on lan wifi and wlan)
 - Better SinglePlayer
 - Saving game in standard Chess format accepted by most games (pgn).
-- Undo moves (I have a method figured out to achieve this, but it is highly inefficient, So I removed the feature)(I am working on the more efficient method)
+- Undo moves (I have a method figured out to achieve this, but it is highly inefficient, so I removed the feature)(I am working on the more efficient method)
 - En Passant(This feature is coming soon)
