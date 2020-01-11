@@ -1,6 +1,4 @@
 # PLEASE READ THIS NOTE
-
-Version 2.0.2: FIXED A CASTLING BUG NOTICED 
 PLEASE KEEP DOWNLOADING THE LATEST VERSION OF THE GAME AS THEY CONTAIN BUG FIXES AND 
 PERFORMANCE OPTIMISERS
 
@@ -35,6 +33,15 @@ To explain in short- how the logic works in the chess game,
 
 Feel free to download the code, use it and please notify me if you come across bugs and glitches.
 
+## How to custumise the game Using Preferences
+- In the main game menu(You see this after running main.py), click preferences.
+- Here you have 4 settings(more coming soon)
+- 1) Animations: When this is True, it will show the pieces that you move to slide smoothly(recommended to be True always, look better)
+- 2) sound: When this is True, it will play sounds(recommended to be False for now, I am working on it)
+- 3) SlideShow: When this is True, it will show a slideshow of images on main menu(recommended to be True always, look better)
+- 4) show moves: When this is True, it will show all legal move options for a selected piece during gameplay(recommended to be True, highly helpful for beginners(my favourite))
+- You can also open preferences.txt and edit the file there(not recommended to do unless you know what you are doing, it might spoil the app)
+
 ## Features
 
 - Clean, easy to use GUI with a good homepage.
@@ -45,7 +52,12 @@ Feel free to download the code, use it and please notify me if you come across b
 - It supports saving and loading games(in a non-standard format).
 - It has single player mode(random move generator which is easy for beginners).
 
-## What's New in this Version(2.0)
+## What's New in this Version(2.1)
+- The upgrade optimised the game even further, fixing a bug.
+- The upgrade added a new preference Menu where you can customise some game features
+- The upgrade adds background animations on the home menu.
+
+## What's New in Version 2.0
 
 - Revamped Home Menu so That it looks better.
 - Fixed Bugs.
@@ -55,11 +67,9 @@ Feel free to download the code, use it and please notify me if you come across b
 - Added basic SinglePlayer.
 
 ## What's next
-
-- I am working on the next upgrade to the game.
-- The upgrade will optimise the game even further, fixing a bug.
-- The upgrade will add a new preference Menu where you can customise some game features(it will be incomplete)
-- The upgrade adds background animations on the home menu.
+- I will further upgrade preferences.
+- Minor changes will be made
+- I will fix bugs(if found).
 - Hopefully, I will add documentation about the Game.
 - Please notify me quickly if you come across bugs, issues.
 - Put down your thoughts about the game in the Issues section along with all bugs/glitches.
@@ -69,5 +79,6 @@ Feel free to download the code, use it and please notify me if you come across b
 - Online Gameplay (on lan wifi and wlan)
 - Better SinglePlayer
 - Saving game in standard Chess format accepted by most games (pgn).
+- Adding sound effects
 - Undo moves (I have a method figured out to achieve this, but it is highly inefficient, so I removed the feature)(I am working on the more efficient method)
 - En Passant(This feature is coming soon)
