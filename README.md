@@ -1,6 +1,9 @@
-# PLEASE READ THIS NOTE
+## PLEASE READ THIS NOTE
 PLEASE KEEP DOWNLOADING THE LATEST VERSION OF THE GAME AS THEY CONTAIN BUG FIXES AND 
 PERFORMANCE OPTIMISERS
+
+NOTIFY ME IN THE ISSUES IF YOU COME ACROSS ANY BUGS OR HAVE SOMETHING TO SAY ABOUT THE GAME
+(REVEIWS, COMPLAINTS, SUGGESTIONS, IDEAS FOR NEXT UPGRADE ETC)
 
 # My-PyChess
 A Multiplayer/SinglePlayer Chess app written in Python using Pygame Library.
@@ -34,27 +37,19 @@ To explain in short- how the logic works in the chess game,
 Feel free to download the code, use it and please notify me if you come across bugs and glitches.
 
 ## How to custumise the game Using Preferences
+
 - In the main game menu(You see this after running main.py), click preferences.
 - Here you have 4 settings(more coming soon)
 - 1) Animations: When this is True, it will show the pieces that you move to slide smoothly(recommended to be True always, look better)
 - 2) sound: When this is True, it will play sounds(recommended to be False for now, I am working on it)
 - 3) SlideShow: When this is True, it will show a slideshow of images on main menu(recommended to be True always, look better)
-- 4) show moves: When this is True, it will show all legal move options for a selected piece during gameplay(recommended to be True, highly helpful for beginners(my favourite))
+- 4) Show moves: When this is True, it will show all legal move options for a selected piece during gameplay(recommended to be True, highly helpful for beginners(my favourite))
 - You can also open preferences.txt and edit the file there(not recommended to do unless you know what you are doing, it might spoil the app)
-
-## Features
-
-- Clean, easy to use GUI with a good homepage.
-- It allows users to make only valid moves.
-- It does not allow users to make moves that puts the users king at check.
-- It detects check, checkmate, stalemate and informs user.
-- It supports things like castling, pawn promotion etc.
-- It supports saving and loading games(in a non-standard format).
-- It has single player mode(random move generator which is easy for beginners).
 
 ## What's New in this Version(2.1)
 - The upgrade optimised the game even further, fixing a bug.
-- The upgrade added a new preference Menu where you can customise some game features
+- When you click a piece, it shows all the available spaces it can go.
+- The upgrade added a new preference Menu where you can customise some game features(read the note above)
 - The upgrade adds background animations on the home menu.
 
 ## What's New in Version 2.0
@@ -66,9 +61,19 @@ Feel free to download the code, use it and please notify me if you come across b
 - Added Save/load game features.
 - Added basic SinglePlayer.
 
+## Features
+
+- Clean, easy to use GUI with a good homepage.
+- It allows users to make only valid moves.
+- It does not allow users to make moves that puts the users king at check.
+- It detects check, checkmate, stalemate and informs user.
+- It supports things like castling, pawn promotion etc.
+- It supports saving and loading games(in a non-standard format).
+- It has single player mode(random move generator which is easy for beginners).
+
 ## What's next
 - I will further upgrade preferences.
-- Minor changes will be made
+- Minor changes will be made to the interface.
 - I will fix bugs(if found).
 - Hopefully, I will add documentation about the Game.
 - Please notify me quickly if you come across bugs, issues.
