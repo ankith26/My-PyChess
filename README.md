@@ -40,11 +40,11 @@ Feel free to download the code, use it and please notify me if you come across b
 
 - In the main game menu(You see this after running main.py), click preferences.
 - Here you have 4 settings(more coming soon)
-- 1) Animations: When this is True, it will show the pieces that you move to slide smoothly(recommended to be True always, look better)
-- 2) sound: When this is True, it will play sounds(recommended to be False for now, I am working on it)
-- 3) SlideShow: When this is True, it will show a slideshow of images on main menu(recommended to be True always, look better)
-- 4) Show moves: When this is True, it will show all legal move options for a selected piece during gameplay(recommended to be True, highly helpful for beginners(my favourite))
-- You can also open preferences.txt and edit the file there(not recommended to do unless you know what you are doing, it might spoil the app)
+1) Animations: When this is True, it will show the pieces that you move to slide smoothly(recommended to be True always, look better)
+2) Sound: When this is True, it will play sounds(recommended to be False for now, I am working on it)
+3) SlideShow: When this is True, it will show a slideshow of images on main menu(recommended to be True always, look better)
+4) Show moves: When this is True, it will show all legal move options for a selected piece during gameplay(recommended to be True, highly helpful for beginners(my favourite))
+-You can also open preferences.txt and edit the file there(not recommended to do unless you know what you are doing, it might spoil the app)
 
 ## What's New in this Version(2.1)
 - The upgrade optimised the game even further, fixing a bug.
@@ -73,6 +73,7 @@ Feel free to download the code, use it and please notify me if you come across b
 
 ## What's next
 - I will further upgrade preferences.
+- I will modify the code to make it easy to understand
 - Minor changes will be made to the interface.
 - I will fix bugs(if found).
 - Hopefully, I will add documentation about the Game.
