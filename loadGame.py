@@ -1,6 +1,7 @@
 import os
 import pygame
 import pygame.font
+
 pygame.font.init()
 
 sans = pygame.font.Font("FreightSansBold.otf", 36)
