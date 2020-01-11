@@ -1,0 +1,4 @@
+animations = True
+sounds = False
+slideshow = True
+show-legal-moves = True

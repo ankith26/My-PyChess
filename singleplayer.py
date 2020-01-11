@@ -5,17 +5,30 @@ from engineB import *
 
 from fontloader import CHECK, CHECKMATE, LOST, STALEMATE, CHOOSE, SAVE
 
-def automove(win, side, wboard, bboard):
+from pref import load
+
+def showAvailMoves(win, side, wboard, bboard, ptype, castle):
+    if load()[3]:
+        for i in availableMoves(side, wboard, bboard, ptype, castle):
+            if isOccupied(wboard, bboard, i) != side:
+                if moveTest(side, wboard, bboard, ptype[:2], i):
+                    x = i[0]*50 + 20
+                    y = i[1]*50 + 20
+                    pygame.draw.rect(win, (0, 255, 0), (x, y, 10, 10))
+
+def automove(win, side, wboard, bboard, anim):
     data = [i for i in allMoves(side, wboard, bboard)]
     bestmove = data[random.randint(0,len(data)-1)]
     if moveTest(side, wboard, bboard, bestmove[0], bestmove[1]):
         piece = bestmove[0] + [getType(bboard, bestmove[0])]
-        animate(win, side, wboard, bboard, piece, bestmove[1])
+        if anim:
+            animate(win, side, wboard, bboard, piece, bestmove[1])
         return move(side, wboard, bboard, bestmove[0], bestmove[1])
     else:
-        return automove(win, side, wboard, bboard)
+        return automove(win, side, wboard, bboard, anim)
 
 def main(win, wmove, wBoard, bBoard, castle):
+    anim = load()[0]
     clock = pygame.time.Clock()
     x = y = -100
     sel = [0, 0]
@@ -55,7 +68,7 @@ def main(win, wmove, wBoard, bBoard, castle):
                         end = [True, "s"]
                 piece = [prevsel[0], prevsel[1], getType(wBoard, prevsel)]
                 if piece in wBoard:
-                    if isOccupied(wBoard, bBoard, sel[0], sel[1]) != "w":
+                    if isOccupied(wBoard, bBoard, sel) != "w":
                         if sel in availableMoves("w", wBoard, bBoard, piece,
                                                  castle=castle):
                             castle = doRoutine(wBoard, bBoard, castle)
@@ -69,7 +82,9 @@ def main(win, wmove, wBoard, bBoard, castle):
                                 pygame.display.update()
                             if moveTest("w", wBoard, bBoard, prevsel, sel):
                                 wmove = False
-                                animate(win, "w", wBoard, bBoard, piece, sel)
+                                if anim:
+                                    animate(win, "w", wBoard, bBoard,
+                                            piece, sel)
                                 wBoard, bBoard = move("w", wBoard, bBoard,
                                                       prevsel, sel)
             else:
@@ -89,16 +104,17 @@ def main(win, wmove, wBoard, bBoard, castle):
                         end = [True, "s"]
                 if not end[0]:
                     castle = doRoutine(wBoard, bBoard, castle)
-                    wBoard, bBoard = automove(win, "b", wBoard, bBoard)
+                    wBoard, bBoard = automove(win, "b", wBoard, bBoard, anim)
                     sel = [-1,-1]
                     wmove = True
-            if wmove and isOccupied(wBoard, bBoard, sel[0], sel[1]) == "w":
-                pygame.draw.rect(win, (255, 255, 0), (x * 50,
-                                                      y * 50, 50, 50))
-            if not wmove and isOccupied(wBoard, bBoard, sel[0], sel[1]) == "b":
+            if wmove and isOccupied(wBoard, bBoard, sel) == "w":
                 pygame.draw.rect(win, (255, 255, 0), (x * 50,
                                                       y * 50, 50, 50))
             drawPieces(win, wBoard, bBoard)
+            if wmove:
+                seltype = sel + [getType(wBoard, sel)]
+                if seltype in wBoard:
+                    showAvailMoves(win, "w", wBoard, bBoard, seltype, castle)
         else:
             if end[1] == "w":
                 win.blit(CHECKMATE,(60,10))

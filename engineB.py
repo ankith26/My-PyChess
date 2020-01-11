@@ -7,7 +7,7 @@ def path(name):
     return os.path.join("pieces", name + ".png")
 
 pygame.init()
-pygame.display.set_mode((2,2))
+pygame.display.set_mode((1,1))
 WPAWN = pygame.image.load(path("whitePawn")).convert_alpha()
 WROOK = pygame.image.load(path("whiteRook")).convert_alpha()
 WKNIGHT = pygame.image.load(path("whiteKnight")).convert_alpha()
@@ -51,7 +51,7 @@ def drawBoard(win):
             else:
                 colour = (181, 101, 29)
             pygame.draw.rect(
-                win, colour, (50 * x + 50, 50 * y + 50, 50, 50))
+                win, colour, (50 * (x + 1), 50 * (y + 1), 50, 50))
 
 def drawPieces(win, wboard, bboard):
     for x in wboard:

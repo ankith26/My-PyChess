@@ -5,7 +5,19 @@ from engineB import *
 
 from fontloader import CHECK, CHECKMATE, LOST, STALEMATE, CHOOSE, SAVE
 
+from pref import load
+
+def showAvailMoves(win, side, wboard, bboard, ptype, castle):
+    if load()[3]:
+        for i in availableMoves(side, wboard, bboard, ptype, castle):
+            if isOccupied(wboard, bboard, i) != side:
+                if moveTest(side, wboard, bboard, ptype[:2], i):
+                    x = i[0]*50 + 20
+                    y = i[1]*50 + 20
+                    pygame.draw.rect(win, (0, 255, 0), (x, y, 10, 10))
+
 def main(win, wmove, wBoard, bBoard, castle):
+    anim = load()[0]
     clock = pygame.time.Clock()
     x = y = -100
     sel = [0, 0]
@@ -46,24 +58,26 @@ def main(win, wmove, wBoard, bBoard, castle):
                         end = [True, "s"]
                 piece = [prevsel[0], prevsel[1], getType(wBoard, prevsel)]
                 if piece in wBoard:
-                    if isOccupied(wBoard, bBoard, sel[0], sel[1]) != "w":
+                    if isOccupied(wBoard, bBoard, sel) != "w":
                         if sel in availableMoves("w", wBoard, bBoard, piece,
-                                                 castle=castle):
+                                                 castle):
                             castle = doRoutine(wBoard, bBoard, castle)
                             if piece[2] == "pawn" and sel[1] == 1:
-                                    drawPieces(win, wBoard, bBoard)
-                                    win.blit(CHOOSE, (70,10))
-                                    win.blit(WQUEEN, (230, 0))
-                                    win.blit(WBISHOP, (280, 0))
-                                    win.blit(WROOK, (330, 0))
-                                    win.blit(WKNIGHT, (380, 0))
-                                    pygame.display.update()
+                                drawPieces(win, wBoard, bBoard)
+                                win.blit(CHOOSE, (70,10))
+                                win.blit(WQUEEN, (230, 0))
+                                win.blit(WBISHOP, (280, 0))
+                                win.blit(WROOK, (330, 0))
+                                win.blit(WKNIGHT, (380, 0))
+                                pygame.display.update()
                             if moveTest("w", wBoard, bBoard, prevsel, sel):
                                 wmove = False
-                                animate(win, "w", wBoard, bBoard, piece, sel)
+                                if anim:
+                                    animate(win, "w", wBoard, bBoard,
+                                            piece, sel)
                                 wBoard, bBoard = move("w", wBoard, bBoard,
                                                       prevsel, sel)
-            else:
+            else:    
                 if isChecked("b", wBoard, bBoard):
                     if isCheckmate("b", wBoard, bBoard):
                         end = [True, "b"]
@@ -80,30 +94,42 @@ def main(win, wmove, wBoard, bBoard, castle):
                         end = [True, "s"]
                 piece = [prevsel[0], prevsel[1], getType(bBoard, prevsel)]
                 if piece in bBoard:
-                    if isOccupied(wBoard, bBoard, sel[0], sel[1]) != "b":
+                    if isOccupied(wBoard, bBoard, sel) != "b":
                         if sel in availableMoves("b", wBoard, bBoard, piece,
-                                                 castle=castle):
+                                                 castle):
                             castle = doRoutine(wBoard, bBoard, castle)
                             if piece[2] == "pawn" and sel[1] == 8:
-                                    drawPieces(win, wBoard, bBoard)
-                                    win.blit(CHOOSE, (70,10))
-                                    win.blit(BQUEEN, (230, 0))
-                                    win.blit(BBISHOP, (280, 0))
-                                    win.blit(BROOK, (330, 0))
-                                    win.blit(BKNIGHT, (380, 0))
-                                    pygame.display.update()
+                                drawPieces(win, wBoard, bBoard)
+                                win.blit(CHOOSE, (70,10))
+                                win.blit(BQUEEN, (230, 0))
+                                win.blit(BBISHOP, (280, 0))
+                                win.blit(BROOK, (330, 0))
+                                win.blit(BKNIGHT, (380, 0))
+                                pygame.display.update()
                             if moveTest("b", wBoard, bBoard, prevsel, sel):
                                 wmove = True
-                                animate(win, "b", wBoard, bBoard, piece, sel)
+                                if anim:
+                                    animate(win, "b", wBoard, bBoard,
+                                            piece, sel)
                                 wBoard, bBoard = move("b", wBoard, bBoard,
                                                       prevsel, sel)
-            if wmove and isOccupied(wBoard, bBoard, sel[0], sel[1]) == "w":
+            if wmove and isOccupied(wBoard, bBoard, sel) == "w":
                 pygame.draw.rect(win, (255, 255, 0), (x * 50,
                                                       y * 50, 50, 50))
-            if not wmove and isOccupied(wBoard, bBoard, sel[0], sel[1]) == "b":
+            if not wmove and isOccupied(wBoard, bBoard, sel) == "b":
                 pygame.draw.rect(win, (255, 255, 0), (x * 50,
                                                       y * 50, 50, 50))
             drawPieces(win, wBoard, bBoard)
+            
+            if wmove:
+                seltype = sel + [getType(wBoard, sel)]
+                if seltype in wBoard:
+                    showAvailMoves(win, "w", wBoard, bBoard, seltype, castle)
+            else:
+                seltype = sel + [getType(bBoard, sel)]
+                if seltype in bBoard:
+                    showAvailMoves(win, "b", wBoard, bBoard, seltype, castle)
+                
         else:
             if end[1] == "w":
                 win.blit(CHECKMATE,(60,10))

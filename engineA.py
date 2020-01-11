@@ -1,14 +1,6 @@
 import os
+from copy import deepcopy
 from engineB import getChoice
-
-def copy(sboard):
-    board = []
-    for i in sboard:
-        if i is None:
-            board.append(None)
-        else:
-            board.append(list(i))
-    return board
 
 def getType(board, pos):
     for i in board:
@@ -46,7 +38,7 @@ def saveGame(move, wboard, bboard , castle, player = "multi", cnt = 0):
             text += str(i) + ' '
         file.write(text)
         file.close()
-        
+
 def move(side, wboard, bboard, fro, to):
     if side == "w":
         for i in range(len(bboard)):
@@ -84,7 +76,7 @@ def move(side, wboard, bboard, fro, to):
         return wboard, bboard
     
 def moveTest(side, wboard, bboard, fro, to):
-    wboard, bboard = copy(wboard), copy(bboard)
+    wboard, bboard = deepcopy(wboard), deepcopy(bboard)
     if side == "w":
         for i in range(len(wboard)):
             if wboard[i] is not None and wboard[i][:2] == fro:
@@ -117,42 +109,36 @@ def doRoutine(wboard, bboard, castle):
         castle[5] = True
     return castle
 
-def isOccupied(wboard, bboard, x, y, flag="w"):
+def isOccupied(wboard, bboard, pos, flag="w"):
     if flag == 'w':
         for i in bboard:
-            if i != None and i[:2] == [x, y]:
+            if i != None and i[:2] == pos:
                 return "b"
         for i in wboard:
-            if i != None and i[:2] == [x, y]:
+            if i != None and i[:2] == pos:
                 return "w"
     elif flag == 'b':
         for i in wboard:
-            if i != None and i[:2] == [x, y]:
+            if i != None and i[:2] == pos:
                 return "w"
         for i in bboard:
-            if i != None and i[:2] == [x, y]:
+            if i != None and i[:2] == pos:
                 return "b"
     return "empty"
 
 def allMoves(side, wboard, bboard):
     if side == "w":
-        cnt = -1
-        for i in wboard:
-            cnt += 1
+        for cnt, i in enumerate(wboard):
             if i != None:
-                for j in availableMoves(side, wboard, bboard, i):
-                    if isOccupied(wboard, bboard, j[0], j[1], "w") != "w":
-                        if wboard[cnt] != None:
-                            yield [list(wboard[cnt][:2]), j]
+                for pos in availableMoves(side, wboard, bboard, i):
+                    if isOccupied(wboard, bboard, pos, "w") != "w":
+                        yield [list(wboard[cnt][:2]), pos]
     elif side == "b":
-        cnt = -1
-        for i in bboard:
-            cnt += 1
+        for cnt, i in enumerate(bboard):
             if i != None:
-                for j in availableMoves(side, wboard, bboard, i):
-                    if isOccupied(wboard, bboard, j[0], j[1], "b") != "b":
-                        if bboard[cnt] != None:
-                            yield [list(bboard[cnt][:2]), j]
+                for pos in availableMoves(side, wboard, bboard, i):
+                    if isOccupied(wboard, bboard, pos, "b") != "b":
+                        yield [list(bboard[cnt][:2]), pos]
 
 def isChecked(side, wboard, bboard, pos=None):
     if side == "w":        
@@ -217,75 +203,76 @@ def castleMoves(side, wboard, bboard, c):
 def availableMoves(side, wboard, bboard, ptype, castle=None):
     x, y = ptype[0], ptype[1]
     piece = ptype[2]
-    if isOccupied(wboard, bboard, x, y, side) != side:
+    if isOccupied(wboard, bboard, [x, y], side) != side:
         return []
     if piece == 'pawn':
         if side == 'w':
-            if y == 7 and isOccupied(wboard, bboard, x, 5) == \
-               isOccupied(wboard, bboard, x, 6) == "empty":
+            if y == 7 and isOccupied(wboard, bboard, [x, 5]) == \
+               isOccupied(wboard, bboard, [x, 6]) == "empty":
                 yield [x, 5]
-            if isOccupied(wboard, bboard, x + 1, y - 1, side) == "b":
+            if isOccupied(wboard, bboard, [x + 1, y - 1]) == "b":
                 yield [x + 1, y - 1]
-            if isOccupied(wboard, bboard, x - 1, y - 1, side) == "b":
+            if isOccupied(wboard, bboard, [x - 1, y - 1]) == "b":
                 yield [x - 1, y - 1]
-            if isOccupied(wboard, bboard, x, y - 1) == "empty":
+            if isOccupied(wboard, bboard, [x, y - 1]) == "empty":
                 yield [x, y - 1]
         else:
-            if y == 2 and isOccupied(wboard, bboard, x, 4) ==\
-               isOccupied(wboard, bboard, x, 3) == "empty":
+            if y == 2 and isOccupied(wboard, bboard, [x, 4]) ==\
+               isOccupied(wboard, bboard, [x, 3]) == "empty":
                 yield [x, 4]
-            if isOccupied(wboard, bboard, x + 1, y + 1, side) == "w":
+            if isOccupied(wboard, bboard, [x + 1, y + 1], side) == "w":
                 yield [x + 1, y + 1]
-            if isOccupied(wboard, bboard, x - 1, y + 1, side) == "w":
+            if isOccupied(wboard, bboard, [x - 1, y + 1], side) == "w":
                 yield [x - 1, y + 1]
-            if isOccupied(wboard, bboard, x, y + 1) == "empty":
+            if isOccupied(wboard, bboard, [x, y + 1]) == "empty":
                 yield [x, y + 1]
     elif piece == 'knight':
-        for i in [[x + 1, y + 2], [x + 1, y - 2], [x - 1, y + 2], [x - 1, y - 2]
-                ,[x + 2, y + 1], [x + 2, y - 1], [x - 2, y + 1], [x - 2, y - 1]]:
+        for i in [[x + 1, y + 2], [x + 1, y - 2], [x - 1, y + 2],
+                  [x - 1, y - 2], [x + 2, y + 1], [x + 2, y - 1],
+                  [x - 2, y + 1], [x - 2, y - 1]]:
             if i[0] in range(1, 9) and i[1] in range(1, 9):
                 yield i
     elif piece == 'bishop':
         for i in range(1, 8):
             if x + i in range(1, 9) and y + i in range(1, 9):
                 yield [x + i, y + i]
-                if isOccupied(wboard, bboard, x + i, y + i) != "empty":
+                if isOccupied(wboard, bboard, [x + i, y + i]) != "empty":
                     break
         for i in range(1, 8):
             if x + i in range(1, 9) and y - i in range(1, 9):
                 yield [x + i, y - i]
-                if isOccupied(wboard, bboard, x + i, y - i) != "empty":
+                if isOccupied(wboard, bboard, [x + i, y - i]) != "empty":
                     break
         for i in range(1, 8):
             if x - i in range(1, 9) and y + i in range(1, 9):
                 yield [x - i, y + i]
-                if isOccupied(wboard, bboard, x - i, y + i) != "empty":
+                if isOccupied(wboard, bboard, [x - i, y + i]) != "empty":
                     break
         for i in range(1, 8):
             if x - i in range(1, 9) and y - i in range(1, 9):
                 yield [x - i, y - i]
-                if isOccupied(wboard, bboard, x - i, y - i) != "empty":
+                if isOccupied(wboard, bboard, [x - i, y - i]) != "empty":
                     break
     elif piece == 'rook':
         for i in range(1, 8):
             if x + i in range(1, 9) and y in range(1, 9):
                 yield [x + i, y]
-                if isOccupied(wboard, bboard, x + i, y) != "empty":
+                if isOccupied(wboard, bboard, [x + i, y]) != "empty":
                     break
         for i in range(1, 8):
             if x in range(1, 9) and y + i in range(1, 9):
                 yield [x, y + i]
-                if isOccupied(wboard, bboard, x, y + i) != "empty":
+                if isOccupied(wboard, bboard, [x, y + i]) != "empty":
                     break
         for i in range(1, 8):
             if x - i in range(1, 9) and y in range(1, 9):
                 yield [x - i, y]
-                if isOccupied(wboard, bboard, x - i, y) != "empty":
+                if isOccupied(wboard, bboard, [x - i, y]) != "empty":
                     break
         for i in range(1, 8):
             if x in range(1, 9) and y - i in range(1, 9):
                 yield [x, y - i]
-                if isOccupied(wboard, bboard, x, y - i) != "empty":
+                if isOccupied(wboard, bboard, [x, y - i]) != "empty":
                     break
     elif piece == 'queen':
         for i in availableMoves(side, wboard, bboard, [x, y, 'bishop']):
@@ -300,4 +287,4 @@ def availableMoves(side, wboard, bboard, ptype, castle=None):
                   [x, y - 1], [x, y + 1],
                   [x + 1, y - 1], [x + 1, y], [x + 1, y + 1]]:
             if i[0] in range(1, 9) and i[1] in range(1, 9):
-                    yield i
+                yield i
