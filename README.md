@@ -36,7 +36,7 @@ To explain in short- how the logic works in the chess game,
 
 Feel free to download the code, use it and please notify me if you come across bugs and glitches.
 
-## How to custumise the game Using Preferences
+## How to customise the game Using Preferences
 
 - In the main game menu(You see this after running main.py), click preferences.
 - Here you have 4 settings(more coming soon)
@@ -71,7 +71,7 @@ Feel free to download the code, use it and please notify me if you come across b
 - It supports saving and loading games(in a non-standard format).
 - It has single player mode(random move generator which is easy for beginners).
 
-## What's next
+## What's next in (v2.2)
 - I will further upgrade preferences.
 - I will modify the code to make it easy to understand
 - Minor changes will be made to the interface.
@@ -79,6 +79,16 @@ Feel free to download the code, use it and please notify me if you come across b
 - Hopefully, I will add documentation about the Game.
 - Please notify me quickly if you come across bugs, issues.
 - Put down your thoughts about the game in the Issues section along with all bugs/glitches.
+
+## What's next in (v3)(planned)
+- EXPECTED TIME OF RELEASE: FEBRUARY 2020
+
+- Simplyfying the code to make it easy to understand(revamping).
+- Undo moves option
+- Export/import pgn games(This is a better and standard format for saving games).
+- More preference options
+
+- I will be removing support for the current format of saving games.
 
 ## Long term Future Goals with the Game
 
