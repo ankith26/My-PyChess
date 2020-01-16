@@ -48,10 +48,13 @@ Feel free to download the code, use it and please notify me if you come across b
 - In the main game menu(You see this after running main.py), click preferences.
 - Here you have 4 settings(more coming soon).
 1) Animations: When this is True, it will show the pieces that you move to slide smoothly(recommended to be True always, look better).
-2) Sound: When this is True, it will play sounds(recommended to be False for now, I am working on it)(a placeholder for future).
+2) Sound: When this is True, it will play sounds(recommended to be False for now, I am working on it)(a placeholder for future upgrade).
 3) SlideShow: When this is True, it will show a slideshow of images on main menu (recommended to be True always, look better).
 4) Show moves: When this is True, it will show all legal move options for a selected piece during gameplay(recommended to be True, highly helpful for beginners (my favouritef feature)).
-5) Undo: When this is True, it allows users to undo(recommended to be True)(a placeholder for future).
+5) Undo: When this is True, it allows users to undo(recommended to be True)(a placeholder for future upgrade).
+6)
+7)
+
 -You can also open preferences.txt and edit the file there (not recommended to do unless you know what you are doing, it might spoil the app).
 
 ## What's New in this Version(2.1)
@@ -87,18 +90,18 @@ Feel free to download the code, use it and please notify me if you come across b
 - I will add some placeholder code to comply with future updates.
 
 ## What's next in (v3)(planned)
-- EXPECTED TIME OF RELEASE: JANUARY/FEBRUARY 2020
+- EXPECTED TIME OF RELEASE: FEBRUARY 2020
 
-- Simplyfying the code to make it easy to understand(revamping).
+- Simplyfying the code to make it easy to understand(with some revamping).
 - Undo moves option.
 - Export/import pgn games (This is a better and standard format for saving games).
-- More preference options.
+- Onine play may be added.
 
 - I will be removing support for the current format of saving games.
 
 ## Long term Future Goals with the Game
 
-- Online Gameplay (on lan wifi and wlan).
+- Online Gameplay (on wlan and lan).
 - Better SinglePlayer.
 - Saving game in standard Chess format accepted by most games (pgn).
 - Adding sound effects.
