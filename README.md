@@ -46,7 +46,7 @@ Feel free to download the code, use it and please notify me if you come across b
 ## How to customise the game Using Preferences
 
 - In the main game menu(You see this after running main.py), click preferences.
-- Here you have 4 settings(more coming soon).
+- Here you have a few settings(more coming soon).
 1) Animations: When this is True, it will show the pieces that you move to slide smoothly(recommended to be True always, look better).
 2) Sound: When this is True, it will play sounds(recommended to be False for now, I am working on it)(a placeholder for future upgrade).
 3) SlideShow: When this is True, it will show a slideshow of images on main menu (recommended to be True always, look better).
@@ -55,9 +55,9 @@ Feel free to download the code, use it and please notify me if you come across b
 6)
 7)
 
--You can also open preferences.txt and edit the file there (not recommended to do unless you know what you are doing, it might spoil the app).
+- You can also open preferences.txt and edit the file there (not recommended to do unless you know what you are doing, it might spoil the app).
 
-## What's New in this Version(2.1)
+## What's New in this Version 2.1
 - The upgrade optimised the game even further, fixing a bug.
 - When you click a piece, it shows all the available spaces it can go.
 - The upgrade added a new preference Menu where you can customise some game features (read the note above).
