@@ -92,11 +92,10 @@ Feel free to download the code, use it and please notify me if you come across b
 
 ## What's next in (v3)(planned)
 - EXPECTED TIME OF RELEASE: FEBRUARY 2020
-
 - Simplyfying the code to make it easy to understand (with some revamping).
 - Undo moves option.
 - Save/load games with a new way of storing gamedata (as a list of FEN strings) .
-- Onine play may be added.
+- Online play may be added.
 - Singleplayer may be upgraded
 
 - I will be removing support for the current format of saving games.
