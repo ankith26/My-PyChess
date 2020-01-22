@@ -37,7 +37,6 @@ def main(win, wmove, wBoard, bBoard, castle):
                 elif 330 < x < 500 and 460 < y < 490:
                     msg = saveGame(wmove, wBoard, bBoard, castle)
                     pygame.display.update()
-                    print(msg)
                     return prompt(win, msg)
         if not end[0]:
             drawBoard(win)
