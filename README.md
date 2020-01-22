@@ -50,18 +50,26 @@ Feel free to download the code, use it and please notify me if you come across b
 3) SlideShow: When this is True, it will show a slideshow of images on main menu (recommended to be True always, look better).
 4) Show moves: When this is True, it will show all legal move options for a selected piece during gameplay (recommended to be True, highly helpful for beginners (my favourite feature)).
 5) Undo: When this is True, it allows users to undo(recommended to be True)(a placeholder for future upgrade).
-6)
-7)
+6) Border color: RGB colour Code for chess board borders.
+7) Screen size: Size of the screen (a placeholder for future upgrade).
 
+- RE-RUN THE GAME TO APPLY NEW SETTINGS.
 - You can also open preferences.txt and edit the file there (not recommended to do unless you know what you are doing, it might spoil the app if you do it the wrong way).
 
-## What's New in this Version 2.1
+## What's New in this Version 2.2
+- Minor performance upgrades
+- Further upgraded preferences.
+- Upgraded loadgame menu.
+- Minor changes made to the interface.
+- Placeholder code added to comply with future updates.
+
+## What was New in Version 2.1
 - The upgrade optimised the game even further, fixing a bug.
 - When you click a piece, it shows all the available spaces it can go.
 - The upgrade added a new preference Menu where you can customise some game features (read the note above).
 - The upgrade adds background animations on the home menu.
 
-## What's New in Version 2.0
+## Wha was New in Version 2.0
 
 - Revamped Home Menu so That it looks better.
 - Fixed Bugs.
@@ -71,7 +79,6 @@ Feel free to download the code, use it and please notify me if you come across b
 - Added basic SinglePlayer.
 
 ## Features
-
 - Clean, easy to use GUI with a good homepage.
 - It allows users to make only valid moves.
 - It does not allow users to make moves that puts the users king at check.
@@ -80,14 +87,6 @@ Feel free to download the code, use it and please notify me if you come across b
 - It supports saving and loading games (in a non-standard format).
 - It has single player mode (random move generator which is easy for beginners).
 - It has a preference menu where, you can customize the game to meet your needs.
-
-## What's next (in v2.2)
-- I will encorporate some performance upgrades (Version 2.1 lags a bit on my Raspberry Pi, even though performance is quite smooth on better machines).
-- I will further upgrade preferences.
-- I will upgrade loadgame menu.
-- Minor changes will be made to the interface.
-- I will fix bugs (if found).
-- I will add some placeholder code to comply with future updates.
 
 ## What's next in (v3)(planned)
 - EXPECTED TIME OF RELEASE: FEBRUARY 2020
