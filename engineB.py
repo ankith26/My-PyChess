@@ -1,7 +1,8 @@
 import pygame
 import time
 import os
-from fontloader import MESSAGE1, MESSAGE2, YES, NO
+from fontloader import MESSAGE1, MESSAGE2, YES, NO, MSG, putNum
+from pref import LOAD
 
 def path(name):
     return os.path.join("pieces", name + ".png")
@@ -39,7 +40,7 @@ def getChoice():
                         return "knight"
 
 def drawBoard(win):
-    colour = (0, 255, 255)
+    colour = LOAD[5]
     pygame.draw.rect(win, colour, (0, 0, 500, 50))
     pygame.draw.rect(win, colour, (0, 0, 50, 500))
     pygame.draw.rect(win, colour, (450, 0, 50, 500))
@@ -133,11 +134,15 @@ def animate(win, side, wboard, bboard, lst, to):
     drawBoard(win)
     return
 
-def prompt(win):
-    pygame.draw.rect(win, (0,0,0), (70, 140, 360, 150))
-    pygame.draw.rect(win, (255,255,255), (70, 140, 360, 150), 4)
+def prompt(win, msg=""):
+    pygame.draw.rect(win, (0,0,0), (70, 140, 360, 180))
+    pygame.draw.rect(win, (255,255,255), (70, 140, 360, 180), 4)
     win.blit(MESSAGE1, (92,140))
     win.blit(MESSAGE2, (142,180))
+    if msg != "":
+        win.blit(MSG, (80, 280))
+        putNum(win, msg, (320, 280), False)
+          
     win.blit(YES, (100, 240))
     win.blit(NO, (340,240))
     pygame.draw.rect(win, (255,255,255), (85, 140, 330, 82), 2)

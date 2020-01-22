@@ -5,10 +5,10 @@ from engineB import *
 
 from fontloader import CHECK, CHECKMATE, LOST, STALEMATE, CHOOSE, SAVE
 
-from pref import load
+from pref import LOAD
 
 def showAvailMoves(win, side, wboard, bboard, ptype, castle):
-    if load()[3]:
+    if LOAD[3]:
         for i in availableMoves(side, wboard, bboard, ptype, castle):
             if isOccupied(wboard, bboard, i) != side:
                 if moveTest(side, wboard, bboard, ptype[:2], i):
@@ -28,7 +28,7 @@ def automove(win, side, wboard, bboard, anim):
         return automove(win, side, wboard, bboard, anim)
 
 def main(win, wmove, wBoard, bBoard, castle):
-    anim = load()[0]
+    anim = LOAD[0]
     clock = pygame.time.Clock()
     x = y = -100
     sel = [0, 0]
@@ -46,8 +46,9 @@ def main(win, wmove, wBoard, bBoard, castle):
                     prevsel = sel
                     sel = [x, y]
                 elif 330 < x < 500 and 460 < y < 490:
-                    saveGame(wmove, wBoard, bBoard, castle, "single")
-                    return prompt(win)
+                    msg=saveGame(wmove, wBoard, bBoard, castle, "single")
+                    pygame.display.update
+                    return prompt(win, msg)
         if not end[0]:
             drawBoard(win)
             win.blit(SAVE,(330,460))

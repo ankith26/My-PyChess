@@ -13,7 +13,7 @@ def saveGame(move, wboard, bboard , castle, player = "multi", cnt = 0):
     try:
         file = open(name, 'r')
         file.close()
-        saveGame(move, wboard, bboard, castle, player, cnt + 1)
+        return saveGame(move, wboard, bboard, castle, player, cnt + 1)
     except:
         file = open(name, "w")
         text = player + '\n'
@@ -38,6 +38,7 @@ def saveGame(move, wboard, bboard , castle, player = "multi", cnt = 0):
             text += str(i) + ' '
         file.write(text)
         file.close()
+        return cnt
 
 def move(side, wboard, bboard, fro, to):
     if side == "w":

@@ -1,4 +1,6 @@
-animations = True
+animations = False
 sounds = False
 slideshow = True
 show-legal-moves = True
+allow-undo = False
+border-color = 0, 200, 200

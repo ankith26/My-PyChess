@@ -12,6 +12,11 @@ clock = pygame.time.Clock()
 win = pygame.display.set_mode((500, 500))
 pygame.display.set_caption('PyChess')
 
+LOGO = pygame.image.load(os.path.join("images",
+                                            "logo.png"))
+
+pygame.display.set_icon(LOGO)
+
 BACKGROUND = pygame.image.load(os.path.join("images",
                                             "background.jpg")).convert()
 BACKGROUND2 = pygame.image.load(os.path.join("images",
@@ -74,6 +79,8 @@ def showMain(cnt = 0, img = 0):
         win.blit(s, (0,0))
         
     win.blit(HEADING, (85, 20))
+    pygame.draw.line(win, (255, 255, 255), (90, 95), (130, 95), 5)
+    pygame.draw.line(win, (255, 255, 255), (170, 95), (400, 95), 5)
     win.blit(VERSION, (340, 100))
       
     win.blit(SINGLE, (single[0], single[1]))
@@ -136,7 +143,7 @@ while running:
             elif docs[0] < x < (docs[0]+docs[2]) and \
                docs[1] < y < (docs[1]+docs[3]):
                 print("Coming soon")
-    if pref.load()[2]:
+    if pref.LOAD[2]:
         cnt += 1
         if cnt < 54:
             showMain(cnt, img)
