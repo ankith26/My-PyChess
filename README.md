@@ -84,6 +84,7 @@ Feel free to download the code, use it and please notify me if you come across b
 ## What's next (in v2.2)
 - I will encorporate some performance upgrades (Version 2.1 lags a bit on my Raspberry Pi, even though performance is quite smooth on better machines).
 - I will further upgrade preferences.
+- I will upgrade loadgame menu.
 - Minor changes will be made to the interface.
 - I will fix bugs (if found).
 - I will add some placeholder code to comply with future updates.
@@ -94,8 +95,7 @@ Feel free to download the code, use it and please notify me if you come across b
 - Undo moves option.
 - Save/load games with a new way of storing gamedata (as a list of FEN strings) .
 - Online play may be added.
-- Singleplayer may be upgraded
-
+- Singleplayer may be upgraded.
 - I will be removing support for the current format of saving games.
 
 ## Long term Future Goals with the Game
