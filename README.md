@@ -96,7 +96,7 @@ Feel free to download the code, use it and please notify me if you come across b
 - Save/load games with a new way of storing gamedata (as a list of FEN strings) .
 - Online play may be added.
 - Singleplayer may be upgraded.
-- I will be removing support for the current format of saving games.
+- I WILL BE REMOVING SUPPORT FOR THE CURRENT FORMAT FOR SAVING GAMES.
 
 ## Long term Future Goals with the Game
 
