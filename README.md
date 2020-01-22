@@ -1,16 +1,14 @@
 ## PLEASE READ THIS NOTE
 
-THANKS FOR SHOWING INTEREST IN MY PROJECT. I KNOW THE CODE IS A BIT MESSY(IT STILL WORKS THOUGH) BUT I WILL CLEAN THE CODE IN THE NEXT MAJOR UPGRADE TO KEEP IT EASY FOR THE EYE.
+Thanks for showing interest in my project. I know the code is a bit messy, it still works well.
+In the next update I add either online play or upgrade singleplayer.
 
-IN THE NEXT UPGRADE I ADD EITHER ONLINE PLAY OR UPGRADE SINLEPLAYER.
-
-PUT YOUR THOUGHTS DOWN IN THE ISSUES SECTION ON WHAT I MUST UPGRADE.
+Put your thoughts down in the issues section.
 
 PLEASE KEEP DOWNLOADING THE LATEST VERSION OF THE GAME AS THEY CONTAIN BUG FIXES AND 
 PERFORMANCE OPTIMISERS.
 
-NOTIFY ME IN THE ISSUES IF YOU COME ACROSS ANY BUGS OR HAVE SOMETHING TO SAY ABOUT THE GAME
-(REVEIWS, COMPLAINTS, SUGGESTIONS, IDEAS FOR NEXT UPGRADE ETC).
+Notify me in the issues section if you have anything to say.(bug reports, suggestions, ideas, etc)
 
 # My-PyChess
 A Multiplayer/SinglePlayer Chess app written in Python using Pygame Library.
