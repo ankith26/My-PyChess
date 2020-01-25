@@ -8,7 +8,7 @@ Put your thoughts down in the issues section.
 PLEASE KEEP DOWNLOADING THE LATEST VERSION OF THE GAME AS THEY CONTAIN BUG FIXES AND 
 PERFORMANCE OPTIMISERS.
 
-Notify me in the issues section if you have anything to say.(bug reports, suggestions, ideas, etc)
+Notify me in the issues section if you have anything to say (bug reports, suggestions, ideas, etc).
 
 # My-PyChess
 A Multiplayer/SinglePlayer Chess app written in Python using Pygame Library.
@@ -89,8 +89,9 @@ Feel free to download the code, use it and please notify me if you come across b
 - It has a preference menu where, you can customize the game to meet your needs.
 
 ## What's next in (v3)(planned)
+
 - EXPECTED TIME OF RELEASE: FEBRUARY 2020
-- Simplyfying the code to make it easy to understand (with some revamping).
+- The code will be revamped.
 - Undo moves option.
 - Save/load games with a new way of storing gamedata (as a list of FEN strings) .
 - Online play may be added.
@@ -99,8 +100,9 @@ Feel free to download the code, use it and please notify me if you come across b
 
 ## Long term Future Goals with the Game
 
-- Online Gameplay (on wlan and lan).
+- Clean, easy to understand code to be implemented.
+- Support for Pygame v2 (which is releasing soon).
+- Online Gameplay (on wlan and lan) with Chat interface.
 - Better SinglePlayer.
 - Adding sound effects.
-- Undo moves (I have a method figured out to achieve this, but it is highly inefficient, so I removed the feature)(I am working on the more efficient method).
 - En Passant (This feature is coming soon).
