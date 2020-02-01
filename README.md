@@ -93,16 +93,16 @@ Feel free to download the code, use it and please notify me if you come across b
 
 ## What's next in Version 3.0
 - EXPECTED TIME OF RELEASE: SECOND WEEK OF APRIL 2020
-- The code will be revamped (and cleaned),
+- The code will be completely revamped.
 - Undo moves option.
-- Save/load games with a new way of storing gamedata (as a list of FEN strings).
+- Save/load games with a new way of storing gamedata (as a list of FEN strings, this is more standard notation that most chess games internally use).
 - Online play MAY BE added.
 - Singleplayer MAY BE upgraded.
 - I WILL BE REMOVING SUPPORT FOR THE CURRENT FORMAT FOR SAVING GAMES.
 
 ## Long term Future Goals with the Game
 - Clean, easy to understand code to be implemented.
-- Support for Pygame v2 (which is releasing soon).
-- Online Gameplay (on wlan and lan) with Chat interface.
-- Better SinglePlayer.
+- Support for Pygame v2.0.0 (stable) (which may release anytime this year).
+- Online Gameplay (on wlan and lan).
+- Better SinglePlayer (smarter computer).
 - En Passant (This feature is coming soon).
