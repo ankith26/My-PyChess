@@ -1,5 +1,4 @@
 ## PLEASE READ THIS NOTE
-
 Thanks for showing interest in my project. I know the code is a bit messy, it still works well.
 In the next update I add either online play or upgrade singleplayer.
 
@@ -14,19 +13,16 @@ Notify me in the issues section if you have anything to say (bug reports, sugges
 A Multiplayer/SinglePlayer Chess app written in Python using Pygame Library.
 
 ## Welcome to PyChess!
+This is a python app purely created from scratch using just Python(version 3.7.x) and Pygame.
 
-This is a python app purely created from scratch using just Python(version 3.7.3) and Pygame.
-
-This game does not support Python 2 and some of the older versions of Python 3.
-(Python 3.5 till Python 3.7.3 supported and tested)
-(may even work on Python 3.3 and 3.4)
+This game does not support Python 2.
+Python 3.5 till Python 3.7.6 supported and tested, may even work on Python 3.3 and 3.4 .
 It even needs a roughly recent version of pygame to work.
 
 To run the game, download the file and run the main.py file.
 Choose from the menus options.
 
 If you choose multiplayer, you will see the chess board appear. Go ahead and enjoy the chess match with your friend.
-
 Singleplayer is a random move generator for beginners.
 Harder levels of difficulty coming soon.
 You can save/load games.
@@ -42,7 +38,6 @@ To explain in short- how the logic works in the chess game,
 Feel free to download the code, use it and please notify me if you come across bugs and glitches.
 
 ## How to customise the game Using Preferences
-
 - In the main game menu(You see this after running main.py), click preferences.
 - Here you have a few settings(more coming soon).
 1) Animations: When this is True, it will show the pieces that you move to slide smoothly(recommended to be True always, look better).
@@ -56,21 +51,20 @@ Feel free to download the code, use it and please notify me if you come across b
 - RE-RUN THE GAME TO APPLY NEW SETTINGS.
 - You can also open preferences.txt and edit the file there (not recommended to do unless you know what you are doing, it might spoil the app if you do it the wrong way).
 
-## What's New in this Version 2.2
+## What's new in this Version 2.2
 - Minor performance upgrades
 - Further upgraded preferences.
 - Upgraded loadgame menu.
 - Minor changes made to the interface.
 - Placeholder code added to comply with future updates.
 
-## What was New in Version 2.1
+## What was new in Version 2.1
 - The upgrade optimised the game even further, fixing a bug.
 - When you click a piece, it shows all the available spaces it can go.
 - The upgrade added a new preference Menu where you can customise some game features (read the note above).
 - The upgrade adds background animations on the home menu.
 
-## Wha was New in Version 2.0
-
+## What was new in Version 2.0
 - Revamped Home Menu so That it looks better.
 - Fixed Bugs.
 - Made some changes that ensure that it can work on all platforms.
@@ -88,21 +82,27 @@ Feel free to download the code, use it and please notify me if you come across b
 - It has single player mode (random move generator which is easy for beginners).
 - It has a preference menu where, you can customize the game to meet your needs.
 
-## What's next in (v3)(planned)
+## What's next in Version 2.3
+- EXPECTED TIME OF RELEASE: THIRD WEEK OF MARCH 2020.
+- Cleaning the code, performance upgrades and fixing minor bugs.
+- Adding new menus for Singleplayer and Online games.
+- Adding new menus for Docs and About.
+- Upgrading textboxes a bit.
+- Adding some placeholder code for future upgrade while starting work on singleplayer and online features.
 
-- EXPECTED TIME OF RELEASE: FEBRUARY 2020
-- The code will be revamped.
+
+## What's next in Version 3.0
+- EXPECTED TIME OF RELEASE: SECOND WEEK OF APRIL 2020
+- The code will be revamped (and cleaned),
 - Undo moves option.
-- Save/load games with a new way of storing gamedata (as a list of FEN strings) .
-- Online play may be added.
-- Singleplayer may be upgraded.
+- Save/load games with a new way of storing gamedata (as a list of FEN strings).
+- Online play MAY BE added.
+- Singleplayer MAY BE upgraded.
 - I WILL BE REMOVING SUPPORT FOR THE CURRENT FORMAT FOR SAVING GAMES.
 
 ## Long term Future Goals with the Game
-
 - Clean, easy to understand code to be implemented.
 - Support for Pygame v2 (which is releasing soon).
 - Online Gameplay (on wlan and lan) with Chat interface.
 - Better SinglePlayer.
-- Adding sound effects.
 - En Passant (This feature is coming soon).
