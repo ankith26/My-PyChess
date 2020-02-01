@@ -56,7 +56,8 @@ Feel free to download the code, use it and please notify me if you come across b
 - Further upgraded preferences.
 - Upgraded loadgame menu.
 - Minor changes made to the interface.
-- Placeholder code added to comply with future updates.
+- Option to delete games in the loadGame menu.
+- While saving a game, it informs under what name the game being saved.
 
 ## What was new in Version 2.1
 - The upgrade optimised the game even further, fixing a bug.
@@ -66,6 +67,7 @@ Feel free to download the code, use it and please notify me if you come across b
 
 ## What was new in Version 2.0
 - Revamped Home Menu so That it looks better.
+- Revamped some code.
 - Fixed Bugs.
 - Made some changes that ensure that it can work on all platforms.
 - Further optimised the code (The game does not lag on my Raspberry Pi anymore).
@@ -78,7 +80,7 @@ Feel free to download the code, use it and please notify me if you come across b
 - It does not allow users to make moves that puts the users king at check.
 - It detects check, checkmate, stalemate and informs user.
 - It supports things like castling, pawn promotion etc.
-- It supports saving and loading games (in a non-standard format).
+- It supports saving and loading games.
 - It has single player mode (random move generator which is easy for beginners).
 - It has a preference menu where, you can customize the game to meet your needs.
 
