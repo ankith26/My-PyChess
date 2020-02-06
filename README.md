@@ -1,8 +1,5 @@
 ## PLEASE READ THIS NOTE
 Thanks for showing interest in my project. I know the code is a bit messy, it still works well.
-In the next update I add either online play or upgrade singleplayer.
-
-Put your thoughts down in the issues section.
 
 PLEASE KEEP DOWNLOADING THE LATEST VERSION OF THE GAME AS THEY CONTAIN BUG FIXES AND 
 PERFORMANCE OPTIMISERS.
@@ -13,10 +10,10 @@ Notify me in the issues section if you have anything to say (bug reports, sugges
 A Multiplayer/SinglePlayer Chess app written in Python using Pygame Library.
 
 ## Welcome to PyChess!
-This is a python app purely created from scratch using just Python(version 3.7.x) and Pygame.
+This is a python app purely created from scratch using just Python and Pygame.
 
-This game does not support Python 2.
-Python 3.5 till Python 3.7.6 supported and tested, may even work on Python 3.3 and 3.4 .
+This game DOES NOT SUPPORT Python 2.
+Python 3.5 till Python 3.8.1 supported and tested, may even work on Python 3.3 and 3.4 .
 It even needs a roughly recent version of pygame to work.
 
 To run the game, download the file and run the main.py file.
@@ -27,18 +24,10 @@ Singleplayer is a random move generator for beginners.
 Harder levels of difficulty coming soon.
 You can save/load games.
 
-If you take a look at the source code, you can observe that Object Oriented Programming style has not been used.
-
-To explain in short- how the logic works in the chess game,
-- Pygame provides the tools for GUI and mouse motion handling.
-- There are 2 lists that hold the position of each piece.
-- The functions are written, each with a specific use to handle data and play chess.
-- This encorporates almost all the features of chess(except en-passant).
-
 Feel free to download the code, use it and please notify me if you come across bugs and glitches.
 
 ## How to customise the game Using Preferences
-- In the main game menu(You see this after running main.py), click preferences.
+- In the main game menu(you see this after running main.py), click preferences.
 - Here you have a few settings(more coming soon).
 1) Animations: When this is True, it will show the pieces that you move to slide smoothly(recommended to be True always, look better).
 2) Sound: When this is True, it will play sounds(recommended to be False for now, I am working on it)(a placeholder for future upgrade).
@@ -48,19 +37,17 @@ Feel free to download the code, use it and please notify me if you come across b
 6) Border color: RGB colour Code for chess board borders.
 7) Screen size: Size of the screen (a placeholder for future upgrade).
 
-- RE-RUN THE GAME TO APPLY NEW SETTINGS.
 - You can also open preferences.txt and edit the file there (not recommended to do unless you know what you are doing, it might spoil the app if you do it the wrong way).
 
 ## What's new in this Version 2.2
 - Minor performance upgrades
 - Further upgraded preferences.
-- Upgraded loadgame menu.
+- Upgraded loadgame menu (with delete games option).
 - Minor changes made to the interface.
-- Option to delete games in the loadGame menu.
 - While saving a game, it informs under what name the game being saved.
 
 ## What was new in Version 2.1
-- The upgrade optimised the game even further, fixing a bug.
+- The upgrade optimised the game a bit, fixing a bug.
 - When you click a piece, it shows all the available spaces it can go.
 - The upgrade added a new preference Menu where you can customise some game features (read the note above).
 - The upgrade adds background animations on the home menu.
@@ -75,7 +62,7 @@ Feel free to download the code, use it and please notify me if you come across b
 - Added basic SinglePlayer.
 
 ## Features
-- Clean, easy to use GUI with a good homepage.
+- Clean, easy to use GUI with a good menu.
 - It allows users to make only valid moves.
 - It does not allow users to make moves that puts the users king at check.
 - It detects check, checkmate, stalemate and informs user.
@@ -86,7 +73,6 @@ Feel free to download the code, use it and please notify me if you come across b
 
 ## What's next in Version 2.3
 - EXPECTED TIME OF RELEASE: THIRD WEEK OF MARCH 2020.
-- Cleaning the code, performance upgrades and fixing minor bugs.
 - Adding new menus for Singleplayer and Online games.
 - Adding new menus for Docs and About.
 - Upgrading textboxes a bit.
@@ -95,16 +81,17 @@ Feel free to download the code, use it and please notify me if you come across b
 
 ## What's next in Version 3.0
 - EXPECTED TIME OF RELEASE: SECOND WEEK OF APRIL 2020
-- The code will be completely revamped.
+- The code will be completely revamped and cleaned.
+- This will make the code more easy for beginners to understand
 - Undo moves option.
 - Save/load games with a new way of storing gamedata (as a list of FEN strings, this is more standard notation that most chess games internally use).
-- Online play MAY BE added.
-- Singleplayer MAY BE upgraded.
+- Online play will be added.
+- Singleplayer will be upgraded.
 - I WILL BE REMOVING SUPPORT FOR THE CURRENT FORMAT FOR SAVING GAMES.
 
 ## Long term Future Goals with the Game
 - Clean, easy to understand code to be implemented.
 - Support for Pygame v2.0.0 (stable) (which may release anytime this year).
-- Online Gameplay (on wlan and lan).
+- Online Gameplay.
 - Better SinglePlayer (smarter computer).
-- En Passant (This feature is coming soon).
+- En-Passant (This feature is coming soon).
