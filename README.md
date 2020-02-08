@@ -7,13 +7,13 @@ PERFORMANCE OPTIMISERS.
 Notify me in the issues section if you have anything to say (bug reports, suggestions, ideas, etc).
 
 # My-PyChess
-A Multiplayer/SinglePlayer Chess app written in Python using Pygame Library.
+A Multiplayer/SinglePlayer Chess app written purely in Python using Pygame Library.
 
 ## Welcome to PyChess!
 This is a python app purely created from scratch using just Python and Pygame.
 
 This game DOES NOT SUPPORT Python 2.
-Python 3.5 till Python 3.8.1 supported and tested, may even work on Python 3.3 and 3.4 .
+Python 3.5 till Python 3.8.1 supported and tested, may even work on Python 3.3 and 3.4.
 It even needs a roughly recent version of pygame to work.
 
 To run the game, download the file and run the main.py file.
@@ -40,7 +40,7 @@ Feel free to download the code, use it and please notify me if you come across b
 - You can also open preferences.txt and edit the file there (not recommended to do unless you know what you are doing, it might spoil the app if you do it the wrong way).
 
 ## What's new in this Version 2.2
-- Minor performance upgrades
+- Minor performance upgrades.
 - Further upgraded preferences.
 - Upgraded loadgame menu (with delete games option).
 - Minor changes made to the interface.
@@ -73,25 +73,44 @@ Feel free to download the code, use it and please notify me if you come across b
 
 ## What's next in Version 2.3
 - EXPECTED TIME OF RELEASE: THIRD WEEK OF MARCH 2020.
-- Adding new menus for Singleplayer and Online games.
-- Adding new menus for Docs and About.
-- Upgrading textboxes a bit.
+- Adding new menus for About, Singleplayer and Online games.
+- Upgrading the textboxes.
+- Upgrading preferences.
+- Upgrading UI.
 - Adding some placeholder code for future upgrade while starting work on singleplayer and online features.
 
+SIDE NOTE: This upgrade may be skipped and I may push version 3 instead.
 
 ## What's next in Version 3.0
 - EXPECTED TIME OF RELEASE: SECOND WEEK OF APRIL 2020
 - The code will be completely revamped and cleaned.
-- This will make the code more easy for beginners to understand
-- Undo moves option.
+- This will make the code more easy for beginners to understand.
+- Undo moves option will be added
 - Save/load games with a new way of storing gamedata (as a list of FEN strings, this is more standard notation that most chess games internally use).
 - Online play will be added.
 - Singleplayer will be upgraded.
 - I WILL BE REMOVING SUPPORT FOR THE CURRENT FORMAT FOR SAVING GAMES.
 
 ## Long term Future Goals with the Game
-- Clean, easy to understand code to be implemented.
 - Support for Pygame v2.0.0 (stable) (which may release anytime this year).
 - Online Gameplay.
 - Better SinglePlayer (smarter computer).
 - En-Passant (This feature is coming soon).
+
+## A small TODO list
+[x] Basic Singleplayer
+[ ] Advanced Singleplayer
+[x] Multiplayer
+[x] Castling
+[ ] EnPassent
+[x] Pawn Promotion
+[x] Menu Screen
+[x] Settings/preference menu
+[ ] About Menu
+[x] Save/Load games
+[ ] Online Gameplay
+[ ] Resizing The Screen
+[ ] Support For Touch Screen
+[ ] Bundling The Executables For All Major Platforms (Windows, Linux, Mac)
+
+And this list goes on.........
