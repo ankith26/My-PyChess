@@ -7,31 +7,33 @@ PERFORMANCE OPTIMISERS.
 Notify me in the issues section if you have anything to say (bug reports, suggestions, ideas, etc).
 
 # My-PyChess
-A Multiplayer/SinglePlayer Chess app written purely in Python using Pygame Library.
-
-## Welcome to PyChess!
-This is a python app purely created from scratch using just Python and Pygame.
+This is a Multiplayer/SinglePlayer Chess app written purely in Python using Pygame Library.
 
 This game DOES NOT SUPPORT Python 2.
 Python 3.5 till Python 3.8.1 supported and tested, may even work on Python 3.3 and 3.4.
-It even needs a roughly recent version of pygame to work.
+So, head over to https://python.org if you do not have the required version of python.
 
-To run the game, download the file and run the main.py file.
+This app needs the **pygame** library to be intalled in your machine.
+
+To install, simply run 'pip3 install pygame' in the command line.
+Pip command needs to be on your machine for this to work.
+
+Then, run the **main.py** file. Trying to run any other file will not run the game (doing this will raise 'importError' in future versions).
 Choose from the menus options.
 
 If you choose multiplayer, you will see the chess board appear. Go ahead and enjoy the chess match with your friend.
+
 Singleplayer is a random move generator for beginners.
 Harder levels of difficulty coming soon.
-You can save/load games.
 
-Feel free to download the code, use it and please notify me if you come across bugs and glitches.
+You can save/load games.
 
 ## How to customise the game Using Preferences
 - In the main game menu(you see this after running main.py), click preferences.
 - Here you have a few settings(more coming soon).
-1) Animations: When this is True, it will show the pieces that you move to slide smoothly(recommended to be True always, look better).
-2) Sound: When this is True, it will play sounds(recommended to be False for now, I am working on it)(a placeholder for future upgrade).
-3) SlideShow: When this is True, it will show a slideshow of images on main menu (recommended to be True always, look better).
+1) Animations: When this is True, it will show the pieces that you move to slide smoothly(recommended to be True, look better).
+~~2) Sound: When this is True, it will play sounds.~~ (this feature will not be added)
+3) SlideShow: When this is True, it will show a slideshow of images on main menu (recommended to be True, look better).
 4) Show moves: When this is True, it will show all legal move options for a selected piece during gameplay (recommended to be True, highly helpful for beginners (my favourite feature)).
 5) Undo: When this is True, it allows users to undo(recommended to be True)(a placeholder for future upgrade).
 6) Border color: RGB colour Code for chess board borders.
@@ -85,7 +87,7 @@ SIDE NOTE: This upgrade may be skipped and I may push version 3 instead.
 - EXPECTED TIME OF RELEASE: SECOND WEEK OF APRIL 2020
 - The code will be completely revamped and cleaned.
 - This will make the code more easy for beginners to understand.
-- Undo moves option will be added
+- Undo moves option will be added.
 - Save/load games with a new way of storing gamedata (as a list of FEN strings, this is more standard notation that most chess games internally use).
 - Online play will be added.
 - Singleplayer will be upgraded.
@@ -103,7 +105,7 @@ SIDE NOTE: This upgrade may be skipped and I may push version 3 instead.
 - [ ] Advanced Singleplayer
 - [x] Multiplayer
 - [x] Castling
-- [ ] EnPassent
+- [ ] EnPassant
 - [x] Pawn Promotion
 - [x] Menu Screen
 - [x] Settings/preference menu
