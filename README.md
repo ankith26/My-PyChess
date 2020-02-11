@@ -32,7 +32,7 @@ You can save/load games.
 - In the main game menu(you see this after running main.py), click preferences.
 - Here you have a few settings(more coming soon).
 1) Animations: When this is True, it will show the pieces that you move to slide smoothly(recommended to be True, look better).
-~~2) Sound: When this is True, it will play sounds.~~ (this feature will not be added)
+2) ~~Sound: When this is True, it will play sounds.~~ (this feature will not be added)
 3) SlideShow: When this is True, it will show a slideshow of images on main menu (recommended to be True, look better).
 4) Show moves: When this is True, it will show all legal move options for a selected piece during gameplay (recommended to be True, highly helpful for beginners (my favourite feature)).
 5) Undo: When this is True, it allows users to undo(recommended to be True)(a placeholder for future upgrade).
