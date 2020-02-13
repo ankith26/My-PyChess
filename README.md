@@ -115,5 +115,6 @@ SIDE NOTE: This upgrade may be skipped and I may push version 3 instead.
 - [ ] Resizing The Screen
 - [ ] Support For Touch Screen
 - [ ] Bundling The Executables For All Major Platforms (Windows, Linux, Mac)
+- [ ] InGame feature to update to the latest version of the code on github.
 
 And this list goes on.........
