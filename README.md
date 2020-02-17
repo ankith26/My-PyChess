@@ -9,8 +9,9 @@ Notify me in the issues section if you have anything to say (bug reports, sugges
 # My-PyChess
 This is a Multiplayer/SinglePlayer Chess app written purely in Python using Pygame Library.
 
-This game DOES NOT SUPPORT Python 2.
-Python 3.5 till Python 3.8.1 supported and tested, may even work on Python 3.3 and 3.4.
+This game DOES NOT SUPPORT Python 2 and old Python 3 versions.
+
+Python 3.5 till Python 3.8.1 supported and tested.
 So, head over to https://python.org if you do not have the required version of python.
 
 This app needs the **pygame** library to be intalled in your machine.
@@ -88,17 +89,11 @@ SIDE NOTE: This upgrade may be skipped and I may push version 3 instead.
 - The code will be completely revamped and cleaned.
 - This will make the code more easy for beginners to understand.
 - Undo moves option will be added.
-- EnPassent will be added(finally).
+- EnPassant will be added(finally).
 - Save/load games with a new way of storing gamedata (as a list of FEN strings, this is more standard notation that most chess games internally use).
 - Online play will be added.
 - Singleplayer will be upgraded.
 - I WILL BE REMOVING SUPPORT FOR THE CURRENT FORMAT FOR SAVING GAMES.
-
-## Long term Future Goals with the Game
-- Support for Pygame v2.0.0 (stable) (which may release anytime this year).
-- Online Gameplay.
-- Better SinglePlayer (smarter computer).
-- En-Passant (This feature is coming soon).
 
 ## A small TODO list
 
@@ -118,4 +113,4 @@ SIDE NOTE: This upgrade may be skipped and I may push version 3 instead.
 - [ ] Bundling The Executables For All Major Platforms (Windows, Linux, Mac)
 - [ ] InGame feature to update to the latest version of the code on github.
 
-And this list goes on.........
+And this list goes on......
