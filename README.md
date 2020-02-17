@@ -88,6 +88,7 @@ SIDE NOTE: This upgrade may be skipped and I may push version 3 instead.
 - The code will be completely revamped and cleaned.
 - This will make the code more easy for beginners to understand.
 - Undo moves option will be added.
+- EnPassent will be added(finally).
 - Save/load games with a new way of storing gamedata (as a list of FEN strings, this is more standard notation that most chess games internally use).
 - Online play will be added.
 - Singleplayer will be upgraded.
