@@ -97,20 +97,21 @@ SIDE NOTE: This upgrade may be skipped and I may push version 3 instead.
 
 ## A small TODO list
 
-- [x] Basic Singleplayer
-- [ ] Advanced Singleplayer
-- [x] Multiplayer
-- [x] Castling
-- [ ] EnPassant
-- [x] Pawn Promotion
-- [x] Menu Screen
-- [x] Settings/preference menu
-- [ ] About Menu
-- [x] Save/Load games
-- [ ] Online Gameplay
-- [ ] Resizing The Screen
-- [ ] Support For Touch Screen
-- [ ] Bundling The Executables For All Major Platforms (Windows, Linux, Mac)
+- [x] Basic Singleplayer.
+- [ ] Advanced Singleplayer.
+- [x] Multiplayer.
+- [x] Castling.
+- [ ] EnPassant.
+- [x] Pawn Promotion.
+- [x] Menu Screen.
+- [x] Settings/preference menu.
+- [ ] About Menu.
+- [x] Save/Load games.
+- [ ] Online Gameplay.
+- [ ] Resizing The Screen.
+- [ ] Support For Touch Screen.
+- [ ] Bundling The Executables For All Major Platforms (Windows, Linux, Mac).
 - [ ] InGame feature to update to the latest version of the code on github.
+- [ ] A basic guide for Chess beginners.
 
 And this list goes on......
