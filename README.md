@@ -77,7 +77,6 @@ You can save/load games.
 ## What's next in Version 2.3
 - EXPECTED TIME OF RELEASE: THIRD WEEK OF MARCH 2020.
 - Adding new menus for About, Singleplayer and Online games.
-- Upgrading the textboxes.
 - Upgrading preferences.
 - Upgrading UI.
 - Adding some placeholder code for future upgrade while starting work on singleplayer and online features.
@@ -93,6 +92,7 @@ SIDE NOTE: This upgrade may be skipped and I may push version 3 instead.
 - Save/load games with a new way of storing gamedata (as a list of FEN strings, this is more standard notation that most chess games internally use).
 - Online play will be added.
 - Singleplayer will be upgraded.
+- Cleaning preference menu to add new features and removing unused ones.
 - I WILL BE REMOVING SUPPORT FOR THE CURRENT FORMAT FOR SAVING GAMES.
 
 ## A small TODO list
@@ -108,8 +108,6 @@ SIDE NOTE: This upgrade may be skipped and I may push version 3 instead.
 - [ ] About Menu.
 - [x] Save/Load games.
 - [ ] Online Gameplay.
-- [ ] Resizing The Screen.
-- [ ] Support For Touch Screen.
 - [ ] Bundling The Executables For All Major Platforms (Windows, Linux, Mac).
 - [ ] InGame feature to update to the latest version of the code on github.
 - [ ] A basic guide for Chess beginners.
