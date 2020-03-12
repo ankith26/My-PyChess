@@ -74,42 +74,18 @@ You can save/load games.
 - It has single player mode (random move generator which is easy for beginners).
 - It has a preference menu where, you can customize the game to meet your needs.
 
-## What's next in Version 2.3
-- EXPECTED TIME OF RELEASE: THIRD WEEK OF MARCH 2020.
-- Adding new menus for About, Singleplayer and Online games.
-- Upgrading preferences.
-- Upgrading UI.
-- Adding some placeholder code for future upgrade while starting work on singleplayer and online features.
-
-SIDE NOTE: This upgrade may be skipped and I may push version 3 instead.
-
 ## What's next in Version 3.0
-- EXPECTED TIME OF RELEASE: SECOND WEEK OF APRIL 2020
-- The code will be completely revamped and cleaned.
+- EXPECTED TIME OF RELEASE: LAST WEEK OF MARCH 2020
+- The code will be COMPLETELY REVAMPED AND CLEANED.
 - This will make the code more easy for beginners to understand.
 - Undo moves option will be added.
-- EnPassant will be added(finally).
+- UI will be improved
+- Screen flip will be added (so that both players get to play from their perspective).
+- New menus for about, chess info, singleplayer and multiplayer.
+- EnPassant will be added (finally).
 - Save/load games with a new way of storing gamedata (as a list of FEN strings, this is more standard notation that most chess games internally use).
-- Online play will be added.
+- Online play will be added. This features a online lobby, you can play with anyone in the world.
 - Singleplayer will be upgraded.
-- Cleaning preference menu to add new features and removing unused ones.
+- Cleaning and upgrading preference menu to add new features and removing unused ones.
+- Upgrading the Loadgame menu to feature a much better gui.
 - I WILL BE REMOVING SUPPORT FOR THE CURRENT FORMAT FOR SAVING GAMES.
-
-## A small TODO list
-
-- [x] Basic Singleplayer.
-- [ ] Advanced Singleplayer.
-- [x] Multiplayer.
-- [x] Castling.
-- [ ] EnPassant.
-- [x] Pawn Promotion.
-- [x] Menu Screen.
-- [x] Settings/preference menu.
-- [ ] About Menu.
-- [x] Save/Load games.
-- [ ] Online Gameplay.
-- [ ] Bundling The Executables For All Major Platforms (Windows, Linux, Mac).
-- [ ] InGame feature to update to the latest version of the code on github.
-- [ ] A basic guide for Chess beginners.
-
-And this list goes on......
