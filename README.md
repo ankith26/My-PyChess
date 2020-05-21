@@ -44,7 +44,7 @@ Then, run the **pychess.py** file. Trying to run any other file will not run the
 - Screen flip was be added (so that both players get to play from their perspective).
 - Save/load games with a new way of storing gamedata.
 
-- BIG CHANGES THAT CAME
+## BIG CHANGES THAT CAME
 
 - Online play was be added. This features a ONLINE LOBBY and support upto 10 people to play chess(read more in ref/online.txt)
 - Singleplayer saw BIG UPGRADES: A Good Menu, ability to play with a decent PYTHON CHESS ENGINE.
