@@ -34,8 +34,8 @@ Then, run the **pychess.py** file. Trying to run any other file will not run the
 ## What's new in this version 3.0
 - THIS IS THE BIGGEST RELEASE OF MY-PYCHESS EVER RELEASED.
 - The code now comes with MIT License instead of the GPL-3 which came with v2.2
-- The code was revamped, fixing minor bugs and MAJOR PERFORMANCE IMPROVEMENTS.
-- Version 2.2 ran at 22 fps, while this upgrade allows it to run at about 200 fps (on my PC) if fps is not constrained.
+- The code was revamped and restructured, fixing minor bugs and MAJOR PERFORMANCE IMPROVEMENTS.
+- On my PC, v2.2 ran at 25 fps, while this upgrade allows it to run at over 200 fps if fps is not constrained.
 - Code is now more easy to understand with code comments throughout the code.
 - EnPassant was added (finally).
 - Undo moves option was added.
@@ -45,7 +45,7 @@ Then, run the **pychess.py** file. Trying to run any other file will not run the
 
 ## BIG CHANGES THAT CAME IN VERSION 3.0
 
-- Online play was be added. This features a ONLINE LOBBY and support upto 10 people to play chess(read more in ref/online.txt)
+- Online play was added. This features a ONLINE LOBBY and support upto 10 people to play chess (read more in ref/online.txt)
 - Singleplayer saw BIG UPGRADES: A Good Menu, ability to play with a decent PYTHON CHESS ENGINE.
 - Now, you can play against STOCKFISH CHESS ENGINE (see stockfishchess.org). My-PyChess will act as an interface to give you this singleplayer mode. Included with this release, a good menu for stockfish and stockfish install/configure menu to help with installing and configuring stockfish with My-PyChess. Remember, stockfish is the best chess engine in the world, even though it's playing strength is limited, it still playes a very hard level of chess. Chess beginners may choose the PYTHON CHESS ENGINE written by me over stockfish.
 
@@ -61,6 +61,8 @@ Changlog has been moved to CHANGELOG.md
 
 3) Improvise the GUI in many places.
 
-4) Improve the TextBox in the online menu
+4) Improve the TextBox in the online menu.
+
+5) Save games in PGN format.
 
 - There are many more in this list, but if you have any ideas, bug-reports or suggestions, feel free to use the issues section to communicate with me.
