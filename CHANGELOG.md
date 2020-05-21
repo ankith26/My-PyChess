@@ -14,6 +14,9 @@ Basic changelog for My-PyChess.
 - UI for loadGame menu was revamped, UI for preference menu was simplified.
 - Screen flip was be added (so that both players get to play from their perspective).
 - Save/load games with a new way of storing gamedata.
+- Online play was be added. This features a ONLINE LOBBY and support upto 10 people to play chess(read more in ref/online.txt)
+- Singleplayer saw BIG UPGRADES: A Good Menu, ability to play with a decent PYTHON CHESS ENGINE.
+- Now, You Can play against STOCKFISH CHESS ENGINE (see stockfishchess.org). My-PyChess will act as an interface to give you this singleplayer mode. Included with this release, a good menu for stockfish and stockfish install/configure menu to help with installing and configuring stockfish with My-PyChess. Remember, stockfish is the best chess engine in the world, even though it's playing strength is limited, it still playes a very hard level of chess. Chess beginners may choose the PYTHON CHESS ENGINE written by me over stockfish.
 
 ## What was new in Version 2.2
 - Minor performance upgrades.
