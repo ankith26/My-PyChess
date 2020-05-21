@@ -1,0 +1,19 @@
+This is the mac installation guide for stockfish. 
+If you have homebrew installed on your system, do
+>> brew install stockfish
+
+If you do not have homebrew, you have to install it
+first by typing this in shell:
+>> /bin/bash -c "$(curl -fsSL https://raw.githubuser
+content.com/Homebrew/install/master/install.sh)"
+
+After this step, you can use the 'brew install 
+stockfish' command on your shell.
+
+NOTE 1: For now, Mac users have only one option,
+using homebrew. Using an executable directly is
+not supported yet.
+
+NOTE 2: I DO NOT HAVE A MAC, SO THIS METHOD OF 
+INSTALLATION IS NOT TESTED BY ME. BUT IT SHOULD 
+STILL WORK NONETHELESS.

@@ -1,0 +1,6 @@
+It appears that you have configured stockfish correctly.
+You can play against stockfish now. If you are not able to
+play against stockfish, there might be an error.
+Try to reconfigure.
+If you want to reconfigure stockfish, click the button
+above.

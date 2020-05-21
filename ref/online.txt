@@ -1,0 +1,71 @@
+Online Gameplay
+
+Online Gameplay consists of two elements, client and server.
+
+CLIENT: It is the machine that runs My-PyChess code.
+SERVER: It is a machine that accepts connections from different clients(upto 10)
+
+HOW TO HOST SERVER:
+    Run server.py code on any machine, as simple as that!
+    
+HOW TO MANAGE THE SERVER:
+    
+When the server is running, it is constantly messaging you whatever is going
+on. You can enter commands to the server.
+
+IF YOU WANT TO CLOSE THE SERVER WHILE IT IS RUNNING, ENTER "quit" IN SHELL.
+TRYING TO FORCE CLOSE THE SERVER MAY GIVE UNEXPECTED RESULTS TO CLIENTS
+CONNECTED.
+
+Commands are listed below
+1) report
+    Gives the current status of the server with useful information like the
+    number of threads the server is running, number of people online etc etc
+    
+2) mypublicip
+    Enter this command to know your public IP
+    
+3) kickall
+    kick EVERYONE connected to the server.
+    
+4) kick <id>
+    kick a particular player (whose id is <id>)
+    example: 'kick 3294'
+    
+5) quit
+    Enter this to stop the server and quit.
+    
+WHAT IS AN ID?
+    When the clients connect to server(using TCP protocol with sockets),
+    server issues the client a unique 4-digit number as their 'ID' or 'key'.
+
+
+I WANT TO PLAY ONLINE CHESS. HOW MUST I HOST THE SERVER?
+
+Everything is dependent on the reach of the server, to whom the server
+is visible.
+
+There are 3 cases that determine the servers reach -
+
+1) The host machine is not connected to a router:
+    In that case, any machine CANNOT CONNECT to server other than itself.
+    This means that only the client running on the same machine can connect
+    to the server (That's pointless)
+
+2) The host machine is connected to a router:
+    In that case, any machine connected to the SAME ROUTER can connect to
+    server.
+
+3) The host machine is connected to a router with port forwarding enabled:
+    In this case, ANY machine in the world that is simply connected to the
+    internet can be a client. The server just has to enable port forwarding.
+    It is to be noted that the client need not do anything special like port
+    forwarding. All clients will connect to the server via its public IP
+    address. To learn more, go through helpful resources available online.
+    
+The third option is what you must do.
+
+
+SECURITY WARNING
+Sharing the public IP address of your home network with anyone puts it at a
+risk of being attacked by hackers around the globe.

@@ -1,0 +1,48 @@
+The resources used in this projects are licensed for free use.
+All resources have been credited for:
+They maintain their respective original licenses.
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+All images from pixabay.com maintain pixabay license.
+It is a simple and permissive. A part of it is given below.
+_________________________________________
+Under the Pixabay License you are granted an irrevocable, worldwide,
+non-exclusive and royalty free right to use, download, copy, modify
+or adapt the Content for commercial or non-commercial purposes.
+Attribution of the photographer, videographer, musician or Pixabay is
+not required but is always appreciated.
+_________________________________________
+For more,
+See: https://pixabay.com/service/license/
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Piecesprites: Image from Wikipedia.com (credits below)
+This file is licensed under the:
+    Creative Commons Attribution-Share Alike 3.0 Unported license.
+Source:  http://commons.wikimedia.org/wiki/Template:SVG_chess_pieces
+Author:  jurgenwesterhof (adapted from work of Cburnett)
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Asimov.otf: This is a Font file licenced under Apache License 2.0
+from fontspace.com
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+CREDITS:
+=======
+
+Background.jpg: Image by FelixMittermeier from pixabay.com (with slight modification from me)
+Background2.jpg: Image by Pexels from pixabay.com
+Background3.jpg: Image by Jan Vašek from pixabay.com
+Background4.jpg: Image by pixel2013 from pixabay.com
+
+ALL THE BACKGROUND IMAGES HAVE BEEN COMBINED IN A SINGLE SPRITE IMAGE.
+
+refresh.png: Image by OpenIcons from pixabay.com
+delete.png: Image by Clker-Free-Vector-Images from pixabay.com 
+icon.png: Image by OpenClipart-Vectors from pixabay.com
+
+Piece sprites: Image by jurgenwesterhof (adapted from work of Cburnett) from wikipedia.com
+
+Asimov.otf: Asimov Font by 'KineticPlasma Fonts' from fontspace.com WITH MODIFICAIONS FROM ME.

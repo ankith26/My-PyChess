@@ -1,0 +1,14 @@
+Python could not determine your OS. That is weird.
+That's why My-PyChess cannot provide you any 
+installation guide.
+
+In such a situation, you have to build Stockfish
+from source. There are a few online tutorials on
+this topic, follow along any one of them, you
+will get an executable.
+Run the executable, if it gives a line like:
+'stockfish 11 by T.Romstad, ---------etc'
+then executable IS WORKING.
+
+Rename the WORKING executable to "stockfish"
+and place it as the following file:

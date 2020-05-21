@@ -1,0 +1,19 @@
+
+ENTER THE IP ADDRESS OF THE SERVER BELOW.
+
+
+
+
+Have no clue about the server thing and IP address
+thing? 
+No problem -
+
+
+Side Note:
+
+The Textbox API written by me is implemented above.
+It is a work-in-progress and is not perfect yet.
+Click on it to enter the address of the server.
+Use keyboard arrow keys to navigate the cursor.
+The Textbox lacks MANY features - I hope to fix
+this in the coming updates.

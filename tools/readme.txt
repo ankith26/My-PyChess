@@ -1,0 +1,1 @@
+This folder is a place to store some external scripts. These scripts are essential tools for PyChess. They are general purpose modules - you can use them too.

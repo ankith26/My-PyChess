@@ -1,0 +1,16 @@
+This is the installation guide for Stockfish chess engine.
+It is a very simple procedure with four simple steps.
+
+Step 1: Head over to downloads page of stockfish,
+          stockfishchess.org.
+
+Step 2: Download the zipfile for Windows and extract
+          it in any folder on your computer.
+
+Step 3: In this Folder, you will see a folder named
+          Windows. Inside which, there will be a set of
+          stockfish executables. Choose the one that
+          says 32-bit executable.
+
+Step 4: Copy this file and paste in the following
+          path after renaming the exe to stockfish.exe.

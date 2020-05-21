@@ -1,0 +1,22 @@
+My-PyChess supports Online Gameplay!!
+
+
+But there is a minor catch, you have to host the
+server yourself. Don't let that scare you, it is
+very easy to do. Just run server.py code in your 
+machine! 
+
+To start with, run the server.py. It will print
+the server log in the shell. Now, on the same 
+machine run TWO INSTANCES of pychess.py.
+On both, enter this IP ADDRESS '127.0.0.1', 
+which is the local IP address of your machine.
+Now, you are in the online lobby. Send a game
+request and start playing chess!!
+
+
+For more information on how to manage the server
+or how you could play chess with anybody in the 
+world (truly online), read more in ref/online.txt
+
+Ok, I got it

@@ -1,0 +1,18 @@
+Your OS was not on the list. No problem, just head over
+to downloads page of stockfishchess.org and download the
+zip file for linux. After unzipping, navigate inside the
+Linux folder and try to run any executable.
+
+If it gives a line of text like:
+'Stockfish 11 by T. Romstad, ...... etc', then the
+EXECUTABLE IS WORKING. If that does not work (in most
+cases it won't), you have to build the executable from
+source.
+
+To achieve this, there are lot of online tutorials.
+Follow any one to get a WORKING EXECUTABLE, test it
+by the method given above.
+
+FINALLY, AFTER you got a working executable, place it
+as the following file (after renaming the exectable to
+'stockfish')

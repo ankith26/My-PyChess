@@ -1,0 +1,5 @@
+(placeholder) = False
+flip = False
+slideshow = True
+show-legal-moves = True
+allow-undo = True

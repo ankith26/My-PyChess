@@ -1,0 +1,6 @@
+You have not configured stockfish. Click the button to
+do so.
+
+You will have to install the stockfish package
+seperately. Clicking the button will take you to the
+appropriate installation and setup guides.

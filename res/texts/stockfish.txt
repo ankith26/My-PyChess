@@ -1,0 +1,12 @@
+Stockfish is a chess engine, means that it can automatically
+play chess against you. It is free and open source, developed
+by T. Romstad, M. Costalba, J. Kiiski, G. Linscott and many
+others.
+
+Regarded as one of the best chess engine in the world, it is
+very popular among people.
+Check out its homepage at stockfishchess.org, source code
+is also available at github.
+
+My-PyChess is meant to act like a GUI and provide a medium
+for you to play against it.
