@@ -1,6 +1,8 @@
 # My-PyChess
 This is a fully featured chess app written purely in Python using Pygame Library.
 
+[Click here](/screenshots.md) to see a few screenshots of My-PyChess!
+
 This app needs the **pygame** library to be intalled in your machine.
 
 To install, simply run 'pip3 install pygame' in the command line.
