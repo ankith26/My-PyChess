@@ -276,6 +276,7 @@ def adminThread():
                 print("SERVER: All Clients kicked, closing the port now.")
                 mainSock.close()
                 print("SERVER: Port closed, exiting application - Bye")
+                return
                 
             else:
                 print(f"SERVER: Invalid command entered ('{msg}')")
