@@ -3,6 +3,10 @@ This is a fully featured chess app written purely in Python using Pygame Library
 
 [Click here](/screenshots.md) to see a few screenshots of My-PyChess!
 
+
+IMPORTANT NOTE: This game is best played on a 720p screen or 768p screen. If you are on a 1080p screen, My-PyChess will be a small window. If you are on a 4K screen, do not even consider using this application as you will get a very small window. In the next update, I will fix the resolution.
+
+
 This app needs the **pygame** library to be intalled in your machine.
 
 To install, simply run 'pip3 install pygame' in the command line.
