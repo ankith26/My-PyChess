@@ -3,7 +3,7 @@ This is a fully featured chess app written purely in Python using Pygame Library
 
 [Click here](/screenshots.md) to see a few screenshots of My-PyChess!
 
-Interested in pygame game development but think that MyPychess code is too hard for you to understand, no problem. I have released a [lite** implementation](http://github.com/ankith26/My-PyChess-lite/) of My-PyChess, that focuses just on chess programming - Free from all the code for menus, singleplayer, online etc. 
+Interested in pygame game development but think that MyPychess code is too hard for you to understand, no problem. I have released a [lite implementation](http://github.com/ankith26/My-PyChess-lite/) of My-PyChess, that focuses just on chess programming - Free from all the code for menus, singleplayer, online etc. 
 
 But if you are just interested in chess, download this app.
 
