@@ -3,9 +3,11 @@ This is a fully featured chess app written purely in Python using Pygame Library
 
 [Click here](/screenshots.md) to see a few screenshots of My-PyChess!
 
+Interested in pygame game development but think that MyPychess code is too hard for you to understand, no problem. I have released a [lite** implementation](http://github.com/ankith26/My-PyChess-lite/) of My-PyChess, that focuses just on chess programming - Free from all the code for menus, singleplayer, online etc. 
 
-IMPORTANT NOTE: This game is best played on a 720p screen or 768p screen. If you are on a 1080p screen, My-PyChess will be a small window. If you are on a 4K screen, do not even consider using this application as you will get a very small window. In the next update, I will fix the resolution.
+But if you are just interested in chess, download this app.
 
+IMPORTANT NOTE: This game is best played on a 720p screen, 768p screen or 1080p screen. If you are on a 4K screen, you will get a very small window. In the next update, I will hopefully fix the resolution.
 
 This app needs the **pygame** library to be intalled in your machine.
 
