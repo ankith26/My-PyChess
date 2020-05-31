@@ -1,11 +1,6 @@
 notes.txt
 
-__pycache__/*
-chess/__pycache__/*
-chess/lib/__pycache__/*
-menus/__pycache__/*
-menus/stockfish/__pycache__/*
-tools/__pycache__/*
+**/__pycache__/
 
 res/stockfish/build/stockfish.exe
 res/stockfish/path.txt
