@@ -3,6 +3,8 @@ This file is the main file of My-PyChess application.
 Run this file to launch the program.
 
 In this file, we handle the main menu which gets displayed at runtime.
+
+Level of development = STABLE
 """
 
 import pygame
@@ -10,6 +12,7 @@ import pygame
 import chess
 import menus
 from loader import MAIN
+from tools import sound
 
 # Some initialisation
 pygame.init()
@@ -27,12 +30,13 @@ pygame.display.set_icon(MAIN.ICON)
 # and its length and breadth
 # So, each constant is of the form (x, y, length, breadth)
 # x and y denote the coordinates of the top-left point
-single = (260, 140, 220, 40)
-multi = (280, 200, 200, 40)
-online = (365, 260, 110, 40)
+sngl = (260, 140, 220, 40)
+mult = (280, 200, 200, 40)
+onln = (360, 260, 120, 40)
 load = (280, 320, 200, 40)
-prefer = (0, 450, 210, 40)
-about = (0, 400, 110, 40)
+pref = (0, 450, 210, 40)
+abt = (390, 450, 110, 40)
+stok = (0, 410, 240, 30)
 
 # This is the function that displays the main screen.
 # "prefs" value is passed, prefs is a list of all the user settings
@@ -83,12 +87,13 @@ def showMain(prefs):
     pygame.draw.line(win, (255, 255, 255), (165, 100), (340, 100), 4)
     win.blit(MAIN.VERSION, (345, 95))
 
-    win.blit(MAIN.SINGLE, single[:2])
-    win.blit(MAIN.MULTI, multi[:2])
-    win.blit(MAIN.ONLINE, online[:2])
+    win.blit(MAIN.SINGLE, sngl[:2])
+    win.blit(MAIN.MULTI, mult[:2])
+    win.blit(MAIN.ONLINE, onln[:2])
     win.blit(MAIN.LOAD, load[:2])
-    win.blit(MAIN.PREF, prefer[:2])
-    win.blit(MAIN.ABOUT, about[:2])
+    win.blit(MAIN.PREF, pref[:2])
+    win.blit(MAIN.ABOUT, abt[:2])
+    win.blit(MAIN.STOCK, stok[:2])
 
 
 # Initialize a few more variables
@@ -98,6 +103,9 @@ running = True
 
 # Load the settings of the player
 LOAD = menus.pref.load()
+
+music = sound.Music()
+music.play(LOAD)
 while running:
     # Start the game loop at 30fps, show the screen every time at first
     clock.tick(30)
@@ -106,81 +114,90 @@ while running:
     # We need to get the position of the mouse so that we can blit an image
     # on the text over which the mouse hovers
     x, y = pygame.mouse.get_pos()
-    # singleplayer
-    if (single[0] < x < single[0] + single[2] and
-        single[1] < y < single[1] + single[3]):
-        win.blit(MAIN.SINGLE_H, single[:2])
-    # multiplayer
-    elif (multi[0] < x < multi[0] + multi[2] and
-          multi[1] < y < multi[1] + multi[3]):
-        win.blit(MAIN.MULTI_H, multi[:2])
-    # online
-    elif (online[0] < x < online[0] + online[2] and
-          online[1] < y < online[1] + online[3]):
-        win.blit(MAIN.ONLINE_H, online[:2])
-    # Load Game
-    elif load[0] < x < load[0] + load[2] and load[1] < y < load[1] + load[3]:
+
+    if sngl[0] < x < sum(sngl[::2]) and sngl[1] < y < sum(sngl[1::2]):
+        win.blit(MAIN.SINGLE_H, sngl[:2])
+
+    if mult[0] < x < sum(mult[::2]) and mult[1] < y < sum(mult[1::2]):
+        win.blit(MAIN.MULTI_H, mult[:2])
+
+    if onln[0] < x < sum(onln[::2]) and onln[1] < y < sum(onln[1::2]):
+        win.blit(MAIN.ONLINE_H, onln[:2])
+
+    if load[0] < x < sum(load[::2]) and load[1] < y < sum(load[1::2]):
         win.blit(MAIN.LOAD_H, load[:2])
-    # Pref
-    elif (prefer[0] < x < prefer[0] + prefer[2] and
-          prefer[1] < y < prefer[1] + prefer[3]):
-        win.blit(MAIN.PREF_H, prefer[:2])
-    # about
-    elif (about[0] < x < about[0] + about[2] and
-          about[1] < y < about[1] + about[3]):
-        win.blit(MAIN.ABOUT_H, about[:2])
+
+    if pref[0] < x < sum(pref[::2]) and pref[1] < y < sum(pref[1::2]):
+        win.blit(MAIN.PREF_H, pref[:2])
+
+    if abt[0] < x < sum(abt[::2]) and abt[1] < y < sum(abt[1::2]):
+        win.blit(MAIN.ABOUT_H, abt[:2])
+
+    if stok[0] < x < sum(stok[::2]) and stok[1] < y < sum(stok[1::2]):
+        win.blit(MAIN.STOCK_H, stok[:2])
 
     # Begin pygame event loop to catch all events
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+            
         elif event.type == pygame.MOUSEBUTTONDOWN:
             # User has clicked somewhere, determine which button and
             # Call a function to handle the game into a different window.
             # All functions defined in the chess module open up the chess
             # board and a game begins based on the type of game
             x, y = event.pos
-            # singleplayer
-            if (single[0] < x < single[0] + single[2] and
-                single[1] < y < single[1] + single[3]):
+
+            if sngl[0] < x < sum(sngl[::2]) and sngl[1] < y < sum(sngl[1::2]):
+                sound.play_click(LOAD)
                 data = menus.splayermenu(win)
                 if data is not None:
                     if data[0]:
                         chess.mysingleplayer(win, data[1], LOAD)
                     else:
                         chess.singleplayer(win, data[1], data[2], LOAD)
-            # multiplayer
-            elif (multi[0] < x < multi[0] + multi[2] and
-                  multi[1] < y < multi[1] + multi[3]):
+
+            elif mult[0] < x < sum(mult[::2]) and mult[1] < y < sum(mult[1::2]):
                 chess.multiplayer(win, LOAD)
-            # online
-            elif (online[0] < x < online[0] + online[2] and
-                  online[1] < y < online[1] + online[3]):
+
+            elif onln[0] < x < sum(onln[::2]) and onln[1] < y < sum(onln[1::2]):
+                sound.play_click(LOAD)
                 chess.online(win, menus.onlinemenu(win), LOAD)
-            # Load Game
-            elif (load[0] < x < load[0] + load[2] and
-                  load[1] < y < load[1] + load[3]):
+
+            elif load[0] < x < sum(load[::2]) and load[1] < y < sum(load[1::2]):
+                sound.play_click(LOAD)
                 game = menus.loadgamemenu(win)
                 if game is not None:
                     if game[0] == "multi":
                         chess.multiplayer(win, LOAD, game[1])
                     elif game[0] == "single":
-                        chess.singleplayer(win, int(game[1]), int(game[2]),
-                                           LOAD, game[3])
+                        chess.singleplayer(
+                            win, int(game[1]), int(game[2]), LOAD, game[3]
+                        )
                     elif game[0] == "mysingle":
                         chess.mysingleplayer(win, int(game[1]), LOAD, game[2])
-            # prefer
-            elif (prefer[0] < x < prefer[0] + prefer[2] and
-                  prefer[1] < y < prefer[1] + prefer[3]):
+
+            elif pref[0] < x < sum(pref[::2]) and pref[1] < y < sum(pref[1::2]):
+                sound.play_click(LOAD)
                 menus.prefmenu(win)
                 LOAD = menus.pref.load()
-            # about
-            elif (about[0] < x < about[0] + about[2] and
-                about[1] < y < about[1] + about[3]):
+                if LOAD[0] and not music.is_playing():
+                    music.play(LOAD)
+
+                if not LOAD[0]:
+                    music.stop()
+
+            elif abt[0] < x < sum(abt[::2]) and abt[1] < y < sum(abt[1::2]):
+                sound.play_click(LOAD)
                 menus.aboutmenu(win)
+
+            elif stok[0] < x < sum(stok[::2]) and stok[1] < y < sum(stok[1::2]):
+                sound.play_click(LOAD)
+                menus.sfmenu(win)
 
     # Update the screen every frame
     pygame.display.flip()
 
-# Quit pygame after the loop is done
+# Stop music, quit pygame after the loop is done
+music.stop()
 pygame.quit()

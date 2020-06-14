@@ -2,6 +2,8 @@
 This file is a file of My-PyChess application.
 In this file, we define heuristic constants required for the
 python chess engine.
+
+Level of development = STABLE
 """
 
 pawnEvalWhite = (
@@ -77,3 +79,5 @@ kingEvalWhite = (
 )
 
 kingEvalBlack = tuple(reversed(kingEvalWhite))
+
+kingEndGameTable = None # Maybe implement this one later

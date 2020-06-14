@@ -1,23 +1,24 @@
-Online Gameplay
-
+===============================================================
+                        Online Gameplay
+                        ---------------
+===============================================================
 Online Gameplay consists of two elements, client and server.
 
 CLIENT: It is the machine that runs My-PyChess code.
 SERVER: It is a machine that accepts connections from different clients(upto 10)
 
 HOW TO HOST SERVER:
-    Run server.py code on any machine, as simple as that!
+==================
+Run server.py code on any machine, as simple as that!
     
 HOW TO MANAGE THE SERVER:
+========================
     
 When the server is running, it is constantly messaging you whatever is going
 on. You can enter commands to the server.
 
-IF YOU WANT TO CLOSE THE SERVER WHILE IT IS RUNNING, ENTER "quit" IN SHELL.
-TRYING TO FORCE CLOSE THE SERVER MAY GIVE UNEXPECTED RESULTS TO CLIENTS
-CONNECTED.
-
 Commands are listed below
+=========================
 1) report
     Gives the current status of the server with useful information like the
     number of threads the server is running, number of people online etc etc
@@ -25,23 +26,39 @@ Commands are listed below
 2) mypublicip
     Enter this command to know your public IP
     
+3) lock
+    This will put the server in a "locked" state. After this, anyone will not
+    be able to connect to the server. This will not affect anyone who is
+    aldready connected to the server.
+    
+4) unlock
+    This will "unlock" the server, the server that is locked will be "unlocked",
+    then anybody can connect to the server. This is the default state of the
+    server, when it has started to run.
+    
+    
 3) kickall
-    kick EVERYONE connected to the server.
+    Kick EVERYONE connected to the server.
     
 4) kick <id>
-    kick a particular player (whose id is <id>)
+    Kick a particular player (whose id is <id>)
     example: 'kick 3294'
     
 5) quit
     Enter this to stop the server and quit.
     
-WHAT IS AN ID?
-    When the clients connect to server(using TCP protocol with sockets),
-    server issues the client a unique 4-digit number as their 'ID' or 'key'.
+IF YOU WANT TO CLOSE THE SERVER WHILE IT IS RUNNING, ENTER "quit" IN SHELL.
+TRYING TO FORCE CLOSE THE SERVER MAY GIVE UNEXPECTED RESULTS TO CLIENTS
+CONNECTED.
+    
+WHAT IS AN ID, WHAT IS A KEY?
+=============================
+When the clients connect to server (using TCP protocol with sockets),
+server issues the client a unique 4-digit number as their 'ID' or 'key'.
 
 
-I WANT TO PLAY ONLINE CHESS. HOW MUST I HOST THE SERVER?
-
+I WANT TO PLAY REAL ONLINE CHESS. HOW MUST I HOST THE SERVER?
+=============================================================
 Everything is dependent on the reach of the server, to whom the server
 is visible.
 
@@ -67,5 +84,6 @@ The third option is what you must do.
 
 
 SECURITY WARNING
+================
 Sharing the public IP address of your home network with anyone puts it at a
 risk of being attacked by hackers around the globe.

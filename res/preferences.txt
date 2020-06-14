@@ -1,5 +1,5 @@
-(placeholder) = False
+sounds = False
 flip = False
 slideshow = True
-show-legal-moves = True
-allow-undo = True
+show_legal_moves = True
+allow_undo = True

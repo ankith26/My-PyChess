@@ -3,6 +3,8 @@ This file is a part of My-PyChess application.
 
 Here I have written a python interface class for stockfish chess engine.
 This is used in the singleplayer mode of My-PyChess.
+
+Level of development = STABLE
 """
 
 import queue
@@ -10,15 +12,15 @@ import subprocess
 import threading
 
 _LEVELDATA = (
-    (0, 20, 1),
-    (2, 80, 1),
-    (5, 120, 2),
-    (9, 200, 4),
-    (12, 300, 6),
-    (15, 400, 8),
-    (17, 500, 10),
-    (19, 700, 12),
-    (20, 900, 16),
+    (0, 10, 1),
+    (1, 50, 1),
+    (3, 80, 2),
+    (6, 160, 4),
+    (8, 250, 6),
+    (10, 400, 8),
+    (12, 500, 10),
+    (14, 700, 12),
+    (16, 900, 16),
 )
 
 # StockFish class to interface with stockfish chess engine.
@@ -55,7 +57,7 @@ class StockFish:
 
     def _put(self, command):
         self._raiseErrorIfInactive()
-        self.stockfish.stdin.write(f"{command}\n")
+        self.stockfish.stdin.write(str(command) + "\n")
         self.stockfish.stdin.flush()
 
     def _isReady(self):
@@ -67,8 +69,8 @@ class StockFish:
 
     def _engine(self):
         self._isReady()
-        self._put(f"position startpos moves {self.moveSequence.strip()}")
-        self._put(f"go depth {self.depth} movetime {self.movetime}")
+        self._put("position startpos moves " + self.moveSequence.strip())
+        self._put("go depth {} movetime {}".format(self.depth, self.movetime))
         while True:
             msg = self.stockfish.stdout.readline().strip().split(" ")
             if msg[0] == "bestmove":
@@ -88,7 +90,7 @@ class StockFish:
 
     def setOption(self, name, value):
         self._isReady()
-        self._put(f"setoption name {name} value {value}")
+        self._put("setoption name {} value {}".format(name, value))
 
     def startEngine(self):
         self._raiseErrorIfInactive()
@@ -115,12 +117,12 @@ class StockFish:
         self._raiseErrorIfInactive()
         return not self.q.empty() and not self.thread.is_alive()
 
-    def undo(self):
+    def undo(self, num=1):
         self._raiseErrorIfInactive()
         if not self.thread.is_alive():
             temp = self.moveSequence.strip().split(" ")
-            if len(temp) not in [0, 1]:
-                self.moveSequence = " ".join(temp[:-2])
+            if len(temp) not in range(num):
+                self.moveSequence = " ".join(temp[:-num])
 
     def close(self):
         self._isReady()

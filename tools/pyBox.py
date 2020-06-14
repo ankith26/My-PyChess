@@ -4,6 +4,8 @@ This Module is WORK-IN-PROGRESS.
 
 This is a module meant to provide a high-level TextBox in Pygame
 It is being designed by me to be fully KEYBOARD and MOUSE INTERACTIVE.
+
+Level of development = ALPHA
 """
 
 import os
@@ -214,5 +216,5 @@ if __name__ == "__main__":
                 running = False
         box.draw(win)
         pygame.display.flip()
-        #print(box.text)
+        # print(box.text)
     pygame.quit()

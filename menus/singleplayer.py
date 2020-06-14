@@ -2,15 +2,40 @@
 This file is a part of My-PyChess application.
 In this file, we manage the single player menu which is called when user clicks
 singleplayer button on main menu.
+
+Level of development = BETA
 '''
 
-import os
+import os.path
 import random
 import pygame
 from loader import SINGLE, putLargeNum
 from tools.utils import rounded_rect
 from menus import stockfish
 
+# This is a prompt, called when user has not configured stockfish
+def prompt(win):
+    rounded_rect(win, (255, 255, 255), (100, 200, 300, 100), 10, 4)
+    
+    for cnt, i in enumerate(SINGLE.CONFIG):
+        win.blit(i, (110, 206 + cnt*18))
+    
+    win.blit(SINGLE.OK, (160, 270))
+    pygame.draw.rect(win, (255, 255, 255), (160, 270, 25, 20), 3)
+    win.blit(SINGLE.NOTNOW, (250, 270))
+    pygame.draw.rect(win, (255, 255, 255), (250, 270, 70, 20), 3)
+    
+    pygame.display.update()
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if 270 < event.pos[1] < 290:
+                    if 160 < event.pos[0] < 185:
+                        return True
+                    if 250 < event.pos[0] < 320:
+                        return False
+
+# This shows the screen
 def showScreen(win, sel, sel2, lvl):
     win.fill((0, 0, 0))
     
@@ -47,6 +72,7 @@ def showScreen(win, sel, sel2, lvl):
     rounded_rect(win, (255, 255, 255), (320, 440, 140, 30), 7, 3)
     win.blit(SINGLE.START, (320, 440))
 
+# This is the main function, called from main menu
 def main(win):
     sel = sel2 = 0
     lvl = 1
@@ -83,29 +109,8 @@ def main(win):
                             return False, random.randint(0, 1), lvl
                         else:
                             return False, sel2, lvl
-                    else:
-                        if prompt(win):
-                            stockfish.main(win)
-                        return None
+                        
+                    elif prompt(win):
+                        if not stockfish.main(win):
+                            return None
             pygame.display.update()
-
-def prompt(win):
-    rounded_rect(win, (255, 255, 255), (100, 200, 300, 100), 20, 4)
-    
-    for cnt, i in enumerate(SINGLE.CONFIG):
-        win.blit(i, (110, 206 + cnt*18))
-    
-    win.blit(SINGLE.OK, (160, 270))
-    pygame.draw.rect(win, (255, 255, 255), (160, 270, 25, 20), 3)
-    win.blit(SINGLE.NOTNOW, (250, 270))
-    pygame.draw.rect(win, (255, 255, 255), (250, 270, 70, 20), 3)
-    
-    pygame.display.update()
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if 270 < event.pos[1] < 290:
-                    if 160 < event.pos[0] < 185:
-                        return True
-                    if 250 < event.pos[0] < 320:
-                        return False

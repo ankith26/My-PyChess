@@ -1,0 +1,20 @@
+My-Pychess was started by me as a small hobby project, I
+had hoped I would finish it within a month. But, I could
+never stop on improving it. I kept on adding more and more
+features which I still do today. I follow 4 principles:
+    
+      "Fix a lot of functionality in a small piece of code."
+I like to have a lot of features and keep the code very small.
+
+          "Do not compromise on readability of code."
+This is important, not only for others to read your code, but
+even for you.
+
+    "Try to do as much testing as you can to avoid bugs."
+Bugs are literally the worst. I am always trying to minimise
+them. 
+
+
+                          Lastly and most importantly,
+                                "Enjoy what you do."
+                          That's what keeps me going.

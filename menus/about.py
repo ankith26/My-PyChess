@@ -2,25 +2,27 @@
 This file is a part of My-PyChess application.
 In this file, we manage the about menu which is called when user clicks
 about button on main menu.
+
+Level of development = STABLE
 '''
 
 import pygame
 from loader import ABOUT
-from menus import stockfish
+from tools.utils import rounded_rect
 
+# This shows the screen
 def showScreen(win):
     win.fill((0, 0, 0))
+    rounded_rect(win, (255, 255, 255), (20, 10, 460, 60), 16, 4)
+    rounded_rect(win, (255, 255, 255), (10, 80, 480, 410), 10, 4)
     
     win.blit(ABOUT.HEAD, (30, 12))
-    pygame.draw.rect(win, (255, 255, 255), (20, 10, 460, 60), 4)
-    
-    win.blit(ABOUT.SOON, (25, 90))
-    pygame.draw.rect(win, (255, 255, 255), (10, 80, 480, 410), 4)
-    
-    win.blit(ABOUT.STOCKFIG, (15, 160))
-    win.blit(ABOUT.CLICK, (160, 190))
-    pygame.draw.rect(win, (255, 255, 255), (160, 190, 140, 30), 3)
+    for cnt, i in enumerate(ABOUT.TEXT):
+        win.blit(i, (20, 90 + cnt*18))
+        
+    pygame.display.update()
 
+# This is the main function, called from main menu
 def main(win):
     clock = pygame.time.Clock()
     while True:

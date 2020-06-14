@@ -3,6 +3,8 @@ This file is a file of My-PyChess application.
 In this file, we define some basic gui-related functions
 
 For more understanding of the variables used here, checkout multiplayer.py
+
+Level of development = STABLE
 """
 
 import pygame
@@ -80,3 +82,20 @@ def prompt(win, msg=None):
                         return True
                     elif 300 < event.pos[0] < 350:
                         return False
+
+# This function shows a small animation when the game starts
+def start(win):
+    clk = pygame.time.Clock()
+    for i in range(101):
+        clk.tick(150)
+        drawBoard(win)
+        
+        for j in range(8):
+            win.blit(CHESS.PIECES[0]["p"], (0.5 * i * (j + 1), 225 + 1.25 * i))
+            win.blit(CHESS.PIECES[1]["p"], (0.5 * i * (j + 1), 225 - 1.25 * i))
+            
+        for j, pc in enumerate(["r", "n", "b", "q", "k", "b", "n", "r"]):
+            win.blit(CHESS.PIECES[0][pc], (0.5 * i * (j + 1), 225 + 1.75 * i))
+            win.blit(CHESS.PIECES[1][pc], (0.5 * i * (j + 1), 225 - 1.75 * i))
+            
+        pygame.display.update()

@@ -4,6 +4,8 @@ In this file, we manage the loadgame menu which is called when user clicks
 loadgame button on main menu.
 
 We also define functions to save, load and scan for games.
+
+Level of development = STABLE
 '''
 
 import os
@@ -11,6 +13,7 @@ import pygame
 from loader import LOADGAME, putLargeNum, putDT
 from tools.utils import rounded_rect
 
+# This function scans for saved games
 def scan():
     for i in range(20):
         pth = os.path.join("res", "savedGames", "game" + str(i) + ".txt")
@@ -19,11 +22,13 @@ def scan():
                 data = f.read().splitlines()[:2]
             yield (i, data[0].split(" ")[0], data[1])
 
+# This function deletes a game.
 def delGame(gameId):
     name = os.path.join("res", "savedGames", "game" + str(gameId) + ".txt")
     if os.path.exists(name):
         os.remove(name)
 
+# This function loads the game
 def loadGame(gameId):
     name = os.path.join("res", "savedGames", "game" + str(gameId) + ".txt")
     if os.path.exists(name):
@@ -36,7 +41,30 @@ def loadGame(gameId):
             return lines[0].split(" ") + [lines[2]]
     else:
         return None
+    
+# This prompts the user comfirmation while user deletes a game
+def prompt(win):
+    rounded_rect(win, (255, 255, 255), (110, 160, 280, 130), 10, 4)
+    
+    win.blit(LOADGAME.MESSAGE[0], (116, 160))
+    win.blit(LOADGAME.MESSAGE[1], (118, 190))
+          
+    win.blit(LOADGAME.YES, (145, 240))
+    win.blit(LOADGAME.NO, (305, 240))
+    pygame.draw.rect(win, (255, 255, 255), (140, 240, 60, 28), 2)
+    pygame.draw.rect(win, (255, 255, 255), (300, 240, 46, 28), 2)
 
+    pygame.display.flip()
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if 240 < event.pos[1] < 270:
+                    if 140 < event.pos[0] < 200:
+                        return True
+                    elif 300 < event.pos[0] < 350:
+                        return False
+
+# This function shows the screen
 def showMain(win, pg, scanned):
     win.fill((0, 0, 0))
     rounded_rect(win, (255, 255, 255), (70, 15, 340, 60), 15, 4)
@@ -80,7 +108,8 @@ def showMain(win, pg, scanned):
     rounded_rect(win, (255, 255, 255), (187, 430, 125, 46), 10, 2)
     win.blit(LOADGAME.PAGE[pg], (190, 430))    
     pygame.display.update()
-            
+
+# This is the main function, called by the main menu
 def main(win):
     scanned = tuple(scan())
     pages = (len(scanned) - 1) // 5
@@ -93,6 +122,7 @@ def main(win):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return None
+            
             if event.type == pygame.MOUSEBUTTONDOWN:
                 x, y = event.pos
                 
@@ -106,7 +136,7 @@ def main(win):
                     for i in range(5):
                         if 120 + 60*i < y < 160 + 60*i:
                             if scanned == tuple(scan()):
-                                if 5*pg + i < len(scanned):       
+                                if 5*pg + i < len(scanned):
                                     if prompt(win):
                                         delGame(scanned[5*pg + i][0])
                                     scanned = tuple(scan())
@@ -122,24 +152,4 @@ def main(win):
                             newScan = tuple(scan())
                             if 5*pg + i < len(newScan):
                                 return loadGame(newScan[5*pg + i][0])
-
-def prompt(win):
-    rounded_rect(win, (255, 255, 255), (110, 160, 280, 130), 10, 4)
-    
-    win.blit(LOADGAME.MESSAGE[0], (116, 160))
-    win.blit(LOADGAME.MESSAGE[1], (118, 190))
-          
-    win.blit(LOADGAME.YES, (145, 240))
-    win.blit(LOADGAME.NO, (305, 240))
-    pygame.draw.rect(win, (255, 255, 255), (140, 240, 60, 28), 2)
-    pygame.draw.rect(win, (255, 255, 255), (300, 240, 50, 28), 2)
-
-    pygame.display.flip()
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if 240 < event.pos[1] < 270:
-                    if 140 < event.pos[0] < 200:
-                        return True
-                    elif 300 < event.pos[0] < 350:
-                        return False
+                            

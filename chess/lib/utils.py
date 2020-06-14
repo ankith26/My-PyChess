@@ -1,6 +1,8 @@
 """
 This file is a file of My-PyChess application.
-In this file, we define a few other non-gui helper functions.
+In this file, we define a few other non-gui MyPyChess helper functions.
+
+Level of development = STABLE
 """
 
 from datetime import datetime
@@ -32,6 +34,25 @@ def decode(data):
             [LETTER.index(data[2]), 9 - int(data[3])],
             data[4],
         )
+    
+# A simple function to undo, num corresponds to the number of moves to undo.
+def undo(moves, num=1):
+    temp = moves.strip().split(" ")
+    if len(temp) in range(num):
+        return moves.strip()
+    else:
+        return " ".join(temp[:-num])
+    
+# Get path to stockfish executable from path.txt config file
+def getSFpath():
+    conffile = os.path.join("res", "stockfish", "path.txt")
+    if os.path.exists(conffile):
+        with open(conffile, "r") as f:
+            return f.read().strip()
+
+# Remove stockfish config path file.
+def rmSFpath():
+    os.remove(os.path.join("res", "stockfish", "path.txt")) 
 
 # This function saves a game into a text file.
 # It does this by saving all moves in long algebraic notation
@@ -42,6 +63,7 @@ def saveGame(moves, gametype="multi", player=0, level=0, cnt=0):
     name = os.path.join("res", "savedGames", "game" + str(cnt) + ".txt")
     if os.path.isfile(name):
         return saveGame(moves, gametype, player, level, cnt + 1)
+    
     else:
         if gametype == "single":
             gametype += " " + str(player) + " " + str(level)

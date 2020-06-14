@@ -5,6 +5,8 @@ It is no longer used in the My-PyChess library, so transfered here.
 
 Also, the notation for castle flag has changed, so changes will be required
 to make this work with the current version of the game.
+
+Level of development = OLD
 """
 
 # Based on the board state, flags and the side that just made a move,

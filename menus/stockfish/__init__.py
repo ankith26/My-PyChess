@@ -6,11 +6,12 @@ This is called from either about menu or singleplayer menu
 '''
 
 import os
-import pygame
-from loader import STOCKFISH as SF
-from tools.utils import rounded_rect
-from menus.stockfish import guide
 
+import pygame
+from tools.utils import rounded_rect
+from menus.stockfish.guide import main as guideMain, SF
+
+# This shows the screen
 def showScreen(win, configured):
     win.fill((0, 0, 0))
     
@@ -30,24 +31,27 @@ def showScreen(win, configured):
         for cnt, i in enumerate(SF.NONCONFIGURED):
             win.blit(i, (15, 360 + cnt*18))
 
+# This is the main function, called by main menu
 def main(win):
     pth = os.path.join("res", "stockfish", "path.txt")
     configured = os.path.exists(pth)
+    
     clock = pygame.time.Clock()
     while True:
         clock.tick(24)
         showScreen(win, configured)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                return
+                return False
+            
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 x, y = event.pos
                 if 120 < x < 370 and 320 < y < 350:
                     if configured:
                         os.remove(pth)
                         
-                    if guide.main(win):
-                        return
+                    if guideMain(win):
+                        return True
                     else:
                         configured = os.path.exists(pth)
                                        

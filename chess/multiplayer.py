@@ -3,6 +3,8 @@ This file is a part of My-PyChess application.
 In this file, we manage the chess gameplay for multiplayer section of this
 application. This script uses all its tools from the module chess.lib
 
+Level of development = STABLE
+
 Documentation for commonly used variables:
 1. side --> This variable stores which side will play next. If white needs
             To play, it stores an integer 0, if black needs to play, it store
@@ -15,7 +17,7 @@ Documentation for commonly used variables:
             ("k" (king), "q" (queen), etc ...)
             
 4. flags -> This stores the required flags for castling and enpassent.
-            This is a 2-element list, first element is flag for caslting.
+            This is a 2-element list, first element is flag for castling.
             second is for enpassent.
             
 The coordinate system used across this game is similar to the system used by
@@ -26,9 +28,13 @@ The top left square is denoted by [1, 1] and as you go right, x value increases
 square becomes [8, 8].
 '''
 from chess.lib import *
+from tools import sound
 
-# Run main code for chess
+# run main code for chess
 def main(win, LOAD, moves=""):
+    sound.play_start(LOAD)
+    start(win)
+    
     side, board, flags = convertMoves(moves)
     clock = pygame.time.Clock()
     sel = [0, 0]
@@ -45,6 +51,10 @@ def main(win, LOAD, moves=""):
                     x, y = x // 50, y // 50
                     if LOAD[1] and side:
                         x, y = 9 - x, 9 - y
+                        
+                    if isOccupied(side, board, [x, y]):
+                        sound.play_click(LOAD)
+                        
                     prevsel = sel
                     sel = [x, y]
                 else:
@@ -53,15 +63,17 @@ def main(win, LOAD, moves=""):
                         if prompt(win, saveGame(moves)):
                             return
                     elif 0 < x < 80 and 0 < y < 50 and LOAD[4]:
-                        if moves.strip():
-                            moves = " ".join(moves.strip().split(" ")[:-1])
-                            side, board, flags = convertMoves(moves)
+                        moves = undo(moves)
+                        side, board, flags = convertMoves(moves)
                             
         showScreen(win, side, board, flags, sel, LOAD)     
         if isValidMove(side, board, flags, prevsel, sel):
             promote = getPromote(win, side, board, prevsel, sel)
+            
+            sound.play_drag(LOAD)
             animate(win, side, board, prevsel, sel, bool(LOAD[1] and side))
-            board = move(side, board, prevsel, sel, promote)
-            flags = updateFlags(side, board, prevsel, sel, flags[0])
+            sound.play_move(LOAD)
+            
+            side, board, flags = makeMove(
+                side, board, prevsel, sel, flags, promote)
             moves += " " + encode(prevsel, sel, promote)
-            side = flip(side)

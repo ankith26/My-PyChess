@@ -1,27 +1,27 @@
 """
 This file is a file of My-PyChess application.
 This file gets imported whenever one tries to do
->> from chess.lib import *
+>>> from chess.lib import *
 In this file, we import all the useful functions for chess from the
 respective modules.
-Some functions that need utility of other functions are defined
-here.
+Some functions that need utility of other functions from various other modules
+are defined here.
 
 For more understanding of the variables used here, checkout multiplayer.py
+
+Level of development = STABLE
 """
 
 from chess.lib.core import (
     flip,
     getType,
     isOccupied,
-    isChecked,
-    legalMoves,
-    move,
+    isChecked,  
     moveTest,
     isEnd,
     isValidMove,
-    updateFlags,
     availableMoves,
+    makeMove, 
 )
 from chess.lib.gui import (
     pygame,
@@ -30,11 +30,13 @@ from chess.lib.gui import (
     drawBoard,
     drawPieces,
     prompt,
+    start, 
 )
-from chess.lib.utils import encode, decode, saveGame
+from chess.lib.utils import encode, decode, undo, getSFpath, rmSFpath, saveGame
+from chess.lib.ai import miniMax
 
 # This function converts a string of moves(move sequence) of standard notation
-# into the notation used by the game
+# into the notation used by the game.
 def convertMoves(moves):
     side = 0
     board = (
@@ -55,19 +57,21 @@ def convertMoves(moves):
     movelist = map(decode, filter(lambda x: x != "", moves.strip().split(" ")))
 
     for fro, to, promote in movelist:
-        move(side, board, fro, to, promote)
-        flags = updateFlags(side, board, fro, to, flags[0])
-        side = flip(side)
+        side, board, flags = makeMove(side, board, fro, to, flags, promote)
 
     return side, board, flags
 
 # This is a wrapper for the getChoice GUI function.
-# getPromote() returns getChoice() only if a pawn has reached promotion
-# state, returns None otherwise.
-def getPromote(win, side, board, fro, to):
+# getPromote() first checks wether a pawn has reaches promotion state
+# Then, if the game is multiplayer, getPromote() returns getChoice()
+# Returns queen otherwise
+def getPromote(win, side, board, fro, to, single=False):
     if getType(side, board, fro) == "p":
         if (side == 0 and to[1] == 1) or (side == 1 and to[1] == 8):
-            return getChoice(win, side)
+            if single:
+                return "q"
+            else:
+                return getChoice(win, side)
 
 # This is a gui function that draws green squares marking the legal moves of
 # a seleced piece.
@@ -93,9 +97,10 @@ def animate(win, side, board, fro, to, flip):
     stepy = (y2 - y1) / 50
     
     col = (180, 100, 30) if (fro[0] + fro[1]) % 2 else (220, 240, 240)
-
-    for i in range(50):
-        pygame.time.delay(6)
+    
+    clk = pygame.time.Clock()
+    for i in range(51):
+        clk.tick(120)
         drawBoard(win)
         drawPieces(win, board, flip)
 
@@ -120,21 +125,24 @@ def showScreen(win, side, board, flags, pos, LOAD, player=None, online=False):
     if not multi:
         win.blit(CHESS.TURN[int(side == player)], (10, 460))
         
-    if not online:
+    if online:
+        win.blit(CHESS.DRAW, (10, 12))
+        win.blit(CHESS.RESIGN, (400, 462))    
+    else:
         if LOAD[4]:
-            win.blit(CHESS.UNDO, (10, 10))
-        win.blit(CHESS.SAVE, (350, 460))
+            win.blit(CHESS.UNDO, (10, 12))
+        win.blit(CHESS.SAVE, (350, 462))
 
     if isEnd(side, board, flags):
         if isChecked(side, board):
-            win.blit(CHESS.CHECKMATE, (140, 12))
-            win.blit(CHESS.LOST, (370, 12))
-            win.blit(CHESS.PIECES[side]["k"], (320, 0))
+            win.blit(CHESS.CHECKMATE, (100, 12))
+            win.blit(CHESS.LOST, (320, 12))
+            win.blit(CHESS.PIECES[side]["k"], (270, 0))
         else:
-            win.blit(CHESS.STALEMATE, (150, 12))
+            win.blit(CHESS.STALEMATE, (160, 12))
     else:
         if isChecked(side, board):
-            win.blit(CHESS.CHECK, (180, 12))
+            win.blit(CHESS.CHECK, (200, 12))
 
         if isOccupied(side, board, pos) and side == player:
             x = (9 - pos[0]) * 50 if flip else pos[0] * 50
