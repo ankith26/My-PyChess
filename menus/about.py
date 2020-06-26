@@ -31,9 +31,4 @@ def main(win):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                x, y = event.pos
-                if 160 < x < 300 and 190 < y < 210:
-                    stockfish.main(win)
-                    return
         pygame.display.update()
