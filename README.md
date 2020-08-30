@@ -7,8 +7,6 @@ Interested in pygame game development but think that MyPychess code is too hard 
 
 But if you are just interested in chess, download this app.
 
-IMPORTANT NOTE: This game is best played on a 720p screen, 768p screen or 1080p screen. If you are on a 4K screen, you will get a very small window.
-
 My-PyChess supports Python v3.5 and above (server.py needs atleast v3.6).
 This app needs the **pygame** library to be intalled in your machine.
 
@@ -22,13 +20,13 @@ Those who are running older versions of this app, must upgrade to the latest ver
 ## How to customise the game Using Preferences
 - In the main game menu, click preferences.
 - Hover over each name to know more about them.
-1) Sounds (beta): When this is True, sounds are enabled.
+1) Sounds: When this is True, sounds are enabled.
 2) Flip: When this is True, it shows the chess board from the perspective of the player who is playing, otherwise shows a constant board with white at the bottom.
 3) SlideShow: When this is True, it will show a slideshow of images on main menu (recommended to be True, look better).
 4) Show moves: When this is True, it will show all legal move options for a selected piece during gameplay (recommended to be True, highly helpful for beginners (my favourite feature)).
 5) Undo: When this is True, it allows users to undo.
 
-- You can also open res/preferences.txt and edit the file there (not recommended to do unless you know what you are doing, it might spoil the app if you do it the wrong way).
+- You can also open res/preferences.txt and edit the file there.
 
 ## Features
 - Clean GUI with a lot of menus for ease of use.
