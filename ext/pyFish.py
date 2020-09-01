@@ -3,8 +3,6 @@ This file is a part of My-PyChess application.
 
 Here I have written a python interface class for stockfish chess engine.
 This is used in the singleplayer mode of My-PyChess.
-
-Level of development = STABLE
 """
 
 import queue
@@ -26,7 +24,7 @@ _LEVELDATA = (
 # StockFish class to interface with stockfish chess engine.
 class StockFish:
     def __init__(self, path="stockfish", level=1):
-        self.moveSequence = ""
+        self.moves = []
         self.skill, self.movetime, self.depth = _LEVELDATA[level - 1]
 
         self.thread = threading.Thread()
@@ -69,7 +67,7 @@ class StockFish:
 
     def _engine(self):
         self._isReady()
-        self._put("position startpos moves " + self.moveSequence.strip())
+        self._put("position startpos moves " + " ".join(self.moves))
         self._put("go depth {} movetime {}".format(self.depth, self.movetime))
         while True:
             msg = self.stockfish.stdout.readline().strip().split(" ")
@@ -86,7 +84,7 @@ class StockFish:
     def startGame(self, moves=""):
         self._isReady()
         self._put("ucinewgame")
-        self.moveSequence = moves
+        self.moves = moves.split()
 
     def setOption(self, name, value):
         self._isReady()
@@ -101,7 +99,7 @@ class StockFish:
             raise RuntimeError("Could not start engine")
 
     def makeMove(self, move):
-        self.moveSequence += " " + move
+        self.moves.append(move)
         self.startEngine()
 
     def getMove(self, block=True):
@@ -110,7 +108,7 @@ class StockFish:
             self._put("stop")
         
         enginemove = self.q.get()
-        self.moveSequence += " " + enginemove
+        self.moves.append(enginemove)
         return enginemove
 
     def hasMoved(self):
@@ -120,9 +118,8 @@ class StockFish:
     def undo(self, num=1):
         self._raiseErrorIfInactive()
         if not self.thread.is_alive():
-            temp = self.moveSequence.strip().split(" ")
-            if len(temp) not in range(num):
-                self.moveSequence = " ".join(temp[:-num])
+            if len(self.moves) not in range(num):
+                self.moves = self.moves[:-num]
 
     def close(self):
         self._isReady()
@@ -138,5 +135,3 @@ def teststockfish(path):
     if stat:
         fish.close()
     return stat
-
-s = StockFish()

@@ -1,0 +1,4 @@
+Play chess against a chess player algorithm implemented in
+python. This is called MiniMax algorithm and is used with
+alpha-beta optimisation technique. Currently, it is setup
+to play like an average (weak) player of chess.

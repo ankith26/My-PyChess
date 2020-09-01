@@ -1,0 +1,31 @@
+Documentation for commonly used chess variables:
+1. side --> This variable is a boolean that stores which side plays next.
+            If white is supposed to play next, it stores False. True otherwise.
+            
+2. board -> A 'board' variable stores the current state of the board.
+            This is a 2-element tuple, First element is a list of all the
+            pieces of white, and the second contains all pieces of black.
+            
+3. piece -> A 'piece' variable is a 3-element list. A piece can be denoted
+            by it's x and y cordinate on the chess board and it's type
+            ("k" (king), "q" (queen), etc ...)
+
+4. flags -> This stores the required flags for castling and enpassent.
+            This is a 2-element list, first element is flag for castling.
+            second is for enpassent.
+
+See initBoardVars() function at chess.lib.utils for a representation of these
+variables in their initial state (when the chess game starts)
+
+Some other variables are
+
+1. win -> The pygame window object.
+2. sel/prevsel/pos -> This is a pair of coordinates. example: [1, 2], [3, 5] etc..
+3. prefs/load -> A dictionary containing user preferences.
+
+The coordinate system used across this game is similar to the system used by
+pygame.
+The top left square is denoted by [1, 1] and as you go right, x value increases
+(x is the first element in the list) and as you go down, y value increases
+(y is the second element in the list). By this convention, the bottom right
+square becomes [8, 8].

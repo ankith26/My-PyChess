@@ -1,13 +1,11 @@
 """
-This file is a file of My-PyChess application.
+This file is a part of My-PyChess application.
 In this file, we implement a basic chess player algorithm in python.
 
 This implementation is a weak player of chess.
 This algorithm is not fast or efficient as any C impemenation of the same,
 just an attempt to display the workings of the minimax algorithm with
 alpha-beta pruning in Python.
-
-Level of development = STABLE
 """
 
 from chess.lib.core import legalMoves, makeMove

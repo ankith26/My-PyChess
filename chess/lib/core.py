@@ -1,18 +1,13 @@
 """
 This file is a part of My-PyChess application.
 In this file, we define the core chess-related functions.
-For more understanding of the variables used here, checkout multiplayer.py
-
-Level of development = STABLE
+For a better understanding of the variables used here, checkout docs.txt
 """
-from copy import deepcopy as copy
-
-# This is a simple function that flips the side variable
-# flip(0) returns 1 and flip(1) returns 0.
-def flip(side):
-    return int(not side)
-
-# Return the type of piece given it's position
+# A simple function to make a copy of the board
+def copy(board):
+    return [[list(j) for j in board[i]] for i in range(2)]       
+        
+# Return the type of piece given it's position. Return None if Empty.
 def getType(side, board, pos):
     for piece in board[side]:
         if piece[:2] == pos:
@@ -20,10 +15,7 @@ def getType(side, board, pos):
 
 # Determine wether the position given is occupied by a piece of the given side.
 def isOccupied(side, board, pos):
-    for piece in board[side]:
-        if piece[:2] == pos:
-            return True
-    return False
+    return getType(side, board, pos) is not None
 
 # Determine wether the position(s) given is(are) empty or not
 def isEmpty(board, *poslist):
@@ -33,12 +25,12 @@ def isEmpty(board, *poslist):
                 return False
     return True
 
-# Determine wether the king is in check or not.
+# Determine wether the king of a given side is in check or not.
 def isChecked(side, board):
     for piece in board[side]:
         if piece[2] == "k":
-            for i in board[flip(side)]:
-                if piece[:2] in availableMoves(flip(side), board, i):
+            for i in board[not side]:
+                if piece[:2] in rawMoves(not side, board, i):
                     return True
             return False
 
@@ -46,10 +38,8 @@ def isChecked(side, board):
 def legalMoves(side, board, flags):
     for piece in board[side]:
         for pos in availableMoves(side, board, piece, flags):
-            if not isOccupied(side, board, pos):
-                if moveTest(side, board, piece[:2], pos):
-                    yield [piece[:2], pos]
-                    
+            yield [piece[:2], pos]
+            
 # This function returns wether a game has ended or not
 def isEnd(side, board, flags):
     for _ in legalMoves(side, board, flags):
@@ -65,9 +55,9 @@ def move(side, board, fro, to, promote="p"):
     UP = 8 if side else 1
     DOWN = 1 if side else 8
     ALLOWENP = fro[1] == 4 + side and to[0] != fro[0] and isEmpty(board, to)
-    for piece in board[flip(side)]:
+    for piece in board[not side]:
         if piece[:2] == to:
-            board[flip(side)].remove(piece)
+            board[not side].remove(piece)
             break
 
     for piece in board[side]:
@@ -84,7 +74,7 @@ def move(side, board, fro, to, promote="p"):
                     board[side].remove(piece)
                     board[side].append([to[0], UP, promote])
                 if ALLOWENP:
-                    board[flip(side)].remove([to[0], fro[1], "p"])
+                    board[not side].remove([to[0], fro[1], "p"])
             break
     return board
 
@@ -94,22 +84,22 @@ def moveTest(side, board, fro, to):
 
 # This function returns wether a move is valid or not
 def isValidMove(side, board, flags, fro, to):
-    piece = fro + [getType(side, board, fro)]
-    if not isOccupied(side, board, to):
-        if to in availableMoves(side, board, piece, flags):
+    if 0 < to[0] < 9 and 0 < to[1] < 9 and not isOccupied(side, board, to):
+        piece = fro + [getType(side, board, fro)]
+        if to in rawMoves(side, board, piece, flags):
             return moveTest(side, board, fro, to)
-    return False
 
-# This is an important wrapper function. It makes the move,
-# updates the flags and flips the side, returning the updated data.
+# This is an important wrapper function. It makes the move, updates the
+# flags and flips the side, returning the updated data.
 def makeMove(side, board, fro, to, flags, promote="q"):
     newboard = move(side, copy(board), fro, to, promote)
-    newflags = updateFlags(side, newboard, fro, to, list(flags[0]))
-    return flip(side), newboard, newflags
+    newflags = updateFlags(side, newboard, fro, to, flags)
+    return not side, newboard, newflags
 
 # Does a routine check to update all the flags required for castling and
 # enpassent. This function needs to be called AFTER every move played.
-def updateFlags(side, board, fro, to, castle):
+def updateFlags(side, board, fro, to, flags):
+    castle = list(flags[0])
     if [5, 8, "k"] not in board[0] or [1, 8, "r"] not in board[0]:
         castle[0] = False
     if [5, 8, "k"] not in board[0] or [8, 8, "r"] not in board[0]:
@@ -128,9 +118,19 @@ def updateFlags(side, board, fro, to, castle):
 
     return castle, enP
 
-# Given a side, board and piece, it returns all possible moves by the piece.
-# It does not validate wether the move is legal or not
-def availableMoves(side, board, piece, flags=[None, None]):
+# Given a side, board and piece, it yields all possible legal moves
+# of that piece. This function is an extension/wrapper on rawMoves() 
+def availableMoves(side, board, piece, flags):
+    for i in rawMoves(side, board, piece, flags):
+        if 0 < i[0] < 9 and 0 < i[1] < 9 and not isOccupied(side, board, i):
+            if moveTest(side, board, piece[:2], i):
+                yield i
+    
+# Given a side, board and piece, it yields all possible moves by the piece.
+# If flags are given, it can also yeild the special moves of chess.
+# It also returns moves that are illegal, therefore the function is for
+# internal use only
+def rawMoves(side, board, piece, flags=[None, None]):  
     x, y, ptype = piece
     if ptype == "p":
         if not side:
@@ -153,59 +153,50 @@ def availableMoves(side, board, piece, flags=[None, None]):
                     yield i
 
     elif ptype == "n":
-        for i, j in ((x + 1, y + 2), (x + 1, y - 2), (x - 1, y + 2),
-                     (x - 1, y - 2), (x + 2, y + 1), (x + 2, y - 1),
-                     (x - 2, y + 1), (x - 2, y - 1)):
-            if 0 < i < 9 and 0 < j < 9:
-                yield [i, j]
+        yield from (
+            [x + 1, y + 2], [x + 1, y - 2], [x - 1, y + 2], [x - 1, y - 2],
+            [x + 2, y + 1], [x + 2, y - 1], [x - 2, y + 1], [x - 2, y - 1]
+        )
 
     elif ptype == "b":
         for i in range(1, 8):
-            if 0 < x + i < 9 and 0 < y + i < 9:
-                yield [x + i, y + i]
-                if not isEmpty(board, [x + i, y + i]):
-                    break
+            yield [x + i, y + i]
+            if not isEmpty(board, [x + i, y + i]):
+                break
         for i in range(1, 8):
-            if 0 < x + i < 9 and 0 < y - i < 9:
-                yield [x + i, y - i]
-                if not isEmpty(board, [x + i, y - i]):
-                    break
+            yield [x + i, y - i]
+            if not isEmpty(board, [x + i, y - i]):
+                break
         for i in range(1, 8):
-            if 0 < x - i < 9 and 0 < y + i < 9:
-                yield [x - i, y + i]
-                if not isEmpty(board, [x - i, y + i]):
-                    break
+            yield [x - i, y + i]
+            if not isEmpty(board, [x - i, y + i]):
+                break
         for i in range(1, 8):
-            if 0 < x - i < 9 and 0 < y - i < 9:
-                yield [x - i, y - i]
-                if not isEmpty(board, [x - i, y - i]):
-                    break
+            yield [x - i, y - i]
+            if not isEmpty(board, [x - i, y - i]):
+                break
 
     elif ptype == "r":
         for i in range(1, 8):
-            if 0 < x + i < 9 and 0 < y < 9:
-                yield [x + i, y]
-                if not isEmpty(board, [x + i, y]):
-                    break
+            yield [x + i, y]
+            if not isEmpty(board, [x + i, y]):
+                break
         for i in range(1, 8):
-            if 0 < x - i < 9 and 0 < y < 9:
-                yield [x - i, y]
-                if not isEmpty(board, [x - i, y]):
-                    break
+            yield [x - i, y]
+            if not isEmpty(board, [x - i, y]):
+                break
         for i in range(1, 8):
-            if 0 < x < 9 and 0 < y + i < 9:
-                yield [x, y + i]
-                if not isEmpty(board, [x, y + i]):
-                    break
+            yield [x, y + i]
+            if not isEmpty(board, [x, y + i]):
+                break
         for i in range(1, 8):
-            if 0 < x < 9 and 0 < y - i < 9:
-                yield [x, y - i]
-                if not isEmpty(board, [x, y - i]):
-                    break
+            yield [x, y - i]
+            if not isEmpty(board, [x, y - i]):
+                break
 
     elif ptype == "q":
-        yield from availableMoves(side, board, [x, y, "b"])
-        yield from availableMoves(side, board, [x, y, "r"])
+        yield from rawMoves(side, board, [x, y, "b"])
+        yield from rawMoves(side, board, [x, y, "r"])
 
     elif ptype == "k":
         if flags[0] is not None and not isChecked(side, board):
@@ -222,7 +213,7 @@ def availableMoves(side, board, piece, flags=[None, None]):
                 if moveTest(1, board, [5, 1], [6, 1]):
                     yield [7, 1]
 
-        for i, j in ((x - 1, y - 1), (x, y - 1), (x + 1, y - 1), (x - 1, y),
-                     (x - 1, y + 1), (x, y + 1), (x + 1, y + 1), (x + 1, y)):
-            if 0 < i < 9 and 0 < j < 9:
-                yield [i, j]
+        yield from (
+            [x - 1, y - 1], [x, y - 1], [x + 1, y - 1], [x - 1, y],
+            [x - 1, y + 1], [x, y + 1], [x + 1, y + 1], [x + 1, y]
+        )

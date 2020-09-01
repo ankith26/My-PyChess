@@ -1,6 +1,6 @@
 '''
 This file is a part of My-PyChess application.
-In this file, import some modules for easy access.
+In this file, we import the modules for easy access.
 '''
 
 from chess.multiplayer import main as multiplayer

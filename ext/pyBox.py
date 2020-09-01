@@ -4,8 +4,6 @@ This Module is WORK-IN-PROGRESS.
 
 This is a module meant to provide a high-level TextBox in Pygame
 It is being designed by me to be fully KEYBOARD and MOUSE INTERACTIVE.
-
-Level of development = ALPHA
 """
 
 import os
@@ -59,7 +57,8 @@ class TextBox:
                 self.RECT[1] < y < (self.RECT[1] + self.RECT[3])):
                 self.active = True
             else:
-                self.active = False               
+                self.active = False
+                self.selected = None
             
         elif event.type == pygame.MOUSEBUTTONUP:
             self.mouseheld = False
@@ -96,18 +95,20 @@ class TextBox:
                         
             elif event.key == pygame.K_RIGHT:
                 if self.cursor < len(self.text):
-                    self.cursor += 1
                     if self.shiftheld:
                         if self.selected is None:
-                            self.selected = [self.cursor - 1, self.cursor]
-                        elif self.cursor == self.selected[1] + 1:
+                            self.selected = [self.cursor, self.cursor + 1]
+                        elif self.cursor == self.selected[1]:
                             self.selected[1] += 1
+                        elif self.cursor == self.selected[0]:
+                            self.selected[0] += 1
                         
                         if self.selected[0] == self.selected[1]:
                             self.selected = None
                             
                     else:
                         self.selected = None
+                    self.cursor += 1
 
             elif event.key == pygame.K_LEFT:
                 if self.cursor > 0:
@@ -117,6 +118,8 @@ class TextBox:
                             self.selected = [self.cursor, self.cursor + 1]
                         elif self.cursor == self.selected[0] - 1:
                             self.selected[0] -= 1
+                        elif self.cursor == self.selected[1] - 1:
+                            self.selected[1] -= 1
                             
                         if self.selected[0] == self.selected[1]:
                             self.selected = None
@@ -128,9 +131,9 @@ class TextBox:
                 if self.cursor < len(self.text):
                     if self.shiftheld:
                         if self.selected is None:
-                            self.selected = [self.cursor, len(self.rendered)]
+                            self.selected = [self.cursor, len(self.text)]
                         else:
-                            self.selected[1] = len(self.rendered)
+                            self.selected[1] = len(self.text)
                     else:
                         self.selected = None
                     self.cursor = len(self.text)
@@ -203,6 +206,7 @@ class TextBox:
         win.blit(self.surf, self.RECT[:2])
         self.clock.tick()                        
 
+# This is basic sample code for use with pyBox
 if __name__ == "__main__":
     pygame.init()
     box = TextBox("calibri", (0, 0, 0), (30, 0, 150, 35))

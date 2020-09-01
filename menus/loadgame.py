@@ -4,13 +4,11 @@ In this file, we manage the loadgame menu which is called when user clicks
 loadgame button on main menu.
 
 We also define functions to save, load and scan for games.
-
-Level of development = STABLE
 '''
 
 import os
 import pygame
-from loader import LOADGAME, putLargeNum, putDT
+from tools.loader import LOADGAME, BACK, putLargeNum, putDT
 from tools.utils import rounded_rect
 
 # This function scans for saved games
@@ -28,17 +26,30 @@ def delGame(gameId):
     if os.path.exists(name):
         os.remove(name)
 
-# This function loads the game
+# This function loads the game, returns the neccessary data
 def loadGame(gameId):
     name = os.path.join("res", "savedGames", "game" + str(gameId) + ".txt")
     if os.path.exists(name):
         with open(name, "r") as file:
             lines = file.read().splitlines()
 
-        if lines[0] == "multi":       
-            return lines[0], lines[2]
+        if len(lines) < 4:
+            lines.extend([""] * (4 - len(lines)))
+            
+        if lines[0].strip() == "multi":
+            temp = list(map(int, lines[3].strip().split()))
+            if len(temp) == 0:
+                return "multi", None, None, lines[2]
+            
+            elif len(temp) == 1:
+                return "multi", temp[0], None, lines[2]
+             
+            else:
+                return "multi", temp[0], temp[1:], lines[2]
+                
         else:
-            return lines[0].split(" ") + [lines[2]]
+            temp = lines[0].strip().split()
+            return [temp[0]] + list(map(int, temp[1:])) + [lines[2]]
     else:
         return None
     
@@ -65,9 +76,10 @@ def prompt(win):
                         return False
 
 # This function shows the screen
-def showMain(win, pg, scanned):
+def showScreen(win, pg, scanned):
     win.fill((0, 0, 0))
     rounded_rect(win, (255, 255, 255), (70, 15, 340, 60), 15, 4)
+    win.blit(BACK, (460, 0))
     win.blit(LOADGAME.HEAD, (100, 18))
     win.blit(LOADGAME.LIST, (125, 80))
     pygame.draw.line(win, (255, 255, 255), (125, 122), (360, 122), 3)
@@ -93,7 +105,7 @@ def showMain(win, pg, scanned):
             
             win.blit(LOADGAME.DATE, (230, num + 2))
             win.blit(LOADGAME.TIME, (230, num + 23))
-            putDT(win, i[2], (275, num + 2))
+            putDT(win, i[2], (278, num + 2))
             
             rounded_rect(win, (255, 255, 255), (362, num + 5, 40, 40), 6, 2)
             win.blit(LOADGAME.DEL, (366, num + 9))
@@ -118,13 +130,16 @@ def main(win):
     clock = pygame.time.Clock()
     while True:
         clock.tick(24)
-        showMain(win, pg, scanned)
+        showScreen(win, pg, scanned)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                return None
+                return 0
             
             if event.type == pygame.MOUSEBUTTONDOWN:
                 x, y = event.pos
+                
+                if 460 < x < 500 and 0 < y < 50:
+                    return 1
                 
                 if 430 < y < 476:
                     if 160 < x < 180:

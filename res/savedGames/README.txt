@@ -1,3 +1,3 @@
-THIS IS A FOLDER WHERE ALL GAMES ARE STORED.
-IF YOU USE SAVEGAME BUTTON, THE FILE GETS SAVED HERE WITH A GAMEID.
-LOAD IT USING THE LOADGAME FEATURE IN MAIN MENU.
+This is a folder where all games are stored.
+If you use savegame feature, the file gets saved here with a gameid.
+Load it using the loadgame feature in main menu.

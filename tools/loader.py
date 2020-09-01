@@ -6,8 +6,6 @@ Most of the scripts in this application import specific classes from this
 module. Each class is a collection of resources for a particular script.
 All font-related stuff is done in this file, the functions to put a number
 on the screen and display date and time are also defined here
-
-Level of development = STABLE
 """
 
 import os.path
@@ -34,41 +32,40 @@ RED = (200, 20, 20)
 # Define a few constants that contain loaded texts of numbers and chararters.
 NUM = [vsmall.render(str(i), True, WHITE) for i in range(10)]
 LNUM = [small.render(str(i), True, WHITE) for i in range(10)]
+BLNUM = [small.render(str(i), True, BLACK) for i in range(10)]
 SLASH = vsmall.render("/", True, WHITE)
 COLON = vsmall.render(":", True, WHITE)
 
-# This is a function that displays a number in a position on the screen.
-# Very small sized text used.
+# This function displays a number in a position, very small sized text used.
 def putNum(win, num, pos):
     for cnt, i in enumerate(list(str(num))):
-        win.blit(NUM[int(i)], (pos[0] + (cnt * 8), pos[1]))
+        win.blit(NUM[int(i)], (pos[0] + (cnt * 9), pos[1]))
 
-
-# This is a function that displays a number in a position on the screen.
-# Small sized text used.
-def putLargeNum(win, num, pos):
+# This function displays a number in a position, Small sized text used.
+def putLargeNum(win, num, pos, white=True):
     for cnt, i in enumerate(list(str(num))):
-        win.blit(LNUM[int(i)], (pos[0] + (cnt * 14), pos[1]))
+        if white:
+            win.blit(LNUM[int(i)], (pos[0] + (cnt * 14), pos[1]))
+        else:
+            win.blit(BLNUM[int(i)], (pos[0] + (cnt * 14), pos[1]))
 
-
-# This is a function that displays the date and time in a position
-# on the screen.
+# This function displays the date and time in a position on the screen.
 def putDT(win, DT, pos):
     var = DT.split()
     date = var[0].split("/")
     time = var[1].split(":")
-    for cnt, num in enumerate(date):
+
+    for cnt, num in enumerate(map(lambda x: format(int(x), "02"), date)):
         putNum(win, num, (pos[0] + 24 * cnt - 5, pos[1]))
 
     win.blit(SLASH, (pos[0] + 13, pos[1]))
     win.blit(SLASH, (pos[0] + 35, pos[1]))
 
-    for cnt, num in enumerate(time):
+    for cnt, num in enumerate(map(lambda x: format(int(x), "02"), time)):
         putNum(win, num, (pos[0] + 24 * cnt, pos[1] + 21))
 
     win.blit(COLON, (pos[0] + 20, pos[1] + 21))
-    win.blit(COLON, (pos[0] + 43, pos[1] + 21))
-
+    win.blit(COLON, (pos[0] + 44, pos[1] + 21))
 
 # This splits a string at regular intervals of "index" characters
 def splitstr(string, index=57):
@@ -79,11 +76,12 @@ def splitstr(string, index=57):
     data.append(string)
     return data
 
-
 # Defined important globals for loading background image sprites.
 BGSPRITE = pygame.image.load(os.path.join("res", "img", "bgsprites.jpg"))
 PSPRITE = pygame.image.load(os.path.join("res", "img", "piecesprite.png"))
 
+# Load global image for back
+BACK = pygame.image.load(os.path.join("res", "img", "back.png"))
 
 class CHESS:
     PIECES = ({}, {})
@@ -103,6 +101,11 @@ class CHESS:
         small.render("Do you want to quit", True, WHITE),
         small.render("this game?", True, WHITE),
     )
+    
+    MESSAGE2 = (
+        small.render("Game saved. Now do", True, WHITE),
+        small.render("you want to quit?", True, WHITE),
+    )
 
     YES = small.render("YES", True, WHITE)
     NO = small.render("NO", True, WHITE)
@@ -116,7 +119,15 @@ class CHESS:
 
     DRAW = small.render("Draw", True, BLACK)
     RESIGN = small.render("Resign", True, BLACK)
-
+    
+    TIMEUP = (
+        vsmall.render("Time Up!", True, WHITE),
+        vsmall.render("Technically the game is over, but you", True, WHITE),
+        vsmall.render("can still continue if you wish to - :)", True, WHITE),
+    )
+    
+    OK = small.render("Ok", True, WHITE)
+    COL = small.render(":", True, BLACK)
 
 class LOADGAME:
     HEAD = large.render("Load Games", True, WHITE)
@@ -129,8 +140,8 @@ class LOADGAME:
         "mysingle": vsmall.render("SinglePlayer", True, WHITE),
         "multi": vsmall.render("MultiPlayer", True, WHITE),
     }
-    DATE = vsmall.render("Date:", True, WHITE)
-    TIME = vsmall.render("Time:", True, WHITE)
+    DATE = vsmall.render("Date-", True, WHITE)
+    TIME = vsmall.render("Time-", True, WHITE)
 
     DEL = pygame.image.load(os.path.join("res", "img", "delete.jpg"))
     LOAD = small.render("LOAD", True, WHITE)
@@ -146,10 +157,9 @@ class LOADGAME:
     RIGHT = medium.render(">", True, WHITE)
     PAGE = [medium.render("Page " + str(i), True, WHITE) for i in range(1, 5)]
 
-
 class MAIN:
     HEADING = head.render("PyChess", True, WHITE)
-    VERSION = vsmall.render("Version 3.1", True, WHITE)
+    VERSION = vsmall.render("Version 3.2", True, WHITE)
     ICON = pygame.image.load(os.path.join("res", "img", "icon.gif"))
     BG = [BGSPRITE.subsurface((i * 500, 0, 500, 500)) for i in range(4)]
 
@@ -157,6 +167,7 @@ class MAIN:
     MULTI = medium.render("MultiPlayer", True, WHITE)
     ONLINE = medium.render("Online", True, WHITE)
     LOAD = medium.render("Load Game", True, WHITE)
+    HOWTO = small.render("Howto", True, WHITE)
     ABOUT = medium.render("About", True, WHITE)
     PREF = medium.render("Preferences", True, WHITE)
     STOCK = small.render("Configure Stockfish", True, WHITE)
@@ -165,16 +176,17 @@ class MAIN:
     MULTI_H = medium.render("MultiPlayer", True, GREY)
     ONLINE_H = medium.render("Online", True, GREY)
     LOAD_H = medium.render("Load Game", True, GREY)
+    HOWTO_H = small.render("Howto", True, GREY)
     ABOUT_H = medium.render("About", True, GREY)
     PREF_H = medium.render("Preferences", True, GREY)
     STOCK_H = small.render("Configure Stockfish", True, GREY)
-
 
 class PREF:
     HEAD = large.render("Preferences", True, WHITE)
 
     SOUNDS = medium.render("Sounds", True, WHITE)
     FLIP = medium.render("Flip screen", True, WHITE)
+    CLOCK = medium.render("Show Clock", True, WHITE)
     SLIDESHOW = medium.render("Slideshow", True, WHITE)
     MOVE = medium.render("Moves", True, WHITE)
     UNDO = medium.render("Allow undo", True, WHITE)
@@ -192,6 +204,10 @@ class PREF:
         vsmall.render("This flips the screen", True, WHITE),
         vsmall.render("after each move", True, WHITE),
     )
+    CLOCK_H = (
+        vsmall.render("Show a clock in chess", True, WHITE),
+        vsmall.render("when timer is disabled", True, WHITE),
+    )
     SLIDESHOW_H = (
         vsmall.render("This shows a slide of", True, WHITE),
         vsmall.render("backgrounds on screen", True, WHITE),
@@ -206,28 +222,28 @@ class PREF:
     )
 
     BSAVE = medium.render("Save", True, WHITE)
-    TIP = vsmall.render(
-        "TIP: Hover the mouse over the feature name to know", True, WHITE
-    )
-    TIP2 = vsmall.render("more about it.", True, WHITE)
+    TIP = vsmall.render("TIP: Hover the mouse over the feature", True, WHITE)
+    TIP2 = vsmall.render("name to know more about it.", True, WHITE)
 
     PROMPT = (
-        vsmall.render("Are you sure you want to quit?", True, WHITE),
+        vsmall.render("Are you sure you want to leave?", True, WHITE),
         vsmall.render("Any changes will not be saved.", True, WHITE),
     )
 
     YES = small.render("YES", True, WHITE)
     NO = small.render("NO", True, WHITE)
 
-
 class ONLINE:
-    TRYCONN = vsmall.render("Trying to connect to server....", True, WHITE)
-    ERR = [
-        vsmall.render("[ERR 1] Couldn't find the server...", True, WHITE),
-        vsmall.render("[ERR 2] Server refused connection..", True, WHITE),
+    ERR = (
+        vsmall.render("Attempting to connect to server..", True, WHITE),
+        vsmall.render("[ERR 1] Couldn't find the server..", True, WHITE),
+        vsmall.render("[ERR 2] Versions are incompatible..", True, WHITE),
         vsmall.render("[ERR 3] Server is full (max = 10)..", True, WHITE),
-        vsmall.render("[ERR 4] The server is Locked...", True, WHITE),
-    ]
+        vsmall.render("[ERR 4] The server is locked...", True, WHITE),
+        vsmall.render("[ERR 5] Unknown error occured...", True, WHITE),
+        vsmall.render("You got disconnected from server..", True, WHITE),
+    )
+    GOBACK = vsmall.render("Go Back", True, WHITE)
         
     EMPTY = small.render("No one's online, you are alone.", True, WHITE)
 
@@ -240,25 +256,23 @@ class ONLINE:
     BUSY = small.render("BUSY", True, RED)
     REQ = small.render("Send Request", True, WHITE)
     YOUARE = medium.render("You Are", True, WHITE)
+    
+    ERRCONN = vsmall.render("Unable to connect to that player..", True, WHITE)
 
     REFRESH = pygame.image.load(os.path.join("res", "img", "refresh.png"))
 
-    MSG1 = (
+    REQUEST1 = (
         vsmall.render("Please wait for the other player to", True, WHITE),
         vsmall.render("accept your request. Game will begin", True, WHITE),
         vsmall.render("shortly. You will play as white", True, WHITE),
     )
-    MSG2 = (
+    REQUEST2 = (
         vsmall.render("Player", True, WHITE),
         vsmall.render("wants to play with you.", True, WHITE),
         vsmall.render("Accept to play. You will play as black", True, WHITE),
     )
 
-    OPPQUIT = small.render("Your Opponent has left", True, WHITE)
-    RESIGN = small.render("Your Opponent has resigned", True, WHITE)
-    DRAWAGREED = small.render("Draw has been agreed", True, WHITE)
-
-    DRAW = (
+    DRAW1 = (
         vsmall.render("Sent a request to your opponent for", True, WHITE),
         vsmall.render("draw, wait for reply.", True, WHITE),
     )
@@ -267,43 +281,38 @@ class ONLINE:
         vsmall.render("Your opponent is requesting for a", True, WHITE),
         vsmall.render("draw, please reply.", True, WHITE),
     )
+    
+    POPUP = {
+        "quit": vsmall.render("Opponent got disconnected", True, WHITE),
+        "resign": vsmall.render("The opponent has resigned", True, WHITE),
+        "draw": vsmall.render("A draw has been agreed", True, WHITE),
+        "end": vsmall.render("Game ended, opponent left", True, WHITE),
+        "abandon": vsmall.render("Opponent abandoned match", True, WHITE),
+    }
 
     NO = small.render("NO", True, WHITE)
     OK = small.render("OK", True, WHITE)
-
 
 class ONLINEMENU:
     HEAD = large.render("Online", True, WHITE)
     with open(os.path.join("res", "texts", "online.txt")) as f:
         TEXT = [vsmall.render(i, True, WHITE) for i in f.read().splitlines()]
 
-    with open(os.path.join("res", "texts", "onlinehowto.txt")) as f:
-        TEXT2 = [vsmall.render(i, True, WHITE) for i in f.read().splitlines()]
-
-    CLICK = vsmall.render("Click Here", True, WHITE)
-    BACK = vsmall.render("Go Back", True, WHITE)
     CONNECT = small.render("Connect", True, WHITE)
 
 class SINGLE:
     HEAD = large.render("Singleplayer", True, WHITE)
-    _PARA1 = (
-        "Play chess against a chess player algorithm implemented in",
-        "python. This is called MiniMax algorithm and is used with",
-        "alpha-beta optimisation technique. Currently, it is setup",
-        "to play like a average (weak) player of chess.",
-    )
-    PARA1 = [vsmall.render(i, True, WHITE) for i in _PARA1]
-    SELECT = pygame.image.load(os.path.join("res", "img", "select.png"))
+    SELECT = pygame.image.load(os.path.join("res", "img", "select.jpg"))
     CHOOSE = small.render("Choose:", True, WHITE)
     START = small.render("Start Game", True, WHITE)
     OR = medium.render("OR", True, WHITE)
-    _PARA2 = (
-        "Play chess against the StockFish Chess Engine, the best",
-        "chess engine in the world. This can play chess with a variety",
-        "of difficulty settings, the hardest levels can easily defeat",
-        "chess grandmasters.",
-    )
-    PARA2 = [vsmall.render(i, True, WHITE) for i in _PARA2]
+    
+    with open(os.path.join("res", "texts", "single1.txt")) as f:
+        PARA1 = [vsmall.render(i, True, WHITE) for i in f.read().splitlines()]
+
+    with open(os.path.join("res", "texts", "single2.txt")) as f:
+        PARA2 = [vsmall.render(i, True, WHITE) for i in f.read().splitlines()]
+        
     LEVEL = small.render("Level:", True, WHITE)
 
     BACK = vsmall.render("Go Back", True, WHITE)
@@ -319,13 +328,13 @@ class SINGLE:
 class STOCKFISH:
     HEAD = large.render("Stockfish Engine", True, WHITE)
     CONFIG = small.render("Configure Stockfish", True, WHITE)
-    with open(os.path.join("res", "texts", "stockfish.txt"), "r") as f:
+    with open(os.path.join("res", "texts", "stockfish", "stockfish.txt"), "r") as f:
         TEXT = [vsmall.render(i, True, WHITE) for i in f.read().splitlines()]
 
-    with open(os.path.join("res", "texts", "configd.txt"), "r") as f:
+    with open(os.path.join("res", "texts", "stockfish", "configd.txt"), "r") as f:
         CONFIGURED = [vsmall.render(i, True, GREEN) for i in f.read().splitlines()]
 
-    with open(os.path.join("res", "texts", "nonconfigd.txt"), "r") as f:
+    with open(os.path.join("res", "texts", "stockfish", "nonconfigd.txt"), "r") as f:
         NONCONFIGURED = [vsmall.render(i, True, RED) for i in f.read().splitlines()]
 
     CLICK = vsmall.render("Click Here", True, WHITE)
@@ -340,19 +349,19 @@ class STOCKFISH:
     MAC_HEAD = small.render("Installation Guide for Mac", True, WHITE)
     OTH_HEAD = small.render("Installation Guide for Other OS", True, WHITE)
 
-    with open(os.path.join("res", "texts", "win.txt"), "r") as f:
+    with open(os.path.join("res", "texts", "stockfish", "win.txt"), "r") as f:
         WIN_TEXT = [vsmall.render(i, True, WHITE) for i in f.read().splitlines()]
 
-    with open(os.path.join("res", "texts", "linux.txt"), "r") as f:
+    with open(os.path.join("res", "texts", "stockfish", "linux.txt"), "r") as f:
         LIN_TEXT = [vsmall.render(i, True, WHITE) for i in f.read().splitlines()]
 
-    with open(os.path.join("res", "texts", "linux2.txt"), "r") as f:
+    with open(os.path.join("res", "texts", "stockfish", "linux2.txt"), "r") as f:
         LIN_TEXT2 = [vsmall.render(i, True, WHITE) for i in f.read().splitlines()]
 
-    with open(os.path.join("res", "texts", "mac.txt"), "r") as f:
+    with open(os.path.join("res", "texts", "stockfish", "mac.txt"), "r") as f:
         MAC_TEXT = [vsmall.render(i, True, WHITE) for i in f.read().splitlines()]
 
-    with open(os.path.join("res", "texts", "other.txt"), "r") as f:
+    with open(os.path.join("res", "texts", "stockfish", "other.txt"), "r") as f:
         OTH_TEXT = [vsmall.render(i, True, WHITE) for i in f.read().splitlines()]
 
     for line in splitstr(os.path.abspath("res/stockfish/build/stockfish.exe")):
@@ -373,18 +382,35 @@ class STOCKFISH:
     SUCCESS = [vsmall.render(i, True, GREEN) for i in _SUCCESS]
     NOSUCCESS = [vsmall.render(i, True, RED) for i in _NOSUCCESS]
     
-    PROMPT = [
+    PROMPT = (
         small.render("Do you want to quit?", True, WHITE),
         vsmall.render("Stockfish is not configured yet.", True, WHITE)
-    ]
+    )
     YES = small.render("Yes", True, WHITE)
     NO = small.render("No", True, WHITE)
 
-
 class ABOUT:
-    HEAD = large.render("About My-PyChess", True, WHITE)
+    HEAD = large.render("About PyChess", True, WHITE)
 
     with open(os.path.join("res", "texts", "about.txt"), "r") as f:
         TEXT = [vsmall.render(i, True, WHITE) for i in f.read().splitlines()]
+        
+class HOWTO:
+    HEAD = large.render("Chess Howto", True, WHITE)
+
+    with open(os.path.join("res", "texts", "howto.txt"), "r") as f:
+        TEXT = [vsmall.render(i, True, WHITE) for i in f.read().splitlines()]
+        
+class TIMER:
+    HEAD = large.render("Timer Menu", True, WHITE)
+    
+    YES = small.render("Yes", True, WHITE)
+    NO = small.render("No", True, WHITE)
+    
+    PROMPT = vsmall.render("Do you want to set timer?", True, WHITE)
+
+    with open(os.path.join("res", "texts", "timer.txt"), "r") as f:
+        TEXT = [vsmall.render(i, True, WHITE) for i in f.read().splitlines()]
+    
 
 pygame.font.quit()

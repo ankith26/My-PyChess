@@ -1,0 +1,20 @@
+
+Configure the game timer for the multiplayer chess game!
+
+
+Choose the number of minutes each side will get to
+complete the game.
+
+CHOOSE:      30     15     10     05     03     01
+
+
+Choose number of seconds to be incremented per move.
+
+CHOOSE:      00     01     02     03     04
+
+
+The number of seconds you selected will be added to your
+timer for every move you make.
+
+
+Are you ready to start playing?             Start

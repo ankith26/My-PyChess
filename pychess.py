@@ -3,39 +3,39 @@ This file is the main file of My-PyChess application.
 Run this file to launch the program.
 
 In this file, we handle the main menu which gets displayed at runtime.
-
-Level of development = STABLE
 """
-
+import sys  
 import pygame
 
 import chess
 import menus
-from loader import MAIN
+from tools.loader import MAIN
 from tools import sound
+
+# This is a non-important bit of code. Flush stdout - useful incase external
+# programs are calling this application.
+sys.stdout.flush()
 
 # Some initialisation
 pygame.init()
 clock = pygame.time.Clock()
 
-# Initialise display, set the caption and icon
-win = pygame.display.set_mode((500, 500))
+# Initialise display, set the caption and icon. Use SCALED if on pygame 2.
+if pygame.version.vernum[0] >= 2:
+    win = pygame.display.set_mode((500, 500), pygame.SCALED)
+else:
+    win = pygame.display.set_mode((500, 500))
 pygame.display.set_caption("My-PyChess")
 pygame.display.set_icon(MAIN.ICON)
 
-# Then, constants are defined which mark the positions of buttons on the menu
-# Each constant is denoted by a tuple consisting four integers.
-# Imagine a button as a rectangular area -
-# We can represent a rectangle by the coordinates of its top-left point
-# and its length and breadth
-# So, each constant is of the form (x, y, length, breadth)
-# x and y denote the coordinates of the top-left point
+# Coordinates of buttons in rectangle notation.
 sngl = (260, 140, 220, 40)
 mult = (280, 200, 200, 40)
 onln = (360, 260, 120, 40)
 load = (280, 320, 200, 40)
 pref = (0, 450, 210, 40)
 abt = (390, 450, 110, 40)
+hwto = (410, 410, 90, 30)
 stok = (0, 410, 240, 30)
 
 # This is the function that displays the main screen.
@@ -51,10 +51,9 @@ def showMain(prefs):
     win.blit(MAIN.BG[img], (0, 0))
 
     # Then we check wether user has enabled background animate feature
-    if prefs[2]:
+    if prefs["slideshow"]:
         # Background animations is a feature that shows a slideshow of images
-        # in the background, each image having a time duration of 7 seconds.
-        # Slow fading of screen is also seen.
+        # in the background, slow fading of screen is also seen.
         # To achieve this, a frame counter variable "cnt" is incremented
         # every frame. The intended framerate of the game is 30 fps, so
         # after seven seconds, the frame counter reaches 210 after which,
@@ -71,10 +70,7 @@ def showMain(prefs):
             win.blit(s, (0, 0))
 
         if cnt == 210:
-            # Reset the counter
             cnt = 0
-            # Set image value to zero if it is at 3, or else increment it
-            # This variable controls which image is seen on screen.
             img = 0 if img == 3 else img + 1
     else:
         # User has disabled screen animations, reset the variables
@@ -92,24 +88,24 @@ def showMain(prefs):
     win.blit(MAIN.ONLINE, onln[:2])
     win.blit(MAIN.LOAD, load[:2])
     win.blit(MAIN.PREF, pref[:2])
+    win.blit(MAIN.HOWTO, hwto[:2])
     win.blit(MAIN.ABOUT, abt[:2])
     win.blit(MAIN.STOCK, stok[:2])
-
 
 # Initialize a few more variables
 cnt = 0
 img = 0
-running = True
+run = True
 
 # Load the settings of the player
-LOAD = menus.pref.load()
+prefs = menus.pref.load()
 
 music = sound.Music()
-music.play(LOAD)
-while running:
+music.play(prefs)
+while run:
     # Start the game loop at 30fps, show the screen every time at first
     clock.tick(30)
-    showMain(LOAD)
+    showMain(prefs)
 
     # We need to get the position of the mouse so that we can blit an image
     # on the text over which the mouse hovers
@@ -129,6 +125,9 @@ while running:
 
     if pref[0] < x < sum(pref[::2]) and pref[1] < y < sum(pref[1::2]):
         win.blit(MAIN.PREF_H, pref[:2])
+        
+    if hwto[0] < x < sum(hwto[::2]) and hwto[1] < y < sum(hwto[1::2]):
+        win.blit(MAIN.HOWTO_H, hwto[:2])
 
     if abt[0] < x < sum(abt[::2]) and abt[1] < y < sum(abt[1::2]):
         win.blit(MAIN.ABOUT_H, abt[:2])
@@ -139,61 +138,76 @@ while running:
     # Begin pygame event loop to catch all events
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            running = False
-            
+            run = False
+
         elif event.type == pygame.MOUSEBUTTONDOWN:
             # User has clicked somewhere, determine which button and
-            # Call a function to handle the game into a different window.
-            # All functions defined in the chess module open up the chess
-            # board and a game begins based on the type of game
+            # call a function to handle the game into a different window.
             x, y = event.pos
 
             if sngl[0] < x < sum(sngl[::2]) and sngl[1] < y < sum(sngl[1::2]):
-                sound.play_click(LOAD)
-                data = menus.splayermenu(win)
-                if data is not None:
-                    if data[0]:
-                        chess.mysingleplayer(win, data[1], LOAD)
+                sound.play_click(prefs)
+                ret = menus.splayermenu(win)
+                if ret == 0:
+                    run = False
+                elif ret != 1:
+                    if ret[0]:
+                        run = chess.mysingleplayer(win, ret[1], prefs)
                     else:
-                        chess.singleplayer(win, data[1], data[2], LOAD)
+                        run = chess.singleplayer(win, ret[1], ret[2], prefs)
 
             elif mult[0] < x < sum(mult[::2]) and mult[1] < y < sum(mult[1::2]):
-                chess.multiplayer(win, LOAD)
+                sound.play_click(prefs)
+                ret = menus.timermenu(win, prefs)
+                if ret == 0:
+                    run = False
+                elif ret != -1:
+                    run = chess.multiplayer(win, ret[0], ret[1], prefs)
 
             elif onln[0] < x < sum(onln[::2]) and onln[1] < y < sum(onln[1::2]):
-                sound.play_click(LOAD)
-                chess.online(win, menus.onlinemenu(win), LOAD)
+                sound.play_click(prefs)
+                ret = menus.onlinemenu(win)
+                if ret == 0:
+                    run = False
+                elif ret != 1:
+                    run = chess.online(win, ret[0], prefs, ret[1])
 
             elif load[0] < x < sum(load[::2]) and load[1] < y < sum(load[1::2]):
-                sound.play_click(LOAD)
-                game = menus.loadgamemenu(win)
-                if game is not None:
-                    if game[0] == "multi":
-                        chess.multiplayer(win, LOAD, game[1])
-                    elif game[0] == "single":
-                        chess.singleplayer(
-                            win, int(game[1]), int(game[2]), LOAD, game[3]
-                        )
-                    elif game[0] == "mysingle":
-                        chess.mysingleplayer(win, int(game[1]), LOAD, game[2])
+                sound.play_click(prefs)
+                ret = menus.loadgamemenu(win)
+                if ret == 0:
+                    run = False
+
+                elif ret != 1:
+                    if ret[0] == "multi":
+                        run = chess.multiplayer(win, *ret[1:3], prefs, ret[3])
+                    elif ret[0] == "single":
+                        run = chess.singleplayer(win, *ret[1:3], prefs, ret[3])
+                    elif ret[0] == "mysingle":
+                        run = chess.mysingleplayer(win, ret[1], prefs, ret[2])
 
             elif pref[0] < x < sum(pref[::2]) and pref[1] < y < sum(pref[1::2]):
-                sound.play_click(LOAD)
-                menus.prefmenu(win)
-                LOAD = menus.pref.load()
-                if LOAD[0] and not music.is_playing():
-                    music.play(LOAD)
-
-                if not LOAD[0]:
-                    music.stop()
+                sound.play_click(prefs)
+                run = menus.prefmenu(win)
+                
+                prefs = menus.pref.load()
+                if music.is_playing():
+                    if not prefs["sounds"]:
+                        music.stop()
+                else:
+                    music.play(prefs)
+                    
+            elif hwto[0] < x < sum(hwto[::2]) and hwto[1] < y < sum(hwto[1::2]):
+                sound.play_click(prefs)
+                run = menus.howtomenu(win)
 
             elif abt[0] < x < sum(abt[::2]) and abt[1] < y < sum(abt[1::2]):
-                sound.play_click(LOAD)
-                menus.aboutmenu(win)
+                sound.play_click(prefs)
+                run = menus.aboutmenu(win)
 
             elif stok[0] < x < sum(stok[::2]) and stok[1] < y < sum(stok[1::2]):
-                sound.play_click(LOAD)
-                menus.sfmenu(win)
+                sound.play_click(prefs)
+                run = menus.sfmenu(win)
 
     # Update the screen every frame
     pygame.display.flip()

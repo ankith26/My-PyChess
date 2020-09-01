@@ -1,0 +1,4 @@
+Play chess against the StockFish Chess Engine, the best
+chess engine in the world. This playes a very hard level of
+chess, even level 1 and 2 give a good fight to chess
+intermediates. Not recommended for beginners.

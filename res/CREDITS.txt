@@ -26,10 +26,11 @@ Background4.jpg: Image by pixel2013 from pixabay.com
 ALL THE BACKGROUND IMAGES HAVE BEEN COMBINED IN A SINGLE SPRITE IMAGE.
 
 refresh.png: Image by OpenIcons from pixabay.com
-delete.jpg: Image by Clker-Free-Vector-Images from pixabay.com 
+delete.jpg: Image by Clker-Free-Vector-Images from pixabay.com
+back.png: Image by Clker-Free-Vector-Images from pixabay.com
 icon.gif: Image by OpenClipart-Vectors from pixabay.com
 
-select.png: This is made by me, but I have used the images of some chess pieces.
+select.jpg: This is made by me, but I have used the images of some chess pieces.
 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 Piecesprites: Image from Wikipedia.com
