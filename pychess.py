@@ -161,7 +161,7 @@ while run:
                 ret = menus.timermenu(win, prefs)
                 if ret == 0:
                     run = False
-                elif ret != -1:
+                elif ret != 1:
                     run = chess.multiplayer(win, ret[0], ret[1], prefs)
 
             elif onln[0] < x < sum(onln[::2]) and onln[1] < y < sum(onln[1::2]):
