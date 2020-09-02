@@ -1,6 +1,3 @@
-# Important note
-**Version 3.2 is just out for a brief testing phase, some things have not been setup yet. Please wait for one or two more days before using this project.**
-
 # My-PyChess
 This is a **fully featured chess app** written purely in Python using Pygame Library.
 
