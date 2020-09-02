@@ -245,25 +245,24 @@ def kickDisconnectedThread():
             except:
                 ret = 0
                 
-            if ret > 0 and ret != 8:
+            if ret > 0:
                 cntr = 0
-                diff = 8 - ret
-                while cntr:
+                diff = 8
+                while True:
                     cntr += 1
                     if cntr == 8:
                         ret = 0
                         break
+                        
+                    if ret == diff:
+                        break  
+                    diff -= ret
                     
                     try:
                         ret = sock.send(b"." * diff)
                     except:
                         ret = 0
-                        break
-                    
-                    if ret == diff:
-                        break
-                    
-                    diff -= ret         
+                        break         
                         
             if ret == 0:
                 log(f"Player{key} got disconnected, removing from player list")
