@@ -58,6 +58,8 @@ Interested in python game development with pygame but want to start off with a s
 - EnPassant in chess, undo move, screenflip and sounds were added.
 - LOTS of changes made to GUI.
 
+Click [here](CHANGELOG.md) to see full changelog.
+
 ## Online Gameplay
 - You can self-host the My-PyChess online server(read more [here](onlinehowto.txt) ).
 - Apart from that, I have launched a public My-PyChess server for PUBLIC BETA TESTING, which ANYONE in the world can connect to.
@@ -66,8 +68,6 @@ Interested in python game development with pygame but want to start off with a s
 
 ### How to test wether your network supports IPv6
 - A reliable way to test would be to enter "ipv6.google.com" in the browser window. If google pops up, then IPv6 is working for you.
-
-Click [here](CHANGELOG.md) to see full changelog.
 
 ## How to customise the game using preferences
 - In the main game menu, click preferences.
