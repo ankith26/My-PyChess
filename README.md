@@ -8,10 +8,10 @@ Click [here](screenshots/screenshots.md) to see more few screenshots of My-PyChe
 Any bug-reports, suggestions or questions, you can leave it in the github issues section.
 If you want to directly communicate with me, you can mail me: itsankith26@gmail.com
 
-The My-PyChess project is available under MIT License. The MIT Licence applies to all the resources I have created in this Project. This includes all the Python files and text files. But some resources(images, sounds and font file) are not created by me, I have downloaded these from the internet. I have given credits to the authors of these resources in [this file](res/CREDITS.txt). All these resources maintain the original licenses that the authors have leased them under (These licenses permit my use of the respective resources in this project).
+The My-PyChess project is available under MIT License. The MIT Licence applies to all the resources I have created in this project. This includes all the python files and text files. But some resources(images, sounds and font file) are not created by me, I have downloaded these from the internet. I have given credits to the authors of these resources in [this file](res/CREDITS.txt). All these resources maintain the original licenses that the authors have leased them under (These licenses permit my use of the respective resources in this project).
 
-## Getting started, with Python source code(All OS support)
-- Make sure you have **Python** and **pygame** installed and working.
+## Getting started, with python source code(All OS support)
+- Make sure you have **python** and **pygame** installed and working.
 - Clone this repository (or download zip file and extract it).
 - Then, run the **pychess.py** file. Trying to run any other file will not run the game.
 - Those who are running older versions of this app, can upgrade to the latest version by the same method.
@@ -23,7 +23,7 @@ The My-PyChess project is available under MIT License. The MIT Licence applies t
 - Run My-PyChess.exe
 - Those who are running older versions of this app, can upgrade to the latest version by the same method.
 
-Interested in python game development with pygame but want to start off with a simpler project. I have released a [lite implementation](https://github.com/ankith26/My-PyChess-lite/) of My-PyChess, that focuses just on chess programming - free from all the code for menus, singleplayer, online etc. 
+Interested in python game development with pygame and want to learn from this applicaton - I have released a [lite implementation](https://github.com/ankith26/My-PyChess-lite/) of My-PyChess, that focuses just on chess programming - free from all the code for menus, singleplayer, online etc. 
 
 ## Features
 - Clean GUI with a lot of menus for ease of use.
@@ -48,12 +48,12 @@ Interested in python game development with pygame but want to start off with a s
 - Several other minor changes and improvements made.
 
 ## Highlights of v3.x, the latest major release.
-- The code was revamped and restructured, fixed bugs and made MAJOR PERFORMANCE IMPROVEMENTS.
-- Online play was added. This features a ONLINE LOBBY and support upto 10 people to play chess.
-- Singleplayer saw BIG UPGRADES: Firstly, a decent PYTHON CHESS ENGINE that playes chess was added.
-- You can play against STOCKFISH CHESS ENGINE (see https://stockfishchess.org). My-PyChess will act as an interface to give you this singleplayer mode.
-- EnPassant in chess, undo move, screenflip and sounds were added.
-- LOTS of changes made to GUI.
+- The code was revamped and restructured, fixed bugs and made **major performance improvements**.
+- **Online play** was added. This features a online lobby and support upto 10 people to play chess.
+- Singleplayer saw big upgrades: Firstly, a decent **python chess engine** that playes chess was added.
+- You can play against **stockfish chess engine** (see https://stockfishchess.org). My-PyChess will act as an interface to give you this singleplayer mode.
+- En-Passant in chess, undo move, screenflip and sounds were added.
+- Lots of changes made to GUI.
 
 Click [here](CHANGELOG.md) to see full changelog.
 
