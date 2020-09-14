@@ -13,7 +13,7 @@ try:
     
     SUCCESS = pygame.mixer.get_init() is not None
 
-except (ImportError, ModuleNotFoundError, RuntimeError):
+except (ImportError, RuntimeError):
     SUCCESS = False
 
 if SUCCESS:
