@@ -17,6 +17,10 @@ import menus
 from tools.loader import MAIN
 from tools import sound
 
+# Change to the current directory, so that pychess.py can be run no matter what
+# directory the terminal is in
+os.chdir(os.path.dirname(os.path.abspath(__file__))
+
 # This is a non-important bit of code. Flush stdout - useful incase external
 # programs are calling this application.
 sys.stdout.flush()
