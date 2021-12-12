@@ -4,8 +4,13 @@ Run this file to launch the program.
 
 In this file, we handle the main menu which gets displayed at runtime.
 """
-import sys  
+import os
+import sys
 import pygame
+
+# Change to the current directory, so that pychess.py can be run no matter what
+# directory the terminal is in
+os.chdir(os.path.dirname(__file__))
 
 import chess
 import menus
