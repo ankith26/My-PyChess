@@ -21,9 +21,6 @@ def showScreen(win, sel):
     for cnt, i in enumerate(ONLINEMENU.TEXT):
         win.blit(i, (40, 100 + cnt*18))
     
-    rounded_rect(win, (255, 255, 255), (150, 230, 110, 30), 10, 3)
-    win.blit(ONLINEMENU.CONNECT, (150, 230))
-    
     rounded_rect(win, (255, 255, 255), (300, 350, 110, 30), 10, 3)
     win.blit(ONLINEMENU.CONNECT, (300, 350))
     
@@ -60,9 +57,6 @@ def main(win):
                     
                     if 290 < x < 320:
                         sel = 1
-                
-                if 150 < x < 260 and 230 < y < 260:
-                    return "my-pychess.tk", True
                 
                 if 300 < x < 410 and 350 < y < 380:
                     return box.text, bool(sel)      

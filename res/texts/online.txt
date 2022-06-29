@@ -1,10 +1,10 @@
-I have hosted a public My-PyChess gameserver that
-anyone in the world can connect to!
+Previously, this menu page gave users the option
+to connect to an external server I used to host
+for testing purposes.
 
-If you want to connect, click the connect button
-below.
-Note: If you are getting an error while trying to
-connect, read onlinehowto.txt to solve it.
+This server is not being hosted anymore and the
+project is not being maintained actively as of
+June 2022.
 
 
 
