@@ -75,7 +75,8 @@ def putClock(win, timer):
 
 # This function draws the board
 def drawBoard(win):
-    win.fill((100, 200, 200))
+    #TODO replace background color from here
+    win.fill((200, 200, 200))
     pygame.draw.rect(win, (180, 100, 30), (50, 50, 400, 400))
     for y in range(1, 9):
         for x in range(1, 9):

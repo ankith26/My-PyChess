@@ -143,15 +143,15 @@ def showScreen(win, side, board, flags, pos, load, player=None, online=False):
     flip = load["flip"] and player
 
     drawBoard(win)
-    win.blit(BACK, (460, 0))
+    # win.blit(BACK, (460, 0))
     
     if not multi:
         win.blit(CHESS.TURN[int(side == player)], (10, 460))
-        
-    if not online:
-        if load["allow_undo"]:
-            win.blit(CHESS.UNDO, (10, 12))
-        win.blit(CHESS.SAVE, (350, 462))
+
+    # if not online:
+    #     if load["allow_undo"]:
+    #         win.blit(CHESS.UNDO, (10, 12))
+    #     win.blit(CHESS.SAVE, (350, 462))
 
     if isEnd(side, board, flags):
         if isChecked(side, board):
