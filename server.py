@@ -354,27 +354,47 @@ def adminThread():
             log("See 'onlinehowto.txt' for help on how to use the commands.")
 
 # Does the initial checks and lets players in.
+def checkusername(username, password):
+    with open('account.txt', 'r') as file:
+        for line in file:
+            data = line.strip().split()
+            if len(data) == 3:
+                stored_username, stored_password, _ = data
+                if username == stored_username and password == stored_password:
+                    return True
+    return False
+
+
+
 def initPlayerThread(sock):
     global players, total, totalsuccess
     log("New client is attempting to connect.")
     total += 1
     
+    # Đọc và kiểm tra username, password từ client
+    username = read(sock, 3)
+    password = read(sock, 3)
+    while not checkusername(username, password):
+        write(sock, "notOK")
+        username = read(sock, 3)
+        password = read(sock, 3)
+        
+    # Phản hồi cho client là thông tin đã được xác nhận
+    write(sock, "OK")
+    
+    # Kiểm tra các điều kiện khác và thực hiện logic kết nối
     if read(sock, 3) != "PyChess":
         log("Client sent invalid header, closing connection.")
         write(sock, "errVer")
-
     elif read(sock, 3) != VERSION:
         log("Client sent invalid version info, closing connection.")
         write(sock, "errVer")
-    
     elif len(players) >= 10:
         log("Server is busy, closing new connections.")
         write(sock, "errBusy")
-    
     elif lock:
         log("SERVER: Server is locked, closing connection.")
         write(sock, "errLock")
-        
     else:
         totalsuccess += 1
         key = genKey()
@@ -392,7 +412,7 @@ def initPlayerThread(sock):
             pass
         rmBusy(key)
     sock.close()
-
+    
 # Initialize the main socket
 log(f"Welcome to My-Pychess Server, {VERSION}\n")
 log("INITIALIZING...")

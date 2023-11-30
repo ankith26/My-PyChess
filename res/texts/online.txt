@@ -13,9 +13,3 @@ THE SECTION BELOW IS FOR SELF-HOSTED SERVERS
 Enter the server's address below and connect to it -
 
 
-
-
-Advanced Settings:
-Enter the IP protocol of server (IPv4 is default)
-
-                       IPv4                               IPv6

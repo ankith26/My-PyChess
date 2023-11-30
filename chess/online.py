@@ -7,6 +7,7 @@ We use the "online lib" module
 '''
 import socket
 import threading
+from time import sleep
 
 from chess.onlinelib import *
 
@@ -15,16 +16,11 @@ PORT = 26104
 
 # This is a main function that calls all other functions, socket initialisation
 # and the screen that appears just after online menu but just before online lobby.
-def main(win, addr, load, ipv6=False):
-    showLoading(win)
-    
-    if ipv6:
-        sock = socket.socket(socket.AF_INET6, socket.SOCK_STREAM)
-        servaddr = (addr, PORT, 0, 0)
-    else:
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        servaddr = (addr, PORT)
+def main(win, username, password, load, ipv6=False):
 
+    # Tai day gui request dang nhap
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    servaddr = ('127.0.0.1', PORT)
     try:
         sock.connect(servaddr)
 
@@ -34,6 +30,17 @@ def main(win, addr, load, ipv6=False):
 
     thread = threading.Thread(target=bgThread, args=(sock,))
     thread.start()
+    
+    write(sock, username)
+    write(sock, password)
+     # Đợi server phản hồi "OK" để xác nhận username và password hợp lệ
+    while read() != "OK":
+        username = "hoan"
+        password = "1234"
+        write(sock, username)
+        write(sock, password)
+    
+    #TODO: check username, password
     write(sock, "PyChess")
     write(sock, VERSION)
 

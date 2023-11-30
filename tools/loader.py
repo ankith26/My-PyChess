@@ -292,6 +292,12 @@ class ONLINE:
 
     NO = small.render("NO", True, WHITE)
     OK = small.render("OK", True, WHITE)
+class LOGINBOARD:
+    HEAD = large.render("Login", True, WHITE)
+    with open(os.path.join("res", "texts", "login.txt")) as f:
+        TEXT = [vsmall.render(i, True, WHITE) for i in f.read().splitlines()]
+        
+    CONNECT = small.render("Connect", True, WHITE)
 
 class ONLINEMENU:
     HEAD = large.render("Online", True, WHITE)
