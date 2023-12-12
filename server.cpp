@@ -33,15 +33,20 @@ const std::string VERSION = "v3.2.0";
 const int PORT = 26104;
 std::chrono::time_point<std::chrono::steady_clock> START_TIME;
 
-int makeInt(const std::string& num) {
-    try {
+int makeInt(const std::string &num)
+{
+    try
+    {
         return std::stoi(num);
-    } catch (const std::invalid_argument& e) {
+    }
+    catch (const std::invalid_argument &e)
+    {
         return -1;
     }
 }
 
-std::string getTime() {
+std::string getTime()
+{
     auto sec = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - START_TIME).count();
     int minutes = sec / 60;
     sec %= 60;
@@ -54,44 +59,62 @@ std::string getTime() {
     return ss.str();
 }
 
-std::string getIp(bool publicIp) {
+std::string getIp(bool publicIp)
+{
     std::string ip;
-    if (publicIp) {
-        try {
+    if (publicIp)
+    {
+        try
+        {
             std::string url = "https://api64.ipify.org";
             std::string response;
             std::string command = "curl -s " + url;
-            FILE* pipe = popen(command.c_str(), "r");
-            if (!pipe) {
+            FILE *pipe = popen(command.c_str(), "r");
+            if (!pipe)
+            {
                 throw std::runtime_error("popen() failed!");
             }
             char buffer[128];
-            while (fgets(buffer, sizeof(buffer), pipe) != nullptr) {
+            while (fgets(buffer, sizeof(buffer), pipe) != nullptr)
+            {
                 response += buffer;
             }
             pclose(pipe);
             ip = response;
-        } catch (const std::exception& e) {
+        }
+        catch (const std::exception &e)
+        {
             ip = "127.0.0.1";
         }
-    } else {
+    }
+    else
+    {
         int sock = socket(AF_INET, SOCK_DGRAM, 0);
-        if (sock == -1) {
+        if (sock == -1)
+        {
             ip = "127.0.0.1";
-        } else {
+        }
+        else
+        {
             sockaddr_in loopback;
             std::memset(&loopback, 0, sizeof(loopback));
             loopback.sin_family = AF_INET;
             loopback.sin_addr.s_addr = INADDR_LOOPBACK;
             loopback.sin_port = htons(9);
-            if (connect(sock, reinterpret_cast<sockaddr*>(&loopback), sizeof(loopback)) == -1) {
+            if (connect(sock, reinterpret_cast<sockaddr *>(&loopback), sizeof(loopback)) == -1)
+            {
                 ip = "127.0.0.1";
-            } else {
+            }
+            else
+            {
                 sockaddr_in name;
                 socklen_t namelen = sizeof(name);
-                if (getsockname(sock, reinterpret_cast<sockaddr*>(&name), &namelen) == -1) {
+                if (getsockname(sock, reinterpret_cast<sockaddr *>(&name), &namelen) == -1)
+                {
                     ip = "127.0.0.1";
-                } else {
+                }
+                else
+                {
                     ip = inet_ntoa(name.sin_addr);
                 }
             }
@@ -101,360 +124,503 @@ std::string getIp(bool publicIp) {
     return ip;
 }
 
-void log(const std::string& data, int key = -1, bool adminput = false) {
+void log(const std::string &data, int key = -1, bool adminput = false)
+{
     std::string text;
-    if (adminput) {
+    if (adminput)
+    {
         text = "";
-    } else if (key == -1) {
-        text = "SERVER: ";
-    } else {
-        text = "Player" + std::to_string(key) + ": ";
     }
-    if (!data.empty()) {
+    else if (key == -1)
+    {
+        text = "SERVER: ";
+    }
+    else
+    {
+        text = "Player " + std::to_string(key) + ": ";
+    }
+    if (!data.empty())
+    {
         text += data;
-        if (!adminput) {
+        if (!adminput)
+        {
             std::cout << text << std::endl;
         }
-        if (LOG) {
+        if (LOG)
+        {
             std::time_t now = std::time(nullptr);
             std::string time = std::asctime(std::localtime(&now));
             logQ.push(time.substr(0, time.length() - 1) + ": " + text + "\n");
         }
-    } else {
+    }
+    else
+    {
         logQ.push("");
     }
 }
 
-std::string read(int sock, int timeout = -1) {
+std::string read(int sock, int timeout = -1)
+{
     char buffer[9];
     std::memset(buffer, 0, sizeof(buffer));
-    if (timeout != -1) {
-        timeval tv;
-        tv.tv_sec = timeout;
-        tv.tv_usec = 0;
-        setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, reinterpret_cast<const char*>(&tv), sizeof(tv));
-    }
+    // if (timeout != -1)
+    // {
+    //     timeval tv;
+    //     tv.tv_sec = timeout;
+    //     tv.tv_usec = 0;
+    //     setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, reinterpret_cast<const char *>(&tv), sizeof(tv));
+    // }
     ssize_t bytesRead = recv(sock, buffer, sizeof(buffer) - 1, 0);
-    if (bytesRead <= 0) {
+    if (bytesRead <= 0)
+    {
         return "quit";
     }
     return std::string(buffer);
 }
 
-void write(int sock, const std::string& msg) {
+void write(int sock, const std::string &msg) {
     std::string buffedmsg = msg + std::string(8 - msg.length(), ' ');
-    send(sock, buffedmsg.c_str(), buffedmsg.length(), 0);
+    ssize_t bytesSent = send(sock, buffedmsg.c_str(), buffedmsg.length(), 0);
 }
-
-int genKey() {
+int genKey()
+{
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> dis(1000, 9999);
     int key = dis(gen);
-    for (const auto& player : players) {
-        if (player.second == key) {
+    for (const auto &player : players)
+    {
+        if (player.second == key)
+        {
             return genKey();
         }
     }
     return key;
 }
 
-int getByKey(int key) {
-    for (const auto& player : players) {
-        if (player.second == key) {
+int getByKey(int key)
+{
+    for (const auto &player : players)
+    {
+        if (player.second == key)
+        {
             return player.first;
         }
     }
     return -1;
 }
 
-void mkBusy(std::initializer_list<int> keys) {
-    for (int key : keys) {
+void mkBusy(std::initializer_list<int> keys)
+{
+    for (int key : keys)
+    {
         busyPpl.insert(key);
     }
 }
 
-void rmBusy(std::initializer_list<int> keys) {
-    for (int key : keys) {
+void rmBusy(std::initializer_list<int> keys)
+{
+    for (int key : keys)
+    {
         busyPpl.erase(key);
     }
 }
 
-bool game(int sock1, int sock2) {
-    while (true) {
+bool game(int sock1, int sock2)
+{
+    while (true)
+    {
         std::string msg = read(sock1);
         write(sock2, msg);
-        if (msg == "quit") {
+        if (msg.compare("quit") == 0)
+        {
             return true;
-        } else if (msg == "draw" || msg == "resign" || msg == "end") {
+        }
+        else if (msg.compare("draw") == 0 || msg.compare("resign") == 0 || msg.compare("end") == 0)
+        {
             return false;
         }
     }
 }
 
-void player(int sock, int key) {
-    while (true) {
-        std::string msg = read(sock);
-        if (msg == "quit") {
+void player(int sock, int key)
+{
+    while (true)
+    {
+        std::string msg = read(sock, 3);
+        if (msg.substr(0, 4).compare("quit") == 0)
+        {
             return;
-        } else if (msg == "pStat") {
+        }
+        else if (msg.substr(0, 5).compare("pStat") == 0)
+        {
             log("Made request for players Stats.", key);
             std::vector<std::pair<int, int>> latestplayers = players;
             std::set<int> latestbusy = busyPpl;
-            if (latestplayers.size() > 0 && latestplayers.size() < 11) {
+            if (latestplayers.size() > 0 && latestplayers.size() < 11)
+            {
                 write(sock, "enum" + std::to_string(latestplayers.size() - 1));
-                for (const auto& player : latestplayers) {
-                    if (player.second != key) {
-                        if (latestbusy.find(player.second) != latestbusy.end()) {
+                for (const auto &player : latestplayers)
+                {
+                    if (player.second != key)
+                    {
+                        if (latestbusy.find(player.second) != latestbusy.end())
+                        {
                             write(sock, std::to_string(player.second) + "b");
-                        } else {
+                        }
+                        else
+                        {
                             write(sock, std::to_string(player.second) + "a");
                         }
                     }
                 }
             }
-        } else if (msg.substr(0, 2) == "rg") {
+
+        }
+        else if (msg.substr(0, 2).compare("rg") == 0)
+        {
             log("Made request to play with Player" + msg.substr(2), key);
             int oSock = getByKey(std::stoi(msg.substr(2)));
-            if (oSock != -1) {
-                if (busyPpl.find(std::stoi(msg.substr(2))) == busyPpl.end()) {
+            if (oSock != -1)
+            {
+                if (busyPpl.find(std::stoi(msg.substr(2))) == busyPpl.end())
+                {
                     mkBusy({key, std::stoi(msg.substr(2))});
                     write(oSock, "gr" + std::to_string(key));
                     write(sock, "msgOk");
-                    std::string newMsg = read(sock);
-                    if (newMsg == "ready") {
-                        log("Player" + std::to_string(key) + " is in a game as white");
-                        if (game(sock, oSock)) {
+                    std::string newMsg = read(sock, 3);
+                    if (newMsg.compare("ready   ") == 0)
+                    {
+                        log("Player " + std::to_string(key) + " is in a game as white");
+                        if (game(sock, oSock))
+                        {
                             return;
-                        } else {
-                            log("Player" + std::to_string(key) + " finished the game");
                         }
-                    } else if (newMsg == "quit") {
+                        else
+                        {
+                            log("Player " + std::to_string(key) + " finished the game");
+                        }
+                    }
+                    else if (newMsg.compare("quit") == 0)
+                    {
                         write(oSock, "quit");
                         return;
                     }
                     rmBusy({key});
-                } else {
-                    log("Player" + std::to_string(key) + " requested busy player");
+                }
+                else
+                {
+                    log("Player " + std::to_string(key) + " requested busy player");
                     write(sock, "errPBusy");
                 }
-            } else {
-                log("Player" + std::to_string(key) + " sent invalid key");
+            }
+            else
+            {
+                log("Player " + std::to_string(key) + " sent invalid key");
                 write(sock, "errKey");
             }
-        } else if (msg.substr(0, 4) == "gmOk") {
+        }
+        else if (msg.substr(0, 4).compare("gmOk") == 0)
+        {
+
             log("Accepted Player" + msg.substr(4) + " request", key);
             int oSock = getByKey(std::stoi(msg.substr(4)));
             write(oSock, "start");
-            log("Player" + std::to_string(key) + " is in a game as black");
-            if (game(sock, oSock)) {
+            log("Player " + std::to_string(key) + " is in a game as black");
+            if (game(sock, oSock))
+            {
                 return;
-            } else {
-                log("Player" + std::to_string(key) + " finished the game");
+            }
+            else
+            {
+                log("Player " + std::to_string(key) + " finished the game");
                 rmBusy({key});
             }
-        } else if (msg.substr(0, 4) == "gmNo") {
+        }
+        else if (msg.substr(0, 4).compare("gmNo") == 0)
+        {
             log("Rejected Player" + msg.substr(4) + " request", key);
             write(getByKey(std::stoi(msg.substr(4))), "nostart");
             rmBusy({key});
         }
     }
-}
 
-void logThread() {
+}
+void logThread()
+{
     std::ofstream file("SERVER_LOG.txt", std::ios::app);
-    while (true) {
+    while (true)
+    {
         std::this_thread::sleep_for(std::chrono::seconds(1));
-        while (!logQ.empty()) {
+        while (!logQ.empty())
+        {
             std::string data = logQ.front();
             logQ.pop();
-            if (data.empty()) {
+            if (data.empty())
+            {
                 return;
-            } else {
+            }
+            else
+            {
                 file << data;
             }
         }
     }
 }
 
-void kickDisconnectedThread() {
-    while (true) {
+void kickDisconnectedThread()
+{
+    while (true)
+    {
         std::this_thread::sleep_for(std::chrono::seconds(10));
-        for (auto it = players.begin(); it != players.end();) {
+        for (auto it = players.begin(); it != players.end();)
+        {
             int sock = it->first;
             int key = it->second;
             char buffer[8];
             std::memset(buffer, '.', sizeof(buffer));
             ssize_t bytesSent = send(sock, buffer, sizeof(buffer), 0);
-            if (bytesSent > 0) {
+            if (bytesSent > 0)
+            {
                 int cntr = 0;
                 int diff = 8;
-                while (true) {
+                while (true)
+                {
                     cntr++;
-                    if (cntr == 8) {
+                    if (cntr == 8)
+                    {
                         bytesSent = 0;
                         break;
                     }
-                    if (bytesSent == diff) {
+                    if (bytesSent == diff)
+                    {
                         break;
                     }
                     diff -= bytesSent;
                     bytesSent = send(sock, buffer, diff, 0);
                 }
             }
-            if (bytesSent == 0) {
-                log("Player" + std::to_string(key) + " got disconnected, removing from player list");
+            if (bytesSent == 0)
+            {
+                log("Player " + std::to_string(key) + " got disconnected, removing from player list");
                 it = players.erase(it);
-            } else {
+            }
+            else
+            {
                 ++it;
             }
         }
     }
 }
 
-void adminThread() {
-    while (true) {
+void adminThread()
+{
+    while (true)
+    {
         std::string msg;
         std::getline(std::cin, msg);
         log(msg, -1, true);
-        if (msg == "report") {
+        if (msg.compare("report") == 0)
+        {
             log(std::to_string(players.size()) + " players are online right now,");
             log(std::to_string(players.size() - busyPpl.size()) + " are active.");
             log(std::to_string(total) + " connections attempted, " + std::to_string(totalsuccess) + " were successful");
             log("Server is running " + std::to_string(std::thread::hardware_concurrency()) + " threads.");
             log("Time elapsed since last reboot: " + getTime());
-            if (!players.empty()) {
+            if (!players.empty())
+            {
                 log("LIST OF PLAYERS:");
-                for (size_t i = 0; i < players.size(); ++i) {
-                    if (busyPpl.find(players[i].second) == busyPpl.end()) {
+                for (size_t i = 0; i < players.size(); ++i)
+                {
+                    if (busyPpl.find(players[i].second) == busyPpl.end())
+                    {
                         log(" " + std::to_string(i + 1) + ". Player" + std::to_string(players[i].second) + ", Status: Active");
-                    } else {
+                    }
+                    else
+                    {
                         log(" " + std::to_string(i + 1) + ". Player" + std::to_string(players[i].second) + ", Status: Busy");
                     }
                 }
             }
-        } else if (msg == "mypublicip") {
+        }
+        else if (msg == "mypublicip")
+        {
             log("Determining public IP, please wait....");
             std::string PUBIP = getIp(true);
-            if (PUBIP == "127.0.0.1") {
+            if (PUBIP == "127.0.0.1")
+            {
                 log("An error occurred while determining IP");
-            } else {
+            }
+            else
+            {
                 log("This machine has a public IP address " + PUBIP);
             }
-        } else if (msg == "lock") {
-            if (lock) {
+        }
+        else if (msg.compare("lock") == 0)
+        {
+            if (lock)
+            {
                 log("Already in locked state");
-            } else {
+            }
+            else
+            {
                 lock = true;
                 log("Locked server, no one can join now.");
             }
-        } else if (msg == "unlock") {
-            if (lock) {
+        }
+        else if (msg.compare("unlock") == 0)
+        {
+            if (lock)
+            {
                 lock = false;
                 log("Unlocked server, all can join now.");
-            } else {
+            }
+            else
+            {
                 log("Already in unlocked state.");
             }
-        } else if (msg.substr(0, 5) == "kick ") {
+        }
+        else if (msg.substr(0, 5).compare("kick") == 0 )
+        {
             std::istringstream iss(msg.substr(5));
             std::vector<int> keys;
             int key;
-            while (iss >> key) {
+            while (iss >> key)
+            {
                 keys.push_back(key);
             }
-            for (int k : keys) {
+            for (int k : keys)
+            {
                 int sock = getByKey(k);
-                if (sock != -1) {
+                if (sock != -1)
+                {
                     write(sock, "close");
                     log("Kicking player" + std::to_string(k));
-                } else {
-                    log("Player" + std::to_string(k) + " does not exist");
+                }
+                else
+                {
+                    log("Player " + std::to_string(k) + " does not exist");
                 }
             }
-        } else if (msg == "kickall") {
+        }
+        else if (msg.compare("kickall") == 0 )
+        {
             log("Attempting to kick everyone.");
             std::vector<std::pair<int, int>> latestplayers = players;
-            for (const auto& player : latestplayers) {
+            for (const auto &player : latestplayers)
+            {
                 write(player.first, "close");
             }
-        } else if (msg == "quit") {
+        }
+        else if (msg.compare("quit") == 0)
+        {
             lock = true;
             log("Attempting to kick everyone.");
             std::vector<std::pair<int, int>> latestplayers = players;
-            for (const auto& player : latestplayers) {
+            for (const auto &player : latestplayers)
+            {
                 write(player.first, "close");
             }
             log("Exiting application - Bye");
             log("");
             end = true;
-            if (IPV6) {
+            if (IPV6)
+            {
                 int sock = socket(AF_INET6, SOCK_STREAM, 0);
                 sockaddr_in6 addr;
                 std::memset(&addr, 0, sizeof(addr));
                 addr.sin6_family = AF_INET6;
                 addr.sin6_port = htons(PORT);
                 inet_pton(AF_INET6, "::1", &(addr.sin6_addr));
-                connect(sock, reinterpret_cast<sockaddr*>(&addr), sizeof(addr));
+                connect(sock, reinterpret_cast<sockaddr *>(&addr), sizeof(addr));
                 close(sock);
-            } else {
+            }
+            else
+            {
                 int sock = socket(AF_INET, SOCK_STREAM, 0);
                 sockaddr_in addr;
                 std::memset(&addr, 0, sizeof(addr));
                 addr.sin_family = AF_INET;
                 addr.sin_port = htons(PORT);
                 inet_pton(AF_INET, "127.0.0.1", &(addr.sin_addr));
-                connect(sock, reinterpret_cast<sockaddr*>(&addr), sizeof(addr));
+                connect(sock, reinterpret_cast<sockaddr *>(&addr), sizeof(addr));
                 close(sock);
             }
             return;
-        } else {
+        }
+        else
+        {
             log("Invalid command entered ('" + msg + "').");
             log("See 'onlinehowto.txt' for help on how to use the commands.");
         }
     }
 }
 
-bool checkusername(const std::string& username, const std::string& password) {
+bool checkusername(const std::string &username, const std::string &password)
+{
     std::ifstream file("account.txt");
     std::string line;
-    while (std::getline(file, line)) {
+    while (std::getline(file, line))
+    {
         std::istringstream iss(line);
         std::string stored_username, stored_password;
         iss >> stored_username >> stored_password;
-        if (username == stored_username && password == stored_password) {
+        if (username.compare(stored_username) == 0 && password.compare(stored_password) == 0)
+        {
             return true;
         }
     }
     return false;
 }
 
-void initPlayerThread(int sock) {
+void initPlayerThread(int sock)
+{
     log("New client is attempting to connect.");
     total++;
-    
+
     std::string username = read(sock, 3);
-    std::string password = read(sock, 3);
-    while (!checkusername(username, password)) {
-        write(sock, "notOK");
-        username = read(sock, 3);
-        password = read(sock, 3);
+    if (username.empty())
+    {
+        log("Error reading username from client.");
+        return;
     }
-    
+    std::string password = read(sock, 3);
+    if (password.empty())
+    {
+        log("Error reading password from client.");
+        return;
+    }
+    // while (!checkusername(username, password))
+    // {
+    //     write(sock, "notOK");
+    //     username = read(sock, 3);
+    //     password = read(sock, 3);
+    // }
+
     write(sock, "OK");
-    
-    if (read(sock, 3) != "PyChess") {
+
+    if (read(sock, 3).compare("PyChess") == 0)
+    {
         log("Client sent invalid header, closing connection.");
         write(sock, "errVer");
-    } else if (read(sock, 3) != VERSION) {
+    }
+    else if (read(sock, 3).compare(VERSION) == 0)
+    {
         log("Client sent invalid version info, closing connection.");
         write(sock, "errVer");
-    } else if (players.size() >= 10) {
+    }
+    else if (players.size() >= 10)
+    {
         log("Server is busy, closing new connections.");
         write(sock, "errBusy");
-    } else if (lock) {
+    }
+    else if (lock)
+    {
         log("SERVER: Server is locked, closing connection.");
         write(sock, "errLock");
-    } else {
+    }
+    else
+    {
         totalsuccess++;
         int key = genKey();
         log("Connection Successful, assigned key - " + std::to_string(key));
@@ -462,21 +628,24 @@ void initPlayerThread(int sock) {
         write(sock, "key" + std::to_string(key));
         player(sock, key);
         write(sock, "close");
-        log("Player" + std::to_string(key) + " has Quit");
-        players.erase(std::remove_if(players.begin(), players.end(), [sock, key](const std::pair<int, int>& player) {
-            return player.first == sock && player.second == key;
-        }), players.end());
+        log("Player " + std::to_string(key) + " has Quit");
+        players.erase(std::remove_if(players.begin(), players.end(), [sock, key](const std::pair<int, int> &player)
+                                     { return player.first == sock && player.second == key; }),
+                      players.end());
         rmBusy({key});
     }
     close(sock);
 }
 
-int main() {
+int main()
+{
     int mainSock;
-    if (IPV6) {
+    if (IPV6)
+    {
         log("IPv6 is enabled. This is NOT the default configuration.");
         mainSock = socket(AF_INET6, SOCK_STREAM, 0);
-        if (mainSock == -1) {
+        if (mainSock == -1)
+        {
             perror("Error creating IPv6 socket");
             return 1;
         }
@@ -487,14 +656,18 @@ int main() {
         addr.sin6_port = htons(PORT);
         addr.sin6_addr = in6addr_any;
 
-        if (bind(mainSock, reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) == -1) {
+        if (bind(mainSock, reinterpret_cast<sockaddr *>(&addr), sizeof(addr)) == -1)
+        {
             perror("Error binding IPv6 socket");
             return 1;
         }
-    } else {
+    }
+    else
+    {
         log("Starting server with IPv4 (default) configuration.");
         mainSock = socket(AF_INET, SOCK_STREAM, 0);
-        if (mainSock == -1) {
+        if (mainSock == -1)
+        {
             perror("Error creating IPv4 socket");
             return 1;
         }
@@ -505,24 +678,29 @@ int main() {
         addr.sin_port = htons(PORT);
         addr.sin_addr.s_addr = INADDR_ANY;
 
-        if (bind(mainSock, reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) == -1) {
+        if (bind(mainSock, reinterpret_cast<sockaddr *>(&addr), sizeof(addr)) == -1)
+        {
             perror("Error binding IPv4 socket");
             return 1;
         }
 
         std::string IP = getIp(false);
-        if (IP == "127.0.0.1") {
+        if (IP == "127.0.0.1")
+        {
             log("This machine does not appear to be connected to a network.");
             log("With this limitation, you can only serve the clients ");
             log("who are on THIS machine. Use IP address 127.0.0.1");
-        } else {
+        }
+        else
+        {
             log("This machine has a local IP address - " + IP);
             log("USE THIS IP IF THE CLIENT IS ON THE SAME NETWORK.");
             log("For more info, read file 'onlinehowto.txt'");
         }
     }
 
-    if (listen(mainSock, 16) == -1) {
+    if (listen(mainSock, 16) == -1)
+    {
         perror("Error listening for connections");
         return 1;
     }
@@ -533,19 +711,23 @@ int main() {
     std::thread(adminThread).detach();
     std::thread(kickDisconnectedThread).detach();
 
-    if (LOG) {
+    if (LOG)
+    {
         log("Logging is enabled. Starting to log all output");
         std::thread(logThread).detach();
     }
 
-    while (true) {
+    while (true)
+    {
         int s = accept(mainSock, nullptr, nullptr);
-        if (s == -1) {
+        if (s == -1)
+        {
             perror("Error accepting connection");
             return 1;
         }
 
-        if (end) {
+        if (end)
+        {
             break;
         }
 
@@ -555,6 +737,3 @@ int main() {
     close(mainSock);
     return 0;
 }
-
-
-
