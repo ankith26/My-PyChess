@@ -16,6 +16,7 @@ from chess.onlinelib.utils import (
     popup,
     request,
     draw,
+    draw_win,
     showLobby,
 )
 
@@ -26,11 +27,9 @@ def lobby(win, sock, key, load):
     playerList = getPlayers(sock)
     while True:
         clock.tick(10)
-        
         if playerList is None:
-            return 2
+            return 2        
         showLobby(win, key, playerList)
-
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 write(sock, "quit")
@@ -72,6 +71,7 @@ def lobby(win, sock, key, load):
 
         if readable():
             msg = read()
+            print(f"1_{msg}") # Tai sao lai chay toi day
             if msg == "close":
                 return 2
 
@@ -129,7 +129,10 @@ def chess(win, sock, player, load):
                         animate(win, player, board, prevsel, sel, load, player)
                         side, board, flags = makeMove(
                             side, board, prevsel, sel, flags, promote)
-
+                    if isEnd(side, board, flags):
+                        write(sock, "win")
+                        ret = draw_win(win, sock)
+                        return ret
                 elif not isEnd(side, board, flags):
                     if 0 < x < 70 and 0 < y < 50:
                         write(sock, "draw?")
@@ -140,13 +143,13 @@ def chess(win, sock, player, load):
                     if 400 < x < 500 and 450 < y < 500:
                         write(sock, "resign")
                         return 3
+            
 
         showScreen(win, side, board, flags, sel, load, player, True)
         if readable():
             msg = read()
             if msg == "close":
                 return 2
-
             elif msg == "quit" or msg == "resign":
                 return popup(win, sock, msg)
             
@@ -157,8 +160,11 @@ def chess(win, sock, player, load):
             elif msg == "draw?":
                 ret = draw(win, sock, False)
                 if ret in [2, 3]:
-                    return ret
-
+                    return 
+            elif msg == "win":
+                ret = draw_win(win, sock, False)
+                if ret in [2, 3]:
+                    return 
             elif msg.startswith("mov") and side != player:
                 fro, to, promote = decode(msg[3:])
                 if isValidMove(side, board, flags, fro, to):

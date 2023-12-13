@@ -56,12 +56,10 @@ def main(win, username, password, load, ipv6=False):
         showLoading(win, 4)
 
     elif msg.startswith("key"):
-        ret = lobby(win, sock, int(msg[3:]), load)
-        
+        ret = lobby(win, sock, int(msg[3:]), load)   
     else:
         print(msg)
         showLoading(win, 5)
-
     write(sock, "quit")
     sock.close()
     thread.join()

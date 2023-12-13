@@ -170,17 +170,71 @@ def draw(win, sock, requester=True):
             msg = read()
             if msg == "close":
                 return 2
-            
+            if msg == "win":
+                return popup(win, sock, msg)
             if msg == "quit":
                 return popup(win, sock, msg)
             
             if requester:
                 if msg == "draw":
                     return popup(win, sock, msg)
-
                 if msg == "nodraw":
                     return 4
-                    
+def draw_win(win, sock, requester=True):
+    if requester:
+        pygame.draw.rect(win, (0, 0, 0), (100, 160, 300, 130))
+        pygame.draw.rect(win, (255, 255, 255), (100, 160, 300, 130), 4)
+
+        win.blit(ONLINE.WIN2[0], (120, 170))
+        win.blit(ONLINE.WIN2[1], (170, 195))
+
+        win.blit(ONLINE.OK, (145, 240))
+        pygame.draw.rect(win, (255, 255, 255), (140, 240, 50, 28), 2)
+        
+    else:
+        pygame.draw.rect(win, (0, 0, 0), (100, 160, 300, 130))
+        pygame.draw.rect(win, (255, 255, 255), (100, 160, 300, 130), 4)
+
+        win.blit(ONLINE.WIN1[0], (120, 170))
+        win.blit(ONLINE.WIN1[1], (170, 195))
+
+        win.blit(ONLINE.OK, (145, 240))
+        pygame.draw.rect(win, (255, 255, 255), (140, 240, 50, 28), 2)
+        
+    pygame.display.flip()
+    while True:
+        for event in pygame.event.get():
+            if requester:
+                if event.type == pygame.QUIT:
+                    write(sock, "quit")
+                    return 0
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if 240 < event.pos[1] < 270:
+                        if 140 < event.pos[0] < 190:
+                            write(sock, "win")
+                            return 3 
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if 240 < event.pos[1] < 270:
+                    if 140 < event.pos[0] < 190:
+                        write(sock, "lose")
+                        return 3  
+                    elif 300 < event.pos[0] < 350:
+                        write(sock, "nodraw")
+                        return 4              
+        if readable():
+            msg = read()
+            if msg == "close":
+                return 2
+            if msg == "win":
+                return popup(win, sock, msg)
+            if msg == "quit":
+                return popup(win, sock, msg)
+            
+            if requester:
+                if msg == "draw":
+                    return popup(win, sock, msg)
+                if msg == "nodraw":
+                    return 4                    
 # Responsible for showing the online Lobby
 def showLobby(win, key, playerlist):
     win.fill((0, 0, 0))

@@ -148,6 +148,7 @@ def game(sock1, sock2):
     while True:
         msg = read(sock1)
         write(sock2, msg)
+        print(msg)
         if msg == "quit":
             return True
 
@@ -160,12 +161,11 @@ def player(sock, key):
         msg = read(sock)
         if msg == "quit":
             return
-
         elif msg == "pStat":
             log("Made request for players Stats.", key)
             latestplayers = list(players)
             latestbusy = list(busyPpl)
-            
+            print(len(latestplayers))
             if 0 < len(latestplayers) < 11:
                 write(sock, "enum" + str(len(latestplayers) - 1))
                 for _, i in latestplayers:
@@ -370,7 +370,6 @@ def initPlayerThread(sock):
     global players, total, totalsuccess
     log("New client is attempting to connect.")
     total += 1
-    
     # Đọc và kiểm tra username, password từ client
     username = read(sock, 3)
     password = read(sock, 3)
@@ -403,6 +402,7 @@ def initPlayerThread(sock):
         
         write(sock, "key" + str(key))
         player(sock, key)
+        log("send message close - " )
         write(sock, "close")
         log(f"Player{key} has Quit")
         

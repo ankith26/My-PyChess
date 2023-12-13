@@ -273,12 +273,21 @@ class ONLINE:
     )
 
     DRAW1 = (
-        vsmall.render("Sent a request to your opponent for", True, WHITE),
+        vsmall.render("Sent a request to your opponent for_1", True, WHITE),
         vsmall.render("draw, wait for reply.", True, WHITE),
     )
 
     DRAW2 = (
         vsmall.render("Your opponent is requesting for a", True, WHITE),
+        vsmall.render("draw, please reply.", True, WHITE),
+    )
+    WIN1 = (
+        vsmall.render("You Lose", True, WHITE),
+        vsmall.render("draw, wait for reply.", True, WHITE),
+    )
+
+    WIN2 = (
+        vsmall.render("Your Win", True, WHITE),
         vsmall.render("draw, please reply.", True, WHITE),
     )
     
@@ -288,6 +297,9 @@ class ONLINE:
         "draw": vsmall.render("A draw has been agreed", True, WHITE),
         "end": vsmall.render("Game ended, opponent left", True, WHITE),
         "abandon": vsmall.render("Opponent abandoned match", True, WHITE),
+        "win": vsmall.render("You win", True, WHITE),
+        "lose": vsmall.render("You lose", True, WHITE),
+        
     }
 
     NO = small.render("NO", True, WHITE)
