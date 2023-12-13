@@ -21,7 +21,18 @@
 
 #define LOG false
 #define IPV6 false
+struct PlayerSockInfo {
+    int sock;
+    int key;
+    // Thêm các thông tin khác của người dùng nếu cần
+};
+struct PlayerInfo {
+    std::string username;
+    int id;
+    int score;
+};
 
+std::vector<PlayerSockInfo> playerInfos;
 std::queue<std::string> logQ;
 std::set<int> busyPpl;
 std::vector<std::pair<int, int>> players;
@@ -32,6 +43,32 @@ int totalsuccess = 0;
 const std::string VERSION = "v3.2.0";
 const int PORT = 26104;
 std::chrono::time_point<std::chrono::steady_clock> START_TIME;
+
+
+
+std::vector<PlayerInfo> readPlayersFromFile(const std::string& filename) {
+    std::vector<PlayerInfo> players;
+    std::ifstream file(filename);
+    std::string line;
+
+    while (std::getline(file, line)) {
+        std::istringstream iss(line);
+        PlayerInfo player;
+        iss >> player.username >> player.id >> player.score;
+        players.push_back(player);
+    }
+
+    return players;
+}
+
+void writePlayersToFile(const std::string& filename, const std::vector<PlayerInfo>& players) {
+    std::ofstream file(filename);
+
+    for (const auto& player : players) {
+        file << player.username << " " << player.id << " " << player.score << "\n";
+    }
+}
+
 
 int makeInt(const std::string &num)
 {
@@ -159,6 +196,50 @@ void log(const std::string &data, int key = -1, bool adminput = false)
     }
 }
 
+int getKeyFromSock(int sock)
+{
+    for (const auto &playerInfo : playerInfos)
+    {
+        if (playerInfo.sock == sock)
+        {
+            return playerInfo.key;
+        }
+    }
+    return -1; // hoặc giá trị khác để biểu thị không tìm thấy
+}
+// void writePlayersToFile(const std::string& filename, const std::vector<PlayerInfo>& players) {
+//     std::ofstream file(filename);
+
+//     for (const auto& player : players) {
+//         file << player.username << " " << player.id << " " << player.score << "\n";
+//     }
+// }
+void score(int win, int lose)
+{
+    int id_win, id_lose;
+    id_win = getKeyFromSock(win);
+    id_lose = getKeyFromSock(lose);
+    std::string filename = "username.txt";  // Thay đổi tên file của bạn
+    std::vector<PlayerInfo> players = readPlayersFromFile(filename);
+    for (auto& player : players) {
+        if (player.id == id_win) {
+            // Cộng điểm cho người thắng
+            player.score += 1;  // Thay đổi dựa trên yêu cầu của bạn
+            break;
+        }
+    }
+    for (auto& player : players) {
+        if (player.id == id_lose) {
+            // Thay đổi điểm của người thua dựa trên yêu cầu của bạn
+            player.score -= 1;  // Giả sử bạn muốn trừ điểm khi thua
+            break;
+        }
+    }
+
+    // Ghi lại thông tin vào file
+    writePlayersToFile(filename, players);
+
+}
 std::string read(int sock, int timeout = -1)
 {
     char buffer[9];
@@ -182,20 +263,28 @@ void write(int sock, const std::string &msg) {
     std::string buffedmsg = msg + std::string(8 - msg.length(), ' ');
     ssize_t bytesSent = send(sock, buffedmsg.c_str(), buffedmsg.length(), 0);
 }
-int genKey()
+std::string remove_space(std::string string)
 {
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<> dis(1000, 9999);
-    int key = dis(gen);
-    for (const auto &player : players)
+    string.erase(std::remove(string.begin(), string.end(), ' '), string.end());
+    return string;
+
+}
+int genKey(std::string username)
+{
+    std::ifstream file("username.txt");
+    std::string line;
+    while (std::getline(file, line))
     {
-        if (player.second == key)
+        std::istringstream iss(line);
+        std::string stored_username;
+        int stored_id;
+        iss >> stored_username >> stored_id;
+        if (username.compare(stored_username) == 0 )
         {
-            return genKey();
+            return stored_id;
         }
     }
-    return key;
+    return 0;
 }
 
 int getByKey(int key)
@@ -231,13 +320,19 @@ bool game(int sock1, int sock2)
     while (true)
     {
         std::string msg = read(sock1);
+        msg = remove_space(msg);
         write(sock2, msg);
         if (msg.compare("quit") == 0)
         {
             return true;
         }
-        else if (msg.compare("draw") == 0 || msg.compare("resign") == 0 || msg.compare("end") == 0)
+        else if (msg.compare("draw") == 0 || msg.compare("resign") == 0 || msg.compare("end") == 0|| msg.compare("lose") == 0|| msg.compare("win") == 0)
         {
+            if (msg.compare("lose") == 0)
+                score(sock1, sock2);
+            else
+                score(sock2, sock1);
+
             return false;
         }
     }
@@ -248,6 +343,8 @@ void player(int sock, int key)
     while (true)
     {
         std::string msg = read(sock, 3);
+        msg = remove_space(msg);
+
         if (msg.substr(0, 4).compare("quit") == 0)
         {
             return;
@@ -289,7 +386,8 @@ void player(int sock, int key)
                     write(oSock, "gr" + std::to_string(key));
                     write(sock, "msgOk");
                     std::string newMsg = read(sock, 3);
-                    if (newMsg.compare("ready   ") == 0)
+                    newMsg = remove_space(newMsg);
+                    if (newMsg.compare("ready") == 0)
                     {
                         log("Player " + std::to_string(key) + " is in a game as white");
                         if (game(sock, oSock))
@@ -579,12 +677,14 @@ void initPlayerThread(int sock)
     total++;
 
     std::string username = read(sock, 3);
+    username = remove_space(username);
     if (username.empty())
     {
         log("Error reading username from client.");
         return;
     }
     std::string password = read(sock, 3);
+    password = remove_space(password);
     if (password.empty())
     {
         log("Error reading password from client.");
@@ -622,7 +722,8 @@ void initPlayerThread(int sock)
     else
     {
         totalsuccess++;
-        int key = genKey();
+        int key = genKey(username);
+        playerInfos.push_back({sock, key});
         log("Connection Successful, assigned key - " + std::to_string(key));
         players.push_back({sock, key});
         write(sock, "key" + std::to_string(key));
