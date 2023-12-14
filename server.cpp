@@ -21,12 +21,14 @@
 
 #define LOG false
 #define IPV6 false
-struct PlayerSockInfo {
+struct PlayerSockInfo
+{
     int sock;
     int key;
     // Thêm các thông tin khác của người dùng nếu cần
 };
-struct PlayerInfo {
+struct PlayerInfo
+{
     std::string username;
     int id;
     int score;
@@ -44,14 +46,14 @@ const std::string VERSION = "v3.2.0";
 const int PORT = 26104;
 std::chrono::time_point<std::chrono::steady_clock> START_TIME;
 
-
-
-std::vector<PlayerInfo> readPlayersFromFile(const std::string& filename) {
+std::vector<PlayerInfo> readPlayersFromFile(const std::string &filename)
+{
     std::vector<PlayerInfo> players;
     std::ifstream file(filename);
     std::string line;
 
-    while (std::getline(file, line)) {
+    while (std::getline(file, line))
+    {
         std::istringstream iss(line);
         PlayerInfo player;
         iss >> player.username >> player.id >> player.score;
@@ -61,14 +63,15 @@ std::vector<PlayerInfo> readPlayersFromFile(const std::string& filename) {
     return players;
 }
 
-void writePlayersToFile(const std::string& filename, const std::vector<PlayerInfo>& players) {
+void writePlayersToFile(const std::string &filename, const std::vector<PlayerInfo> &players)
+{
     std::ofstream file(filename);
 
-    for (const auto& player : players) {
+    for (const auto &player : players)
+    {
         file << player.username << " " << player.id << " " << player.score << "\n";
     }
 }
-
 
 int makeInt(const std::string &num)
 {
@@ -219,26 +222,29 @@ void score(int win, int lose)
     int id_win, id_lose;
     id_win = getKeyFromSock(win);
     id_lose = getKeyFromSock(lose);
-    std::string filename = "username.txt";  // Thay đổi tên file của bạn
+    std::string filename = "username.txt"; // Thay đổi tên file của bạn
     std::vector<PlayerInfo> players = readPlayersFromFile(filename);
-    for (auto& player : players) {
-        if (player.id == id_win) {
+    for (auto &player : players)
+    {
+        if (player.id == id_win)
+        {
             // Cộng điểm cho người thắng
-            player.score += 1;  // Thay đổi dựa trên yêu cầu của bạn
+            player.score += 1; // Thay đổi dựa trên yêu cầu của bạn
             break;
         }
     }
-    for (auto& player : players) {
-        if (player.id == id_lose) {
+    for (auto &player : players)
+    {
+        if (player.id == id_lose)
+        {
             // Thay đổi điểm của người thua dựa trên yêu cầu của bạn
-            player.score -= 1;  // Giả sử bạn muốn trừ điểm khi thua
+            player.score -= 1; // Giả sử bạn muốn trừ điểm khi thua
             break;
         }
     }
 
     // Ghi lại thông tin vào file
     writePlayersToFile(filename, players);
-
 }
 std::string read(int sock, int timeout = -1)
 {
@@ -256,10 +262,12 @@ std::string read(int sock, int timeout = -1)
     {
         return "quit";
     }
+    std::cout <<sock<<": "<<buffer << std::endl;
     return std::string(buffer);
 }
 
-void write(int sock, const std::string &msg) {
+void write(int sock, const std::string &msg)
+{
     std::string buffedmsg = msg + std::string(8 - msg.length(), ' ');
     ssize_t bytesSent = send(sock, buffedmsg.c_str(), buffedmsg.length(), 0);
 }
@@ -267,7 +275,6 @@ std::string remove_space(std::string string)
 {
     string.erase(std::remove(string.begin(), string.end(), ' '), string.end());
     return string;
-
 }
 int genKey(std::string username)
 {
@@ -279,7 +286,7 @@ int genKey(std::string username)
         std::string stored_username;
         int stored_id;
         iss >> stored_username >> stored_id;
-        if (username.compare(stored_username) == 0 )
+        if (username.compare(stored_username) == 0)
         {
             return stored_id;
         }
@@ -326,13 +333,16 @@ bool game(int sock1, int sock2)
         {
             return true;
         }
-        else if (msg.compare("draw") == 0 || msg.compare("resign") == 0 || msg.compare("end") == 0|| msg.compare("lose") == 0|| msg.compare("win") == 0)
+        else if (msg.compare("draw") == 0 || msg.compare("resign") == 0 || msg.compare("end") == 0 || msg.compare("lose") == 0 || msg.compare("win") == 0)
         {
-            if (msg.compare("lose") == 0)
+            if (msg.compare("resign") == 0 )
+                score(sock2, sock1); 
+            else if (msg.compare("lose") == 0 )
                 score(sock1, sock2);
-            else
-                score(sock2, sock1);
+            
 
+            // if (msg.compare("win") == 0)
+            //     score(sock2, sock1);
             return false;
         }
     }
@@ -372,7 +382,6 @@ void player(int sock, int key)
                     }
                 }
             }
-
         }
         else if (msg.substr(0, 2).compare("rg") == 0)
         {
@@ -442,7 +451,6 @@ void player(int sock, int key)
             rmBusy({key});
         }
     }
-
 }
 void logThread()
 {
@@ -578,7 +586,7 @@ void adminThread()
                 log("Already in unlocked state.");
             }
         }
-        else if (msg.substr(0, 5).compare("kick") == 0 )
+        else if (msg.substr(0, 5).compare("kick") == 0)
         {
             std::istringstream iss(msg.substr(5));
             std::vector<int> keys;
@@ -601,7 +609,7 @@ void adminThread()
                 }
             }
         }
-        else if (msg.compare("kickall") == 0 )
+        else if (msg.compare("kickall") == 0)
         {
             log("Attempting to kick everyone.");
             std::vector<std::pair<int, int>> latestplayers = players;
@@ -741,65 +749,39 @@ void initPlayerThread(int sock)
 int main()
 {
     int mainSock;
-    if (IPV6)
+
+    log("Starting server with IPv4 (default) configuration.");
+    mainSock = socket(AF_INET, SOCK_STREAM, 0);
+    if (mainSock == -1)
     {
-        log("IPv6 is enabled. This is NOT the default configuration.");
-        mainSock = socket(AF_INET6, SOCK_STREAM, 0);
-        if (mainSock == -1)
-        {
-            perror("Error creating IPv6 socket");
-            return 1;
-        }
+        perror("Error creating IPv4 socket");
+        return 1;
+    }
 
-        sockaddr_in6 addr;
-        std::memset(&addr, 0, sizeof(addr));
-        addr.sin6_family = AF_INET6;
-        addr.sin6_port = htons(PORT);
-        addr.sin6_addr = in6addr_any;
+    sockaddr_in addr;
+    std::memset(&addr, 0, sizeof(addr));
+    addr.sin_family = AF_INET;
+    addr.sin_port = htons(PORT);
+    addr.sin_addr.s_addr = INADDR_ANY;
 
-        if (bind(mainSock, reinterpret_cast<sockaddr *>(&addr), sizeof(addr)) == -1)
-        {
-            perror("Error binding IPv6 socket");
-            return 1;
-        }
+    if (bind(mainSock, reinterpret_cast<sockaddr *>(&addr), sizeof(addr)) == -1)
+    {
+        perror("Error binding IPv4 socket");
+        return 1;
+    }
+
+    std::string IP = getIp(false);
+    if (IP == "127.0.0.1")
+    {
+        log("This machine does not appear to be connected to a network.");
+        log("With this limitation, you can only serve the clients ");
+        log("who are on THIS machine. Use IP address 127.0.0.1");
     }
     else
     {
-        log("Starting server with IPv4 (default) configuration.");
-        mainSock = socket(AF_INET, SOCK_STREAM, 0);
-        if (mainSock == -1)
-        {
-            perror("Error creating IPv4 socket");
-            return 1;
-        }
-
-        sockaddr_in addr;
-        std::memset(&addr, 0, sizeof(addr));
-        addr.sin_family = AF_INET;
-        addr.sin_port = htons(PORT);
-        addr.sin_addr.s_addr = INADDR_ANY;
-
-        if (bind(mainSock, reinterpret_cast<sockaddr *>(&addr), sizeof(addr)) == -1)
-        {
-            perror("Error binding IPv4 socket");
-            return 1;
-        }
-
-        std::string IP = getIp(false);
-        if (IP == "127.0.0.1")
-        {
-            log("This machine does not appear to be connected to a network.");
-            log("With this limitation, you can only serve the clients ");
-            log("who are on THIS machine. Use IP address 127.0.0.1");
-        }
-        else
-        {
-            log("This machine has a local IP address - " + IP);
-            log("USE THIS IP IF THE CLIENT IS ON THE SAME NETWORK.");
-            log("For more info, read file 'onlinehowto.txt'");
-        }
+        log("This machine has a local IP address - " + IP);
+        log("USE THIS IP IF THE CLIENT IS ON THE SAME NETWORK.");
     }
-
     if (listen(mainSock, 16) == -1)
     {
         perror("Error listening for connections");
