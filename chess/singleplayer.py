@@ -12,6 +12,14 @@ For a better understanding of the variables used here, checkout docs.txt
 from chess.lib import *
 from ext.pyFish import StockFish
 
+
+def helper_function():
+    pass
+
+def nl():
+    print("")
+
+
 # Run main code for chess singleplayer (stockfish)
 def main(win, player, level, load, movestr=""):
     fish = StockFish(getSFpath(), level)
