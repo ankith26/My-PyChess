@@ -341,10 +341,16 @@ bool game(int sock1, int sock2)
                 score(sock1, sock2);
             
 
-            // if (msg.compare("win") == 0)
+            // if (msg.compare("win") == 0)rematch
             //     score(sock2, sock1);
             return false;
+        } else if (msg.compare("acc") == 0)
+        {
+            msg = "11";
+            write(sock2, msg);
+            return false;
         }
+        
     }
 }
 
@@ -820,3 +826,6 @@ int main()
     close(mainSock);
     return 0;
 }
+
+
+// g++ server.cpp -o server && ./server

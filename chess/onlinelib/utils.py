@@ -180,6 +180,40 @@ def draw(win, sock, requester=True):
                     return popup(win, sock, msg)
                 if msg == "nodraw":
                     return 4
+                
+def rematch(win, sock, requester=True):
+    pygame.draw.rect(win, (0, 0, 0), (100, 160, 300, 130))
+    pygame.draw.rect(win, (255, 255, 255), (100, 160, 300, 130), 4)
+
+    win.blit(ONLINE.DRAW2[0], (120, 170))
+    win.blit(ONLINE.DRAW2[1], (170, 195))
+
+    win.blit(ONLINE.OK, (145, 240))
+    win.blit(ONLINE.NO, (305, 240))
+    pygame.draw.rect(win, (255, 255, 255), (140, 240, 50, 28), 2)
+    pygame.draw.rect(win, (255, 255, 255), (300, 240, 50, 28), 2)
+    
+    pygame.display.flip()
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if 240 < event.pos[1] < 270:
+                    if 140 < event.pos[0] < 190:
+                        write(sock, "acc")
+                        return 3  
+                    elif 300 < event.pos[0] < 350:
+                        write(sock, "dec")
+                        return 4    
+            if readable():
+                msg = read()
+                if msg == "acc":
+                    return 2
+                if msg == "dec":
+                    return 2
+
+                                   
+    
+    
 def draw_win(win, sock, requester=True):
     if requester:
         pygame.draw.rect(win, (0, 0, 0), (100, 160, 300, 130))
