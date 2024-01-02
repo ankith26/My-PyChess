@@ -9,6 +9,7 @@ from chess.onlinelib.utils import (
     read,
     readable,
     flush,
+    waiting,
     write,
     getPlayers,
     showUpdateList,
@@ -17,6 +18,7 @@ from chess.onlinelib.utils import (
     request,
     draw,
     draw_win,
+    rematch,
     showLobby,
 )
 
@@ -68,15 +70,25 @@ def lobby(win, sock, key, load):
 
                             playerList = getPlayers(sock)
                             break
+                if 200 < x < 300 and 450 < y < 480:
+                    write(sock,"find")
+                    msg = read()
+                    print(msg)
+                    if msg == "msgOk":
+                        ret = waiting(win, sock)
+                        newret = chess(win, sock, 0, load)
+                        if newret in [0, 1, 2]:
+                            return newret
 
         if readable():
             msg = read()
             print(f"1_{msg}") # Tai sao lai chay toi day
             if msg == "close":
                 return 2
-
             elif msg.startswith("gr"):
                 ret = request(win, sock, msg[2:])
+                # write(sock, "ready")        
+                ret = 4
                 if ret == 4:
                     write(sock, "gmOk" + msg[2:])
                     newret = chess(win, sock, 1, load)
@@ -88,12 +100,41 @@ def lobby(win, sock, key, load):
                     if ret == 2:
                         return ret
                 playerList = getPlayers(sock)
+            elif msg.startswith("xr"):
+                write(sock, "ready")
+                write(sock, "gmOk" + msg[2:])
+                newret = chess(win, sock, 1, load)
+                if newret in [0, 1, 2]:
+                    return newret
+                playerList = getPlayers(sock)
 
+
+def save_game_to_pgn(moves, filename="game.pgn"):
+    with open(filename, "w") as pgn_file:
+        pgn_file.write("[Event \"My Chess Game\"]\n")
+        pgn_file.write("[Site \"Chess Board\"]\n")
+        pgn_file.write("[Date \"2023.12.21\"]\n")
+        pgn_file.write("[Round \"-\"]\n")
+        pgn_file.write("[White \"Player 1\"]\n")
+        pgn_file.write("[Black \"Player 2\"]\n")
+        pgn_file.write("[Result \"*\"]\n\n")
+
+        for i, move in enumerate(moves, start=1):
+            if i % 2 == 1:
+                pgn_file.write(f"{i // 2 + 1}. {move} ")
+            else:
+                pgn_file.write(move + " ")
+
+        if len(moves) % 2 == 1:
+            pgn_file.write("*")
+        else:
+            pgn_file.write("\n*\n")
 # This is called when user enters chess match, handles online chess.
-def chess(win, sock, player, load):
+def chess(win, sock, player, load, pgn_filename="game.pgn"):
     start(win, load)
 
     side, board, flags = initBoardVars()
+    moves = []  # List to store moves for PGN
 
     clock = pygame.time.Clock()
     sel = prevsel = [0, 0]
@@ -109,7 +150,7 @@ def chess(win, sock, player, load):
                 if 460 < x < 500 and 0 < y < 50:
                     write(sock, "end")
                     return 3
-                    
+
                 if 50 < x < 450 and 50 < y < 450:
                     x, y = x // 50, y // 50
                     if load["flip"] and player:
@@ -122,15 +163,24 @@ def chess(win, sock, player, load):
                     sel = [x, y]
 
                     if (side == player
-                        and isValidMove(side, board, flags, prevsel, sel)):
+                            and isValidMove(side, board, flags, prevsel, sel)):
                         promote = getPromote(win, player, board, prevsel, sel)
                         write(sock, "mov" + encode(prevsel, sel, promote))
-                        
+
                         animate(win, player, board, prevsel, sel, load, player)
                         side, board, flags = makeMove(
                             side, board, prevsel, sel, flags, promote)
+
+                        # Save move to PGN
+                        pgn_move = encode(prevsel, sel, promote)
+                        moves.append(pgn_move)
+
+                        # Save PGN after each move
+                        save_game_to_pgn(moves, pgn_filename)
+
                     if isEnd(side, board, flags):
                         write(sock, "win")
+                        # ret = rematch(win, sock)
                         ret = draw_win(win, sock)
                         return ret
                 elif not isEnd(side, board, flags):
@@ -143,7 +193,6 @@ def chess(win, sock, player, load):
                     if 400 < x < 500 and 450 < y < 500:
                         write(sock, "resign")
                         return 3
-            
 
         showScreen(win, side, board, flags, sel, load, player, True)
         if readable():
@@ -152,7 +201,7 @@ def chess(win, sock, player, load):
                 return 2
             elif msg == "quit" or msg == "resign":
                 return popup(win, sock, msg)
-            
+
             elif msg == "end":
                 msg = "end" if isEnd(side, board, flags) else "abandon"
                 return popup(win, sock, msg)
@@ -160,11 +209,11 @@ def chess(win, sock, player, load):
             elif msg == "draw?":
                 ret = draw(win, sock, False)
                 if ret in [2, 3]:
-                    return 
+                    return
             elif msg == "win":
                 ret = draw_win(win, sock, False)
-                if ret in [2, 3]:
-                    return 
+                # ret = rematch(win, sock)
+                return ret
             elif msg.startswith("mov") and side != player:
                 fro, to, promote = decode(msg[3:])
                 if isValidMove(side, board, flags, fro, to):

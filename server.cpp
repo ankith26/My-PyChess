@@ -38,6 +38,8 @@ std::vector<PlayerSockInfo> playerInfos;
 std::queue<std::string> logQ;
 std::set<int> busyPpl;
 std::vector<std::pair<int, int>> players;
+std::vector<std::pair<int, int>> findMatchPlayers;
+std::vector<std::pair<int, int>> reMatchPlayers;
 bool end = false;
 bool lock = false;
 int total = 0;
@@ -262,7 +264,7 @@ std::string read(int sock, int timeout = -1)
     {
         return "quit";
     }
-    std::cout <<sock<<": "<<buffer << std::endl;
+    std::cout << sock << ": " << buffer << std::endl;
     return std::string(buffer);
 }
 
@@ -322,7 +324,7 @@ void rmBusy(std::initializer_list<int> keys)
     }
 }
 
-bool game(int sock1, int sock2)
+int game(int sock1, int sock2)
 {
     while (true)
     {
@@ -335,27 +337,30 @@ bool game(int sock1, int sock2)
         }
         else if (msg.compare("draw") == 0 || msg.compare("resign") == 0 || msg.compare("end") == 0 || msg.compare("lose") == 0 || msg.compare("win") == 0)
         {
-            if (msg.compare("resign") == 0 )
-                score(sock2, sock1); 
-            else if (msg.compare("lose") == 0 )
+            if (msg.compare("resign") == 0)
+                score(sock2, sock1);
+            else if (msg.compare("lose") == 0)
                 score(sock1, sock2);
-            
 
             // if (msg.compare("win") == 0)rematch
             //     score(sock2, sock1);
             return false;
-        } else if (msg.compare("acc") == 0)
+        }
+        else if (msg.compare("acc") == 0)
         {
-            msg = "11";
-            write(sock2, msg);
+            // Xu li giong findmatch
+        }
+        else if (msg.compare("dec") == 0)
+        {
+            write(sock2, "msg");
             return false;
         }
-        
     }
 }
 
 void player(int sock, int key)
 {
+    bool rematch = false;
     while (true)
     {
         std::string msg = read(sock, 3);
@@ -450,6 +455,58 @@ void player(int sock, int key)
                 rmBusy({key});
             }
         }
+        else if (msg.substr(0, 4).compare("find") == 0)
+        {
+            int id_win = getKeyFromSock(sock);
+            findMatchPlayers.push_back({sock, id_win});
+            std::vector<std::pair<int, int>> findplayers = findMatchPlayers;
+            std::cout<<findplayers.size();
+            if (findplayers.size() == 1)
+            {
+                mkBusy({id_win, sock});
+                write(sock,"Wait");
+            }
+            else
+            {            
+                // TODO: Tim 1 nguoi k ban de match
+                int current_player_index = -1;
+                for (size_t i = 0; i < findplayers.size(); ++i)
+                {
+                    if (findplayers[i].first == sock)
+                    {
+                        current_player_index = i;
+                        break;
+                    }
+                }
+                int oSock = findplayers[0].first;
+                write(oSock, "xr" + std::to_string(key));
+                write(sock, "msgOk");
+                std::string newMsg = read(sock, 3);
+                newMsg = remove_space(newMsg);
+                if (newMsg.compare("ready") == 0)
+                {
+                    log("Player " + std::to_string(key) + " is in a game as white");
+                    if (game(sock, oSock))
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        log("Player " + std::to_string(key) + " finished the game");
+                    }
+                }
+                else if (newMsg.compare("quit") == 0)
+                {
+                    write(oSock, "quit");
+                    return;
+                }
+                rmBusy({key});
+            }
+        }
+        // Tim 1 nguoi trong danh sach
+        // Khong co thi doi trong 5p
+        // Neu co 1 nguoi cung dang doi =>
+
         else if (msg.substr(0, 4).compare("gmNo") == 0)
         {
             log("Rejected Player" + msg.substr(4) + " request", key);
@@ -826,6 +883,5 @@ int main()
     close(mainSock);
     return 0;
 }
-
 
 // g++ server.cpp -o server && ./server

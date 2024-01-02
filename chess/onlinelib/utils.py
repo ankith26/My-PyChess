@@ -71,7 +71,7 @@ def request(win, sock, key=None):
         pygame.draw.rect(win, (0, 0, 0), (100, 210, 300, 100))
         pygame.draw.rect(win, (255, 255, 255), (100, 210, 300, 100), 4)
 
-        win.blit(ONLINE.REQUEST1[0], (120, 220))
+        win.blit(ONLINE.WAITING1[0], (120, 220))
         win.blit(ONLINE.REQUEST1[1], (105, 245))
         win.blit(ONLINE.REQUEST1[2], (135, 270))
                     
@@ -128,6 +128,26 @@ def request(win, sock, key=None):
 # It shows a popup message on the screen. It can show two things,
 # 1) Waiting for other players input for draw game (when requester is True)
 # 2) Waiting for players input for draw game (when requester is False)
+def waiting(win, sock):
+    pygame.draw.rect(win, (0, 0, 0), (100, 210, 300, 100))
+    pygame.draw.rect(win, (255, 255, 255), (100, 210, 300, 100), 4)
+
+    win.blit(ONLINE.WAITING1[0], (120, 220))
+    while True:
+        if readable():
+            msg = read()
+            if msg == "nostart":
+                write(sock, "pass")
+                return 3
+
+            if msg == "start":
+                write(sock, "ready")
+                return 4
+            if msg.startswith("xr"):
+                write(sock, "ready")
+                return 4
+    
+    
 def draw(win, sock, requester=True):
     if requester:
         pygame.draw.rect(win, (0, 0, 0), (100, 220, 300, 60))
@@ -194,6 +214,7 @@ def rematch(win, sock, requester=True):
     pygame.draw.rect(win, (255, 255, 255), (300, 240, 50, 28), 2)
     
     pygame.display.flip()
+    
     while True:
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -206,14 +227,7 @@ def rematch(win, sock, requester=True):
                         return 4    
             if readable():
                 msg = read()
-                if msg == "acc":
-                    return 2
-                if msg == "dec":
-                    return 2
-
-                                   
-    
-    
+                print(f'{msg}__')
 def draw_win(win, sock, requester=True):
     if requester:
         pygame.draw.rect(win, (0, 0, 0), (100, 160, 300, 130))
@@ -299,9 +313,9 @@ def showLobby(win, key, playerlist):
         pygame.draw.rect(win, (255, 255, 255), (300, yCord + 2, 175, 26), 2)
         win.blit(ONLINE.REQ, (300, yCord))
 
-    win.blit(ONLINE.YOUARE, (100, 430))
-    pygame.draw.rect(win, (255, 255, 255), (250, 435, 158, 40), 3)
-    win.blit(ONLINE.PLAYER, (260, 440))
-    putLargeNum(win, key, (340, 440))
-
+    win.blit(ONLINE.FIND_MATCH, (200, 450))
+    # win.blit(ONLINE.YOUARE, (100, 430))
+    # pygame.draw.rect(win, (255, 255, 255), (250, 435, 158, 40), 3)
+    # win.blit(ONLINE.PLAYER, (260, 440))
+    # putLargeNum(win, key, (340, 440))
     pygame.display.update()
