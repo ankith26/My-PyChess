@@ -298,8 +298,9 @@ def showLobby(win, key, playerlist):
     if not playerlist:
         win.blit(ONLINE.EMPTY, (25, 130))
     
+    # TODO: Hien thi so diem
     for cnt, player in enumerate(playerlist):
-        pkey, stat = int(player[:4]), player[4]
+        pkey, stat, elo = int(player[:4]), player[4], player[5:]
         yCord = 120 + cnt * 30
         
         putLargeNum(win, cnt + 1, (20, yCord))
@@ -310,8 +311,9 @@ def showLobby(win, key, playerlist):
             win.blit(ONLINE.ACTIVE, (200, yCord))
         elif stat == "b":
             win.blit(ONLINE.BUSY, (200, yCord))
-        pygame.draw.rect(win, (255, 255, 255), (300, yCord + 2, 175, 26), 2)
-        win.blit(ONLINE.REQ, (300, yCord))
+        pygame.draw.rect(win, (255, 255, 255), (350, yCord + 2, 120, 26), 2)
+        putLargeNum(win, elo, (300, yCord))
+        win.blit(ONLINE.REQ, (350, yCord))
 
     win.blit(ONLINE.FIND_MATCH, (200, 450))
     # win.blit(ONLINE.YOUARE, (100, 430))

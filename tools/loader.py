@@ -254,7 +254,7 @@ class ONLINE:
 
     ACTIVE = small.render("ACTIVE", True, GREEN)
     BUSY = small.render("BUSY", True, RED)
-    REQ = small.render("Send Request", True, WHITE)
+    REQ = small.render("Send Req", True, WHITE)
     YOUARE = medium.render("You Are", True, WHITE)
     
     ERRCONN = vsmall.render("Unable to connect to that player..", True, WHITE)

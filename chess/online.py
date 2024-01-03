@@ -10,6 +10,7 @@ import threading
 from time import sleep
 
 from chess.onlinelib import *
+import menus
 
 VERSION = "v3.2.0"
 PORT = 26104
@@ -35,8 +36,8 @@ def main(win, username, password, load, ipv6=False):
     write(sock, password)
      # Đợi server phản hồi "OK" để xác nhận username và password hợp lệ
     while read() != "OK":
-        username = "hoan"
-        password = "1234"
+        ret = menus.onlinemenu(win)
+        username, password = ret[0], ret[1]
         write(sock, username)
         write(sock, password)
     
