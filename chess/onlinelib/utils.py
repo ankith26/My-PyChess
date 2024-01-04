@@ -3,6 +3,7 @@ This file is a part of My-PyChess application.
 In this file, we define the gui functions for online chess.
 '''
 
+import datetime
 import pygame
 
 from chess.onlinelib.sockutils import *
@@ -149,7 +150,7 @@ def waiting(win, sock):
     
     
 def draw(win, sock, requester=True):
-    if requester:
+    if not requester:
         pygame.draw.rect(win, (0, 0, 0), (100, 220, 300, 60))
         pygame.draw.rect(win, (255, 255, 255), (100, 220, 300, 60), 4)
 
@@ -233,21 +234,19 @@ def draw_win(win, sock, requester=True):
         pygame.draw.rect(win, (0, 0, 0), (100, 160, 300, 130))
         pygame.draw.rect(win, (255, 255, 255), (100, 160, 300, 130), 4)
 
-        win.blit(ONLINE.WIN2[0], (120, 170))
-        win.blit(ONLINE.WIN2[1], (170, 195))
+        win.blit(ONLINE.WIN2[0], (225, 195))
 
-        win.blit(ONLINE.OK, (145, 240))
-        pygame.draw.rect(win, (255, 255, 255), (140, 240, 50, 28), 2)
+        win.blit(ONLINE.OK, (240, 240))
+        pygame.draw.rect(win, (255, 255, 255), (235, 240, 50, 28), 2)
         
     else:
         pygame.draw.rect(win, (0, 0, 0), (100, 160, 300, 130))
         pygame.draw.rect(win, (255, 255, 255), (100, 160, 300, 130), 4)
 
-        win.blit(ONLINE.WIN1[0], (120, 170))
-        win.blit(ONLINE.WIN1[1], (170, 195))
+        win.blit(ONLINE.WIN1[0], (225, 195))
 
-        win.blit(ONLINE.OK, (145, 240))
-        pygame.draw.rect(win, (255, 255, 255), (140, 240, 50, 28), 2)
+        win.blit(ONLINE.OK, (240, 240))
+        pygame.draw.rect(win, (255, 255, 255), (235, 240, 50, 28), 2)
         
     pygame.display.flip()
     while True:
@@ -258,12 +257,12 @@ def draw_win(win, sock, requester=True):
                     return 0
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if 240 < event.pos[1] < 270:
-                        if 140 < event.pos[0] < 190:
+                        if 240 < event.pos[0] < 290:
                             write(sock, "win")
                             return 3 
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if 240 < event.pos[1] < 270:
-                    if 140 < event.pos[0] < 190:
+                    if 240 < event.pos[0] < 290:
                         write(sock, "lose")
                         return 3  
                     elif 300 < event.pos[0] < 350:
@@ -292,6 +291,7 @@ def showLobby(win, key, playerlist):
     win.blit(BACK, (460, 0))
     win.blit(ONLINE.LIST, (20, 75))
     win.blit(ONLINE.REFRESH, (270, 85))
+    win.blit(ONLINE.HISTORY, (330, 85))
     pygame.draw.line(win, (255, 255, 255), (20, 114), (190, 114), 3)
     pygame.draw.line(win, (255, 255, 255), (210, 114), (265, 114), 3)
     
@@ -313,7 +313,7 @@ def showLobby(win, key, playerlist):
             win.blit(ONLINE.BUSY, (200, yCord))
         pygame.draw.rect(win, (255, 255, 255), (350, yCord + 2, 120, 26), 2)
         putLargeNum(win, elo, (300, yCord))
-        win.blit(ONLINE.REQ, (350, yCord))
+        win.blit(ONLINE.REQ, (360, yCord))
 
     win.blit(ONLINE.FIND_MATCH, (200, 450))
     # win.blit(ONLINE.YOUARE, (100, 430))
@@ -321,3 +321,31 @@ def showLobby(win, key, playerlist):
     # win.blit(ONLINE.PLAYER, (260, 440))
     # putLargeNum(win, key, (340, 440))
     pygame.display.update()
+    
+def showHistory(win, key, history):
+    win.fill((0, 0, 0))
+    
+    win.blit(ONLINE.HISTORY_TITLED, (140, 14))
+    pygame.draw.rect(win, (255, 255, 255), (65, 10, 355, 68), 4)
+    win.blit(BACK, (460, 0))
+    if not history:
+        win.blit(ONLINE.EMPTY_HISTORY, (25, 130))
+    for cnt, his in enumerate(history):
+        parts = his.split()
+        username = parts[0]
+        time = parts[1]
+        status = parts[2]
+        yCord = 120 + cnt * 30
+        
+        # win.blit(ONLINE.DOT, (20, yCord))
+        # win.blit(ONLINE.PLAYER, (52, yCord))
+        putLargeNum(win, username, (20, yCord))
+        if status == '1':
+            win.blit(ONLINE.WIN_STATUS, (110, yCord))
+        elif status == "0":
+            win.blit(ONLINE.LOSE_STATUS, (110, yCord))
+        year, month, day, hour, minute = map(int, time.split('-'))
+        output_str = '{:02d}-{:02d}-{} {:02d}:{:02d}'.format(day, month, year, hour, minute)
+        putLargeNum(win, output_str, (230, yCord))
+    pygame.display.update()
+    

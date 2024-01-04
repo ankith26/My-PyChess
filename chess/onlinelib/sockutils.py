@@ -16,8 +16,7 @@ def bgThread(sock):
     isdead = False
     while True:
         try:
-            msg = sock.recv(8).decode("utf-8").strip()
-
+            msg = sock.recv(1024).decode("utf-8").strip()
         except:
             break
         
@@ -64,6 +63,21 @@ def write(sock, msg):
     
 # A function to query the server for number of people online, returns a list
 # of players connected to server if all went well, None otherwise.
+def getHistory(sock):
+    if not flush():
+        return None
+    write(sock, "his")
+    msg = read()
+    if msg.startswith("xnum"):
+        data = []
+        for i in range(int(msg[4:6])):
+            newmsg = read()
+            if newmsg == "close":
+                return None
+            else:
+                data.append(newmsg)
+        return tuple(data)
+    
 def getPlayers(sock):
     if not flush():
         return None

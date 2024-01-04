@@ -81,16 +81,16 @@ def showMain(prefs):
     win.blit(MAIN.HEADING, (80, 20))
     pygame.draw.line(win, (255, 255, 255), (80, 100), (130, 100), 4)
     pygame.draw.line(win, (255, 255, 255), (165, 100), (340, 100), 4)
-    win.blit(MAIN.VERSION, (345, 95))
+    # win.blit(MAIN.VERSION, (345, 95))
 
     win.blit(MAIN.SINGLE, sngl[:2])
     win.blit(MAIN.MULTI, mult[:2])
     win.blit(MAIN.ONLINE, onln[:2])
     win.blit(MAIN.LOAD, load[:2])
-    win.blit(MAIN.PREF, pref[:2])
-    win.blit(MAIN.HOWTO, hwto[:2])
-    win.blit(MAIN.ABOUT, abt[:2])
-    win.blit(MAIN.STOCK, stok[:2])
+    # win.blit(MAIN.PREF, pref[:2])
+    # win.blit(MAIN.HOWTO, hwto[:2])
+    # win.blit(MAIN.ABOUT, abt[:2])
+    # win.blit(MAIN.STOCK, stok[:2])
 
 # Initialize a few more variables
 cnt = 0

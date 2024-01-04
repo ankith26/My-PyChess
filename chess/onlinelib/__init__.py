@@ -4,11 +4,13 @@ In this file, we define the main functions for online chess, and aggregate
 other functions for importing from online.py
 '''
 from chess.lib import *
+from chess.onlinelib.sockutils import getHistory
 from chess.onlinelib.utils import (
     bgThread,
     read,
     readable,
     flush,
+    showHistory,
     waiting,
     write,
     getPlayers,
@@ -45,7 +47,27 @@ def lobby(win, sock, key, load):
 
                 if 270 < x < 300 and 85 < y < 115:
                     playerList = getPlayers(sock)
+                    
+                if 330 < x < 400 and 85 < y < 115:
+                    history = getHistory(sock)
+                    break_while = False
 
+                    while True:
+                        showHistory(win, key, history)
+                        for event in pygame.event.get():
+                            if event.type == pygame.QUIT:
+                                write(sock, "quit")
+                                return 0
+                            if event.type == pygame.MOUSEBUTTONDOWN:
+                                x, y = event.pos
+                                if 460 < x < 500 and 0 < y < 50:
+                                    break_while = True
+                                    break  # This breaks out of the for loop
+
+                        if break_while:
+                            break  # This breaks out of the while loop
+                            
+                        
                 if 300 < x < 475:
                     for i in range(len(playerList)):
                         if 122 + 30 * i < y < 148 + 30 * i:
@@ -59,7 +81,6 @@ def lobby(win, sock, key, load):
                                 ret = request(win, sock)
                                 if ret in [0, 1, 2]:
                                     return ret
-                                
                                 elif ret == 4:
                                     newret = chess(win, sock, 0, load)
                                     if newret in [0, 1, 2]:
@@ -82,7 +103,7 @@ def lobby(win, sock, key, load):
 
         if readable():
             msg = read()
-            print(f"1_{msg}") # Tai sao lai chay toi day
+            # print(f"{msg}") # Tai sao lai chay toi day
             if msg == "close":
                 return 2
             elif msg.startswith("gr"):

@@ -239,6 +239,19 @@ std::string getUsernameFromSock(int sock)
     }
     return "";
 }
+std::string getUsernameFromKey(int key)
+{
+    std::string filename = "username.txt"; // Thay đổi tên file của bạn
+    std::vector<PlayerInfo> players = readPlayersFromFile(filename);
+    for (auto &player : players)
+    {
+        if (player.id == key)
+        {
+            return player.username;
+        }
+    }
+    return "";
+}
 int getEloByID(int id)
 {
     std::string filename = "username.txt"; // Thay đổi tên file của bạn
@@ -252,19 +265,99 @@ int getEloByID(int id)
     }
     return 0;
 }
+
+// Hàm để giới hạn số dòng trong file
+void limitFileLines(const std::string &filename, int limit = 10)
+{
+    std::ifstream inputFile(filename);
+    if (inputFile.is_open())
+    {
+        std::vector<std::string> lines;
+        std::string line;
+        while (std::getline(inputFile, line))
+        {
+            lines.push_back(line);
+        }
+
+        inputFile.close();
+        std::ofstream outputFile(filename);
+        int start = std::max(0, static_cast<int>(lines.size()) - limit);
+        for (int i = start; i < lines.size(); ++i)
+        {
+            outputFile << lines[i] << "\n";
+        }
+        outputFile.close();
+    }
+}
+
+void writeLog(std::string username_win, std::string username_lose)
+{
+    // 0 la thua, 1 la thang
+    // Win
+    std::string filelog_win = "./res/log_game/" + username_win + ".txt"; // Thay đổi tên file của bạn
+
+    std::ofstream outputFile_win(filelog_win, std::ios::app); // Open in append mode
+    if (outputFile_win.is_open())
+    {
+        auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+        struct tm timeinfo;
+        localtime_r(&now, &timeinfo);
+        // Write log information
+        {
+            char buffer[80];
+            strftime(buffer, sizeof(buffer), "%Y-%m-%d-%H-%M", &timeinfo);
+            outputFile_win << username_lose << " " << buffer << " " << 1 << "\n";
+        }
+        outputFile_win.close();
+    }
+
+    // Lose
+    std::string filelog_lose = "./res/log_game/" + username_lose + ".txt";
+    std::ofstream outputFile_lose(filelog_lose, std::ios::app);
+    if (outputFile_lose.is_open())
+    {
+        auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+        struct tm timeinfo;
+        localtime_r(&now, &timeinfo);
+        // Write log information
+        {
+            char buffer[80];
+            strftime(buffer, sizeof(buffer), "%Y-%m-%d-%H-%M", &timeinfo);
+            outputFile_lose << username_win << " " << buffer << " " << 0 << "\n";
+        }
+        outputFile_lose.close();
+    }
+    // Giới hạn 10 dòng
+    limitFileLines(filelog_win);
+    limitFileLines(filelog_lose);
+}
+double calculateExpectedScore(int rating1, int rating2)
+{
+    return 1.0 / (1.0 + std::pow(10, static_cast<double>(rating2 - rating1) / 400.0));
+}
+void updateElo(int &rating, int opponentRating, int result)
+{
+    const double k = 32.0; // Hệ số K
+    double expectedScore = calculateExpectedScore(rating, opponentRating);
+    rating += static_cast<int>(k * (result - expectedScore));
+}
+
 void score(int win, int lose)
 {
     int id_win, id_lose;
+    int elo_win, elo_lose;
     id_win = getKeyFromSock(win);
     id_lose = getKeyFromSock(lose);
     std::string filename = "username.txt"; // Thay đổi tên file của bạn
     std::vector<PlayerInfo> players = readPlayersFromFile(filename);
+    std::string username_win, username_lose;
     for (auto &player : players)
     {
         if (player.id == id_win)
         {
-            // Cộng điểm cho người thắng
-            player.score += 1; // Thay đổi dựa trên yêu cầu của bạn
+            // player.score += 10;
+            elo_win = player.score;
+            username_win = player.username;
             break;
         }
     }
@@ -272,13 +365,32 @@ void score(int win, int lose)
     {
         if (player.id == id_lose)
         {
-            // Thay đổi điểm của người thua dựa trên yêu cầu của bạn
-            player.score -= 1; // Giả sử bạn muốn trừ điểm khi thua
+            username_lose = player.username;
+            // if (player.score < 5)
+            // {
+            //     break;
+            // }
+            // player.score -= 5;
+            elo_lose = player.score;
             break;
         }
     }
+    updateElo(elo_win, elo_lose, 1); // Người thắng
+    updateElo(elo_lose, elo_win, 0); // Người thua
 
-    // Ghi lại thông tin vào file
+    writeLog(username_win, username_lose);
+
+    for (auto &player : players)
+    {
+        if (player.id == id_win)
+        {
+            player.score = elo_win;
+        }
+        else if (player.id == id_lose)
+        {
+            player.score = elo_lose;
+        }
+    }
     writePlayersToFile(filename, players);
 }
 std::string read(int sock, int timeout = -1)
@@ -301,9 +413,13 @@ std::string read(int sock, int timeout = -1)
     return std::string(buffer);
 }
 
+void longWrite(int sock, const std::string &msg)
+{
+    ssize_t bytesSent = send(sock, msg.c_str(), msg.length(), 0);
+}
 void write(int sock, const std::string &msg)
 {
-    std::string buffedmsg = msg + std::string(8 - msg.length(), ' ');
+    std::string buffedmsg = msg + std::string(1024 - msg.length(), ' ');
     ssize_t bytesSent = send(sock, buffedmsg.c_str(), buffedmsg.length(), 0);
 }
 std::string remove_space(std::string string)
@@ -376,18 +492,6 @@ int game(int sock1, int sock2)
                 score(sock2, sock1);
             else if (msg.compare("lose") == 0)
                 score(sock1, sock2);
-
-            // if (msg.compare("win") == 0)rematch
-            //     score(sock2, sock1);
-            return false;
-        }
-        else if (msg.compare("acc") == 0)
-        {
-            // Xu li giong findmatch
-        }
-        else if (msg.compare("dec") == 0)
-        {
-            write(sock2, "msg");
             return false;
         }
     }
@@ -403,10 +507,33 @@ void player(int sock, int key)
 
         if (msg.substr(0, 4).compare("quit") == 0)
         {
-            std::string tmp_username = getUsernameFromSock(sock);
+            std::string tmp_username = getUsernameFromKey(key);
             loggedUsernames.erase(std::remove(loggedUsernames.begin(), loggedUsernames.end(), tmp_username), loggedUsernames.end());
-
             return;
+        }
+        else if (msg.substr(0, 3).compare("his") == 0)
+        {
+            log("Made request for watch history.", key);
+            std::string username = getUsernameFromKey(key);
+            std::string filelog = "./res/log_game/" + username + ".txt"; // Thay đổi tên file của bạn
+            std::ifstream file(filelog);
+            std::string line;
+            int lineCount = 0;
+
+            while (std::getline(file, line))
+            {
+                lineCount++;
+            }
+            write(sock, "xnum" + std::to_string(lineCount));
+            file.close();
+
+            // Process
+            std::ifstream file2(filelog);
+            while (std::getline(file2, line))
+            {
+                write(sock, line);
+            }
+            file2.close();
         }
         else if (msg.substr(0, 5).compare("pStat") == 0)
         {
@@ -425,11 +552,11 @@ void player(int sock, int key)
                         // Them elo tai day
                         if (latestbusy.find(player.second) != latestbusy.end())
                         {
-                            write(sock, std::to_string(player.second) + "b" +std::to_string(elo));
+                            write(sock, std::to_string(player.second) + "b" + std::to_string(elo));
                         }
                         else
                         {
-                            write(sock, std::to_string(player.second) + "a"+ std::to_string(elo));
+                            write(sock, std::to_string(player.second) + "a" + std::to_string(elo));
                         }
                     }
                 }
@@ -632,148 +759,148 @@ void kickDisconnectedThread()
     }
 }
 
-void adminThread()
-{
-    while (true)
-    {
-        std::string msg;
-        std::getline(std::cin, msg);
-        log(msg, -1, true);
-        if (msg.compare("report") == 0)
-        {
-            log(std::to_string(players.size()) + " players are online right now,");
-            log(std::to_string(players.size() - busyPpl.size()) + " are active.");
-            log(std::to_string(total) + " connections attempted, " + std::to_string(totalsuccess) + " were successful");
-            log("Server is running " + std::to_string(std::thread::hardware_concurrency()) + " threads.");
-            log("Time elapsed since last reboot: " + getTime());
-            if (!players.empty())
-            {
-                log("LIST OF PLAYERS:");
-                for (size_t i = 0; i < players.size(); ++i)
-                {
-                    if (busyPpl.find(players[i].second) == busyPpl.end())
-                    {
-                        log(" " + std::to_string(i + 1) + ". Player" + std::to_string(players[i].second) + ", Status: Active");
-                    }
-                    else
-                    {
-                        log(" " + std::to_string(i + 1) + ". Player" + std::to_string(players[i].second) + ", Status: Busy");
-                    }
-                }
-            }
-        }
-        else if (msg == "mypublicip")
-        {
-            log("Determining public IP, please wait....");
-            std::string PUBIP = getIp(true);
-            if (PUBIP == "127.0.0.1")
-            {
-                log("An error occurred while determining IP");
-            }
-            else
-            {
-                log("This machine has a public IP address " + PUBIP);
-            }
-        }
-        else if (msg.compare("lock") == 0)
-        {
-            if (lock)
-            {
-                log("Already in locked state");
-            }
-            else
-            {
-                lock = true;
-                log("Locked server, no one can join now.");
-            }
-        }
-        else if (msg.compare("unlock") == 0)
-        {
-            if (lock)
-            {
-                lock = false;
-                log("Unlocked server, all can join now.");
-            }
-            else
-            {
-                log("Already in unlocked state.");
-            }
-        }
-        else if (msg.substr(0, 5).compare("kick") == 0)
-        {
-            std::istringstream iss(msg.substr(5));
-            std::vector<int> keys;
-            int key;
-            while (iss >> key)
-            {
-                keys.push_back(key);
-            }
-            for (int k : keys)
-            {
-                int sock = getByKey(k);
-                if (sock != -1)
-                {
-                    write(sock, "close");
-                    log("Kicking player" + std::to_string(k));
-                }
-                else
-                {
-                    log("Player " + std::to_string(k) + " does not exist");
-                }
-            }
-        }
-        else if (msg.compare("kickall") == 0)
-        {
-            log("Attempting to kick everyone.");
-            std::vector<std::pair<int, int>> latestplayers = players;
-            for (const auto &player : latestplayers)
-            {
-                write(player.first, "close");
-            }
-        }
-        else if (msg.compare("quit") == 0)
-        {
-            lock = true;
-            log("Attempting to kick everyone.");
-            std::vector<std::pair<int, int>> latestplayers = players;
-            for (const auto &player : latestplayers)
-            {
-                write(player.first, "close");
-            }
-            log("Exiting application - Bye");
-            log("");
-            end = true;
-            if (IPV6)
-            {
-                int sock = socket(AF_INET6, SOCK_STREAM, 0);
-                sockaddr_in6 addr;
-                std::memset(&addr, 0, sizeof(addr));
-                addr.sin6_family = AF_INET6;
-                addr.sin6_port = htons(PORT);
-                inet_pton(AF_INET6, "::1", &(addr.sin6_addr));
-                connect(sock, reinterpret_cast<sockaddr *>(&addr), sizeof(addr));
-                close(sock);
-            }
-            else
-            {
-                int sock = socket(AF_INET, SOCK_STREAM, 0);
-                sockaddr_in addr;
-                std::memset(&addr, 0, sizeof(addr));
-                addr.sin_family = AF_INET;
-                addr.sin_port = htons(PORT);
-                inet_pton(AF_INET, "127.0.0.1", &(addr.sin_addr));
-                connect(sock, reinterpret_cast<sockaddr *>(&addr), sizeof(addr));
-                close(sock);
-            }
-            return;
-        }
-        else
-        {
-            log("Invalid command entered ('" + msg + "').");
-            log("See 'onlinehowto.txt' for help on how to use the commands.");
-        }
-    }
-}
+// void adminThread()
+// {
+//     while (true)
+//     {
+//         std::string msg;
+//         std::getline(std::cin, msg);
+//         log(msg, -1, true);
+//         if (msg.compare("report") == 0)
+//         {
+//             log(std::to_string(players.size()) + " players are online right now,");
+//             log(std::to_string(players.size() - busyPpl.size()) + " are active.");
+//             log(std::to_string(total) + " connections attempted, " + std::to_string(totalsuccess) + " were successful");
+//             log("Server is running " + std::to_string(std::thread::hardware_concurrency()) + " threads.");
+//             log("Time elapsed since last reboot: " + getTime());
+//             if (!players.empty())
+//             {
+//                 log("LIST OF PLAYERS:");
+//                 for (size_t i = 0; i < players.size(); ++i)
+//                 {
+//                     if (busyPpl.find(players[i].second) == busyPpl.end())
+//                     {
+//                         log(" " + std::to_string(i + 1) + ". Player" + std::to_string(players[i].second) + ", Status: Active");
+//                     }
+//                     else
+//                     {
+//                         log(" " + std::to_string(i + 1) + ". Player" + std::to_string(players[i].second) + ", Status: Busy");
+//                     }
+//                 }
+//             }
+//         }
+//         else if (msg == "mypublicip")
+//         {
+//             log("Determining public IP, please wait....");
+//             std::string PUBIP = getIp(true);
+//             if (PUBIP == "127.0.0.1")
+//             {
+//                 log("An error occurred while determining IP");
+//             }
+//             else
+//             {
+//                 log("This machine has a public IP address " + PUBIP);
+//             }
+//         }
+//         else if (msg.compare("lock") == 0)
+//         {
+//             if (lock)
+//             {
+//                 log("Already in locked state");
+//             }
+//             else
+//             {
+//                 lock = true;
+//                 log("Locked server, no one can join now.");
+//             }
+//         }
+//         else if (msg.compare("unlock") == 0)
+//         {
+//             if (lock)
+//             {
+//                 lock = false;
+//                 log("Unlocked server, all can join now.");
+//             }
+//             else
+//             {
+//                 log("Already in unlocked state.");
+//             }
+//         }
+//         else if (msg.substr(0, 5).compare("kick") == 0)
+//         {
+//             std::istringstream iss(msg.substr(5));
+//             std::vector<int> keys;
+//             int key;
+//             while (iss >> key)
+//             {
+//                 keys.push_back(key);
+//             }
+//             for (int k : keys)
+//             {
+//                 int sock = getByKey(k);
+//                 if (sock != -1)
+//                 {
+//                     write(sock, "close");
+//                     log("Kicking player" + std::to_string(k));
+//                 }
+//                 else
+//                 {
+//                     log("Player " + std::to_string(k) + " does not exist");
+//                 }
+//             }
+//         }
+//         else if (msg.compare("kickall") == 0)
+//         {
+//             log("Attempting to kick everyone.");
+//             std::vector<std::pair<int, int>> latestplayers = players;
+//             for (const auto &player : latestplayers)
+//             {
+//                 write(player.first, "close");
+//             }
+//         }
+//         else if (msg.compare("quit") == 0)
+//         {
+//             lock = true;
+//             log("Attempting to kick everyone.");
+//             std::vector<std::pair<int, int>> latestplayers = players;
+//             for (const auto &player : latestplayers)
+//             {
+//                 write(player.first, "close");
+//             }
+//             log("Exiting application - Bye");
+//             log("");
+//             end = true;
+//             if (IPV6)
+//             {
+//                 int sock = socket(AF_INET6, SOCK_STREAM, 0);
+//                 sockaddr_in6 addr;
+//                 std::memset(&addr, 0, sizeof(addr));
+//                 addr.sin6_family = AF_INET6;
+//                 addr.sin6_port = htons(PORT);
+//                 inet_pton(AF_INET6, "::1", &(addr.sin6_addr));
+//                 connect(sock, reinterpret_cast<sockaddr *>(&addr), sizeof(addr));
+//                 close(sock);
+//             }
+//             else
+//             {
+//                 int sock = socket(AF_INET, SOCK_STREAM, 0);
+//                 sockaddr_in addr;
+//                 std::memset(&addr, 0, sizeof(addr));
+//                 addr.sin_family = AF_INET;
+//                 addr.sin_port = htons(PORT);
+//                 inet_pton(AF_INET, "127.0.0.1", &(addr.sin_addr));
+//                 connect(sock, reinterpret_cast<sockaddr *>(&addr), sizeof(addr));
+//                 close(sock);
+//             }
+//             return;
+//         }
+//         else
+//         {
+//             log("Invalid command entered ('" + msg + "').");
+//             log("See 'onlinehowto.txt' for help on how to use the commands.");
+//         }
+//     }
+// }
 
 bool checkusername(const std::string &username, const std::string &password)
 {
@@ -906,7 +1033,7 @@ int main()
     log("Successfully Started.");
     log("Accepting connections on port " + std::to_string(PORT));
 
-    std::thread(adminThread).detach();
+    // std::thread(adminThread).detach();
     std::thread(kickDisconnectedThread).detach();
 
     if (LOG)

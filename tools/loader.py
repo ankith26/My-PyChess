@@ -28,13 +28,18 @@ GREY = (180, 180, 180)
 BLACK = (0, 0, 0)
 GREEN = (0, 255, 0)
 RED = (200, 20, 20)
+BLUE = (0, 0, 255)
 
 # Define a few constants that contain loaded texts of numbers and chararters.
 NUM = [vsmall.render(str(i), True, WHITE) for i in range(10)]
 LNUM = [small.render(str(i), True, WHITE) for i in range(10)]
 BLNUM = [small.render(str(i), True, BLACK) for i in range(10)]
-SLASH = vsmall.render("/", True, WHITE)
+CHARACTERS = [vsmall.render(chr(i), True, WHITE) for i in range(65, 91)]  # Uppercase letters A-Z
+CHARACTERS += [vsmall.render(chr(i), True, WHITE) for i in range(97, 123)]  # Lowercase letters a-z
+SLASH = small.render("/", True, WHITE)
 COLON = vsmall.render(":", True, WHITE)
+HYPHEN = vsmall.render("-", True, WHITE)
+SCOLON =small.render(":", True, WHITE)
 
 # This function displays a number in a position, very small sized text used.
 def putNum(win, num, pos):
@@ -42,12 +47,24 @@ def putNum(win, num, pos):
         win.blit(NUM[int(i)], (pos[0] + (cnt * 9), pos[1]))
 
 # This function displays a number in a position, Small sized text used.
-def putLargeNum(win, num, pos, white=True):
-    for cnt, i in enumerate(list(str(num))):
-        if white:
-            win.blit(LNUM[int(i)], (pos[0] + (cnt * 14), pos[1]))
-        else:
-            win.blit(BLNUM[int(i)], (pos[0] + (cnt * 14), pos[1]))
+def putLargeNum(win, data, pos, white=True):
+    for cnt, char in enumerate(str(data)):
+        if char.isdigit():
+            if white:
+                win.blit(LNUM[int(char)], (pos[0] + (cnt * 14), pos[1]))
+            else:
+                win.blit(BLNUM[int(char)], (pos[0] + (cnt * 14), pos[1]))
+        elif char.isalpha():
+            # Check if it's an uppercase or lowercase letter
+            if 'A' <= char <= 'Z':
+                win.blit(CHARACTERS[ord(char) - 65], (pos[0] + (cnt * 14), pos[1]))
+            elif 'a' <= char <= 'z':
+                win.blit(CHARACTERS[ord(char) - 97 + 26], (pos[0] + (cnt * 14), pos[1]))
+        elif char == '-':
+            win.blit(SLASH, (pos[0] + (cnt * 14), pos[1]))
+        elif char == ':':
+            win.blit(SCOLON, (pos[0] + (cnt * 14), pos[1]))
+            
 
 # This function displays the date and time in a position on the screen.
 def putDT(win, DT, pos):
@@ -233,6 +250,7 @@ class PREF:
     YES = small.render("YES", True, WHITE)
     NO = small.render("NO", True, WHITE)
 
+
 class ONLINE:
     ERR = (
         vsmall.render("Attempting to connect to server..", True, WHITE),
@@ -246,15 +264,22 @@ class ONLINE:
     GOBACK = vsmall.render("Go Back", True, WHITE)
         
     EMPTY = small.render("No one's online, you are alone.", True, WHITE)
+    EMPTY_HISTORY = small.render("You have no matches.", True, WHITE)
 
     LOBBY = large.render("Online Lobby", True, WHITE)
+    HISTORY_TITLED = large.render("HISTORY", True, WHITE)
     LIST = medium.render("List of Players", True, WHITE)
+    HISTORY = small.render("HISTORY", True, BLUE)
     PLAYER = small.render("Player", True, WHITE)
     DOT = small.render(".", True, WHITE)
 
     ACTIVE = small.render("ACTIVE", True, GREEN)
     BUSY = small.render("BUSY", True, RED)
-    REQ = small.render("Send Req", True, WHITE)
+    
+    WIN_STATUS = small.render("WIN", True, GREEN)
+    LOSE_STATUS = small.render("LOSE", True, RED)
+    
+    REQ = small.render("Request", True, WHITE)
     YOUARE = medium.render("You Are", True, WHITE)
     
     ERRCONN = vsmall.render("Unable to connect to that player..", True, WHITE)
