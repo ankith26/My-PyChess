@@ -30,9 +30,9 @@ pygame.display.set_icon(MAIN.ICON)
 
 # Coordinates of buttons in rectangle notation.
 sngl = (260, 140, 220, 40)
-mult = (280, 200, 200, 40)
-onln = (360, 260, 120, 40)
-load = (280, 320, 200, 40)
+mult = (260, 200, 200, 40)
+onln = (260, 260, 120, 40)
+load = (260, 320, 200, 40)
 pref = (0, 450, 210, 40)
 abt = (390, 450, 110, 40)
 hwto = (410, 410, 90, 30)
@@ -81,16 +81,16 @@ def showMain(prefs):
     win.blit(MAIN.HEADING, (80, 20))
     pygame.draw.line(win, (255, 255, 255), (80, 100), (130, 100), 4)
     pygame.draw.line(win, (255, 255, 255), (165, 100), (340, 100), 4)
-    win.blit(MAIN.VERSION, (345, 95))
+    # win.blit(MAIN.VERSION, (345, 95))
 
     win.blit(MAIN.SINGLE, sngl[:2])
     win.blit(MAIN.MULTI, mult[:2])
     win.blit(MAIN.ONLINE, onln[:2])
     win.blit(MAIN.LOAD, load[:2])
-    win.blit(MAIN.PREF, pref[:2])
-    win.blit(MAIN.HOWTO, hwto[:2])
-    win.blit(MAIN.ABOUT, abt[:2])
-    win.blit(MAIN.STOCK, stok[:2])
+    # win.blit(MAIN.PREF, pref[:2])
+    # win.blit(MAIN.HOWTO, hwto[:2])
+    # win.blit(MAIN.ABOUT, abt[:2])
+    # win.blit(MAIN.STOCK, stok[:2])
 
 # Initialize a few more variables
 cnt = 0
@@ -170,7 +170,7 @@ while run:
                 if ret == 0:
                     run = False
                 elif ret != 1:
-                    run = chess.online(win, ret[0], prefs, ret[1])
+                    run = chess.online(win, ret[0], ret[1], prefs, ret[1])
 
             elif load[0] < x < sum(load[::2]) and load[1] < y < sum(load[1::2]):
                 sound.play_click(prefs)

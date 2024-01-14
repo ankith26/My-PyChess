@@ -42,9 +42,11 @@ def legalMoves(side, board, flags):
             
 # This function returns wether a game has ended or not
 def isEnd(side, board, flags):
-    for _ in legalMoves(side, board, flags):
-        return False
-    return True
+    # Check if the king of the given side is present in the board
+    king_present = any(piece[2] == "k" for piece in board[side])
+    
+    # If the king is not present, the game has ended
+    return not king_present
 
 # This function moves the piece from one coordinate to other while handling the
 # capture of enemy, pawn promotion and en-passent. 
@@ -80,7 +82,8 @@ def move(side, board, fro, to, promote="p"):
 
 # This function returns wether a move puts ones own king at check
 def moveTest(side, board, fro, to):
-    return not isChecked(side, move(side, copy(board), fro, to))
+    # return not isChecked(side, move(side, copy(board), fro, to))
+    return True
 
 # This function returns wether a move is valid or not
 def isValidMove(side, board, flags, fro, to):
@@ -94,6 +97,9 @@ def isValidMove(side, board, flags, fro, to):
 def makeMove(side, board, fro, to, flags, promote="q"):
     newboard = move(side, copy(board), fro, to, promote)
     newflags = updateFlags(side, newboard, fro, to, flags)
+    if isEnd(side, newboard, newflags):
+        print("Game Over! The king has been captured.")
+        # You might want to handle the end of the game here
     return not side, newboard, newflags
 
 # Does a routine check to update all the flags required for castling and

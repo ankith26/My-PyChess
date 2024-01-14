@@ -179,3 +179,41 @@ def showScreen(win, side, board, flags, pos, load, player=None, online=False):
         
     if not multi:
         pygame.display.update()
+def showScreen_view(win, side, board, flags, pos, player=None, online=False):
+    multi = False
+    if player is None:
+        multi = True
+        player = side
+    flip = False
+
+    drawBoard(win)
+    win.blit(BACK, (460, 0))
+    
+    if not multi:
+        win.blit(CHESS.TURN[int(side == player)], (10, 460))
+        
+    if not online:
+        win.blit(CHESS.SAVE, (350, 462))
+
+    if isEnd(side, board, flags):
+        if isChecked(side, board):
+            win.blit(CHESS.CHECKMATE, (100, 12))
+            win.blit(CHESS.LOST, (320, 12))
+            win.blit(CHESS.PIECES[side]["k"], (270, 0))
+        else:
+            win.blit(CHESS.STALEMATE, (160, 12))
+    else:
+        if online:
+            win.blit(CHESS.DRAW, (10, 12))
+            win.blit(CHESS.RESIGN, (400, 462))
+            
+        if isChecked(side, board):
+            win.blit(CHESS.CHECK, (200, 12))
+        if isOccupied(side, board, pos) and side == player:
+            x = (9 - pos[0]) * 50 if flip else pos[0] * 50
+            y = (9 - pos[1]) * 50 if flip else pos[1] * 50 
+            pygame.draw.rect(win, (255, 255, 0), (x, y, 50, 50))
+    drawPieces(win, board, flip)
+        
+    if not multi:
+        pygame.display.update()

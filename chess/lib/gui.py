@@ -134,7 +134,7 @@ def prompt(win, msg=None):
 # optimising images for display - call only once per game
 def start(win, load):
     convertPieces(win)
-    sound.play_start(load)
+    # sound.play_start(load)
     clk = pygame.time.Clock()
     for i in range(101):
         clk.tick_busy_loop(140)
