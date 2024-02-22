@@ -1,0 +1,13 @@
+* Account: account.txt
+Descriptions: 
+    The file includes 3 columns: Username, Password, Status.
+        Username, Password.
+        Status: Between 0 & 1.
+            0: Block - Cant Login
+            1: Avaiable
+* username.txt
+Descriptions: 
+    The file includes 3 columns: Username, ID, Elo Score.
+        ID: 
+        Elo Score
+
