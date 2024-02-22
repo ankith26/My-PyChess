@@ -283,6 +283,8 @@ class ONLINE:
     YOUARE = medium.render("You Are", True, WHITE)
     
     ERRCONN = vsmall.render("Unable to connect to that player..", True, WHITE)
+    WAIT_FINDMATCH = vsmall.render("Waiting for other player..", True, WHITE)
+    
 
     REFRESH = pygame.image.load(os.path.join("res", "img", "refresh.png"))
     FIND_MATCH = pygame.image.load(os.path.join("res", "img", "findmatch.png"))

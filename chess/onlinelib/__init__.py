@@ -100,6 +100,7 @@ def lobby(win, sock, key, load):
                         newret = chess(win, sock, 0, load)
                         if newret in [0, 1, 2]:
                             return newret
+                    
 
         if readable():
             msg = read()
